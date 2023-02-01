@@ -1,0 +1,11 @@
+body {
+    background-color: black;
+}
+
+main {
+    min-height: 870px;
+}
+
+.row {
+    margin: auto 0;
+}

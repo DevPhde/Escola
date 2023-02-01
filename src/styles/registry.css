@@ -1,0 +1,9 @@
+body {
+    background-color: black;
+}
+
+.div_registry {
+    width: 200px;
+    min-height: 250px;
+    border: 1px solid purple
+}
