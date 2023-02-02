@@ -1,9 +1,19 @@
-body {
-    background-color: black;
-}
-
 .div_registry {
     width: 200px;
     min-height: 250px;
     border: 1px solid purple
 }
+
+.input_with_button {
+  padding: 0 35%;
+  }
+  
+  .invalid {
+      border: 1px solid #ffaba5;
+  }
+  
+  @media only screen and (max-width: 550px) {
+      .input_with_button {
+        padding: 0 10%;
+      }
+    }
