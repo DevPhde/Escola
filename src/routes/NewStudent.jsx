@@ -1,124 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { AxiosApi } from "../services/RequisitionAPI"
-import profile from "../assets/profile.jpg"
-import { Student } from '../entities/Student';
+import { StudentUseCases } from "../useCases/StudentUseCases"
+import { useState } from "react"
+import "../styles/registry.css"
+import { ErrorInput } from "../components/ErrorInput"
 
-const StudentInfo = () => {
-    const [data, setData] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
-    const [isEditing, setIsEditing] = useState(false);
-    const [deletingStudent, setDeletingStudent] = useState(false)
+//PEDENCIAS =>
 
-    const [name, setName] = useState(data.nome);
-    const [birthday, setBirthday] = useState('');
-    const [cpf, setCpf] = useState('');
-    const [registration, setRegistration] = useState('');
+// FINALIZAR VALIDAÇÃO DE INPUTS
+// HOOK DE REGEX NO CPF
+// HOOK DE REGEX DATA DE NASCIMENTO
+
+function NewStudent() {
+
+    // HOOKS
+    const [registration, setRegistration] = useState('')
+    const [fullNameInput, setFullNameInput] = useState('')
+    const [cpfInput, setCpfInput] = useState('')
+    const [birthdayInput, setBirthdayInput] = useState('')
+
+    // ERROR HOOKS
+    // const [ErrorFullName, setErrorFullName] = useState('')
+    // const [ErrorBirthday, setErrorBirthday] = useState('')
+    // const [ErrorCPF, setErrorCPF] = useState('')
+    // const [ErrorRegistration, setErrorRegistration] = useState('')
 
 
-    useEffect(() => {
-        async function requisitionInfo() {
-            try {
-                const connection = await AxiosApi.Get(window.location.pathname)
-                setData(connection.data)
-                setIsLoading(false)
-            } catch (error) {
-                alert(error)
-            }
 
-        }
 
-        requisitionInfo()
 
-    }, [])
-
-    if (isLoading) {
-        return <p>Carregando informações do aluno...</p>;
-    }
-
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleCancelClick = () => {
-        setIsEditing(false);
-    };
-
-    const handleSaveClick = () => {
-        // Fazer a requisição para salvar as alterações
-        setIsEditing(false);
-    };
-
-    if (deletingStudent) {
-        return (
-            <div className='mb-5 text-center'>
-                <h5>A exclusão do cadastro é irreversível.</h5>
-                <p>Tem certeza que deseja deletar o cadastro?</p>
-                <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
-                <button className='btn btn-dark ms-5' onClick={() => setDeletingStudent(false)}>Cancelar</button>
-            </div>
-        )
-    }
-    const handleDeleteStudent = () => {
-        setDeletingStudent(true)
+    const [createStudent, setCreateStudent] = useState('')
+    async function createNewStudent(e) {
+        e.preventDefault()
+        // const map = [fullNameInput, cpfInput, birthdayInput, registration]  //
+        // for (let index = 0; index < map.length; index++) {
+        //    if (map[index] == "") {
+        //    }   
+        // }
+        const student = await StudentUseCases.CreateStudent(fullNameInput, cpfInput, birthdayInput, registration)
+        setCreateStudent(student)
 
     }
-
-    async function handleDelete(){
-        let getInfo = await AxiosApi.Get(window.location.pathname)
-        getInfo = getInfo.data
-
-        // const connection = await AxiosApi.Put(window.location.pathname)
-    }
-    console.log(name)
-
     return (
-        <div>
-            {isEditing ? (
-                <div className='mb-5'>
-                    <div className='mb-5 text-center'>
-                        <img src={profile} alt="" />
+        <main>
+            <h3 className='text-center mb-5'>Cadastrar novo aluno</h3>
+            <form>
+                <div className="container p-3 mt-5 border rounded-5">
+                    <div className="row align-items-center py-5 ms-5">
+                        <section className="col-lg-5 px-2">
+                            {/* <ErrorInput message={ErrorFullName}/> */}
+                            <div className="form-floating mb-3">
+                                <input type="text" className="form-control border-secondary" value={fullNameInput} onChange={event => setFullNameInput(event.target.value)} placeholder="Nome Completo" />
+                                <label htmlFor='floatingFullName'>Nome Completo</label>
+                            </div>
+                            {/* <ErrorInput message={ErrorBirthday} /> */}
+                            <div className="form-floating mb-3">
+                                <input type="number" className="form-control border-secondary" value={cpfInput} onChange={event => setCpfInput(event.target.value)} placeholder="CPF" />
+                                <label htmlFor='floatingCPF'>CPF</label>
+                            </div>
+                        </section>
+                        <section className="mx-auto col-lg-5 px-2">
+                            {/* <ErrorInput message={ErrorCPF} /> */}
+                            <div className="form-floating mb-3">
+                                <input type="number" className="form-control border-secondary" value={birthdayInput} onChange={event => setBirthdayInput(event.target.value)} placeholder="Data de Nascimento" />
+                                <label htmlFor='floatingBirthday'>Data de Nascimento</label>
+                            </div>
+                            {/* <ErrorInput message={ErrorRegistration}/> */}
+                            <div className="input-group mb-3">
+                                <input type="text" readOnly className="form-control form-control-lg" placeholder="Matrícula" value={registration} />
+                                <button className="btn btn-danger" type="button" onClick={async (e) => {
+                                    e.preventDefault()
+                                    setRegistration(await StudentUseCases.StudentRegistration())
+                                }}>Button</button>
+                            </div>
+                        </section>
                     </div>
-                    <div className='d-flex flex-column mb-3'>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control border-secondary w-50" value={name} onChange={e => setName(e.target.value)} placeholder="Nome Completo" />
-                            <label htmlFor='floatingFullName'>Nome Completo</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control border-secondary w-50" value={birthday} onChange={e => setBirthday(e.target.value)} placeholder="Data de Nascimento" />
-                            <label htmlFor='floatingFullName'>Data de Nascimento</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control border-secondary w-50" value={cpf} onChange={e => setCpf(e.target.value)} placeholder="CPF" />
-                            <label htmlFor='floatingFullName'>CPF</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control border-secondary w-50" value={registration} onChange={e => setRegistration(e.target.value)} placeholder="Matrícula" />
-                            <label htmlFor='floatingFullName'>Matrícula</label>
-                        </div>
+                    <div className="d-flex justify-content-center mb-5">
+                        <button type="submit" className="btn btn-light" onClick={createNewStudent}>Cadastrar</button>
                     </div>
-                    <div>
-                        <button className='btn-dark btn m-1' onClick={handleSaveClick}>Salvar</button>
-                        <button className='btn-dark btn m-1' onClick={handleCancelClick}>Cancelar</button>
-                    </div>
-
+                    <p className="text-center mt-5">{createStudent}</p>
                 </div>
-            ) : (
-                <div className='mb-5'>
-                    <div className='text-center mb-5'>
-                        <img src={profile} alt="" />
-                    </div>
-                    <p>Nome Completo: {data.nome}</p>
-                    <p>Data de Nascimento: {data.dataNascimento}</p>
-                    <p>CPF: {data.cpf}</p>
-                    <p>Matrícula: {data.matricula}</p>
-                    <p>Turma: {!data.turma ? "Aluno não matriculado em nenhuma turma." : data.turma}</p>
-                    <button className='btn btn-dark' onClick={handleEditClick}>Editar Aluno</button>
-                    <button className='btn btn-dark text-end' onClick={handleDeleteStudent}>Deletar Cadastro</button>
+            </form>
+        </main >
+    )
+}
 
-                </div>
-            )}
-        </div>
-    );
-};
-
-export default StudentInfo;
+export default NewStudent

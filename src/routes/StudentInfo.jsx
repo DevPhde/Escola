@@ -11,21 +11,24 @@ const StudentInfo = () => {
 
     const [dataState, setDataState] = useState(undefined)
 
-    const [name, setName] = useState(data.nome);
+    const [handleState, setHandleState] = useState(0)
+    const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
     const [cpf, setCpf] = useState('');
     const [registration, setRegistration] = useState('');
 
 
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         async function requisitionInfo() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 setData(connection.data)
                 setDataState(connection.data)
-                console.log(dataState)
-                console.log(name)
+                setName(data.nome)
+                setBirthday(data.dataNascimento)
+                setCpf(data.cpf)
+                setRegistration(data.matricula)
                 setIsLoading(false)
             } catch (error) {
                 alert('Erro inesperado, tente novamente mais tarde.')
@@ -35,7 +38,7 @@ const StudentInfo = () => {
 
         requisitionInfo()
 
-    }, [])
+    }, [handleState])
 
     if (isLoading) {
         return <p>Carregando informações do aluno...</p>;
@@ -43,6 +46,8 @@ const StudentInfo = () => {
 
     const handleEditClick = () => {
         setIsEditing(true);
+        setHandleState(handleState + 1)
+
     };
 
     const handleCancelClick = () => {
@@ -76,7 +81,7 @@ const StudentInfo = () => {
         console.log(newInfos)
         // const connection = await AxiosApi.Put(window.location.pathname)
     }
-    console.log(dataState)
+    console.log(name)
     if (dataState === undefined) {
         return <p>Carregando...</p>;
     }
