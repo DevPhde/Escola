@@ -9,4 +9,8 @@ export class AxiosApi {
         return await axios.post(`http://localhost:3000${path}`,
         body)
     }
+    static async Put(path, body) {
+        return await axios.post(`http://localhost:3000${path}`,
+        body)
+    }
 }
