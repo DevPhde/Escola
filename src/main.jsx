@@ -29,6 +29,10 @@ const router = createBrowserRouter([
         element: <StudentInfo />
       },
       {
+        path: "/alunos/:id",
+        element: <StudentInfo />
+      },
+      {
         path: "Professores",
         element: <TeacherInfo />
       },
@@ -47,7 +51,7 @@ const router = createBrowserRouter([
       {
         path: "new/turma",
         element: <NewClass />
-      },
+      }
     ]
   }
 ])

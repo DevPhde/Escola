@@ -1,4 +1,4 @@
-import { CreateStundentUseCase } from "../useCases/StudentUseCase"
+import { StudentUseCases } from "../useCases/StudentUseCases"
 import { useState } from "react"
 import "../styles/registry.css"
 import { ErrorInput } from "../components/ErrorInput"
@@ -27,7 +27,7 @@ function NewStudent() {
 
 
 
-    const [createUser, setCreateUser] = useState('')
+    const [createStudent, setCreateStudent] = useState('')
     async function createNewStudent(e) {
         e.preventDefault()
         // const map = [fullNameInput, cpfInput, birthdayInput, registration]  //
@@ -35,8 +35,8 @@ function NewStudent() {
         //    if (map[index] == "") {
         //    }   
         // }
-        const create = await CreateStundentUseCase.Create(fullNameInput, cpfInput, birthdayInput, registration)
-        setCreateUser(create)
+        const student = await StudentUseCases.CreateStudent(fullNameInput, cpfInput, birthdayInput, registration)
+        setCreateStudent(student)
 
     }
     return (
@@ -68,7 +68,7 @@ function NewStudent() {
                                 <input type="text" readOnly className="form-control form-control-lg" placeholder="Matrícula" value={registration} />
                                 <button className="btn btn-danger" type="button" onClick={async (e) => {
                                     e.preventDefault()
-                                    setRegistration(await CreateStundentUseCase.StudentRegistration())
+                                    setRegistration(await StudentUseCases.StudentRegistration())
                                 }}>Button</button>
                             </div>
                         </section>
@@ -76,7 +76,7 @@ function NewStudent() {
                     <div className="d-flex justify-content-center mb-5">
                         <button type="submit" className="btn btn-light" onClick={createNewStudent}>Cadastrar</button>
                     </div>
-                    <p className="text-center mt-5">{createUser}</p>
+                    <p className="text-center mt-5">{createStudent}</p>
                 </div>
             </form>
         </main >
