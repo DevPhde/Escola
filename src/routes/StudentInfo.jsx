@@ -14,12 +14,15 @@ const StudentInfo = () => {
     const [cpf, setCpf] = useState('');
     const [registration, setRegistration] = useState('');
 
+    const [dataState, setDataState] = useState(undefined)
+    
 
     useEffect(() => {
         async function requisitionInfo() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 setData(connection.data)
+                setDataState(connection.data)
                 setIsLoading(false)
             } catch (error) {
                 alert(error)
@@ -70,7 +73,12 @@ const StudentInfo = () => {
         // const connection = await AxiosApi.Put(window.location.pathname)
     }
     console.log(name)
-
+    if (dataState === undefined) {
+        return <p>Carregando...</p>;
+      }
+      else {
+         
+      
     return (
         <div>
             {isEditing ? (
@@ -119,6 +127,7 @@ const StudentInfo = () => {
             )}
         </div>
     );
+            }
 };
 
 export default StudentInfo;
