@@ -54,9 +54,16 @@ const StudentInfo = () => {
         setIsEditing(false);
     };
 
-    const handleSaveClick = () => {
-        // Fazer a requisição para salvar as alterações
+    const handleSaveClick = async () => {
+        // FAZER MENSAGEM NA TELA DE USUÁRIO ALTERADO OU ERROR
+        let getInfo = await AxiosApi.Get(window.location.pathname)
+        getInfo = getInfo.data
+        console.log(getInfo)
+        const newInfos = new Student(name, cpf, birthday, registration, getInfo.turma)
+        console.log(newInfos)
+        const putNewInfos = await AxiosApi.Put(window.location.pathname, newInfos)
         setIsEditing(false);
+        setHandleState(handleState + 1)
     };
 
     if (deletingStudent) {
@@ -73,12 +80,14 @@ const StudentInfo = () => {
         setDeletingStudent(true)
 
     }
+    async function handleEdit() {
+        
+    }
 
     async function handleDelete() {
-        let getInfo = await AxiosApi.Get(window.location.pathname)
-        getInfo = getInfo.data
-        const newInfos = new Student(name, birthday, cpf, registration, getInfo.turma)
-        console.log(newInfos)
+         const deleteInfos = await AxiosApi.Delete(window.location.pathname)
+         console.log(deleteInfos)
+         deleteInfos.status == 200 ? alert('cadastro Deletado') : alert('Erro interno')
         // const connection = await AxiosApi.Put(window.location.pathname)
     }
     console.log(name)
