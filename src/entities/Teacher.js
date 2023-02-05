@@ -1,8 +1,8 @@
 export class Teacher {
-    constructor(fullName, cpf, matter, turma) {
+    constructor(fullName, cpf, register, turma) {
         this.nome = fullName;
         this.cpf = cpf;
-        this.materia = matter
+        this.registro = register
         this.turma = turma || false
     }
 }

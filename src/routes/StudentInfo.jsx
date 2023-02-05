@@ -8,7 +8,7 @@ import "../styles/info.css"
 
 import Input from '../components/Input';
 
-const StudentInfo = () => {
+function StudentInfo() {
     const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
@@ -112,7 +112,7 @@ const StudentInfo = () => {
 
 
         return (
-            <div>
+            <main>
                 {isEditing ? (
                     <div className='mb-5 text-center'>
                         <div className='mb-5 text-center rounded'>
@@ -152,7 +152,7 @@ const StudentInfo = () => {
                         <p>Turma: {!data.turma ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : data.turma}</p>
                         <div className='d-flex justify-content-between mt-5'>
                             <div>
-                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar Aluno</button>
+                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar cadastro</button>
 
                             </div>
                             <div>
@@ -161,7 +161,7 @@ const StudentInfo = () => {
                         </div>
                     </div>
                 )}
-            </div>
+            </main>
         );
     }
 };
