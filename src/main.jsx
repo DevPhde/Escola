@@ -10,6 +10,7 @@ import TeacherInfo from './routes/TeacherInfo'
 import Registry from './routes/Registry'
 
 import "./styles/main.css"
+
 import NewStudent from './routes/NewStudent'
 import NewTeacher from './routes/NewTeacher'
 import NewClass from './routes/NewClass'
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  // </React.StrictMode>
 )
