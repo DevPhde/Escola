@@ -1,47 +1,66 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AxiosApi } from "../services/RequisitionAPI"
-import profile from "../assets/profile.jpg"
+import profile from "../assets/profile.webp"
 import { Student } from '../entities/Student';
+import { Link, useNavigate } from 'react-router-dom';
+import "../styles/info.css"
+
+
+import Input from '../components/Input';
 
 const StudentInfo = () => {
-    const [data, setData] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState(false);
+    const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
     const [deletingStudent, setDeletingStudent] = useState(false)
+    const [editedThings, setEditedThings] = useState(false)
 
-    const [dataState, setDataState] = useState(undefined)
+    const [loadgindState, setLoadgindState] = useState(false)
 
     const [handleState, setHandleState] = useState(0)
     const [name, setName] = useState('');
     const [birthday, setBirthday] = useState('');
     const [cpf, setCpf] = useState('');
     const [registration, setRegistration] = useState('');
-
-
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function requisitionInfo() {
-            try {
-                const connection = await AxiosApi.Get(window.location.pathname)
-                setData(connection.data)
-                setDataState(connection.data)
-                setName(data.nome)
-                setBirthday(data.dataNascimento)
-                setCpf(data.cpf)
-                setRegistration(data.matricula)
-                setIsLoading(false)
-            } catch (error) {
-                alert('Erro inesperado, tente novamente mais tarde.')
-            }
-
+            AxiosApi.Get(window.location.pathname)
+                .then((connection) => {
+                    setData(connection.data)
+                    setLoadgindState(connection.data)
+                    if (data) {
+                        setName(data.nome)
+                        setBirthday(data.dataNascimento)
+                        setCpf(data.cpf)
+                        setRegistration(data.matricula)
+                    }
+                    setIsLoading("false")
+                }).catch((connection) => {
+                    if (connection.response.status == 404) {
+                        setIsLoading("error")
+                    } else {
+                        alert("Erro Inesperado, Tente novamente mais tarde.")
+                    }
+                })
         }
-
         requisitionInfo()
-
     }, [handleState])
 
-    if (isLoading) {
+    if (isLoading == "true") {
         return <p>Carregando informações do aluno...</p>;
+    } else if (isLoading == "error") {
+        return (
+            <div className='text-center text-white'>
+                <h1>Erro 404!</h1>
+                <h4>Aluno não encontrado.</h4>
+                <div className='mt-4 mb-5'>
+                    <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
+                </div>
+            </div>
+        )
+
     }
 
     const handleEditClick = () => {
@@ -52,46 +71,41 @@ const StudentInfo = () => {
 
     const handleCancelClick = () => {
         setIsEditing(false);
+        setEditedThings(false)
     };
 
     const handleSaveClick = async () => {
         // FAZER MENSAGEM NA TELA DE USUÁRIO ALTERADO OU ERROR
         let getInfo = await AxiosApi.Get(window.location.pathname)
-        getInfo = getInfo.data
-        console.log(getInfo)
-        const newInfos = new Student(name, cpf, birthday, registration, getInfo.turma)
-        console.log(newInfos)
-        const putNewInfos = await AxiosApi.Put(window.location.pathname, newInfos)
+        const newInfos = new Student(name, cpf, birthday, registration, getInfo.data.turma)
+        await AxiosApi.Put(window.location.pathname, newInfos)
+        setEditedThings(true)
         setIsEditing(false);
         setHandleState(handleState + 1)
     };
 
     if (deletingStudent) {
         return (
-            <div className='mb-5 text-center'>
+            <div className='mb-5 text-center text-white'>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
-                <button className='btn btn-dark ms-5' onClick={() => setDeletingStudent(false)}>Cancelar</button>
+                <button className='btn btn-light ms-5' onClick={() => setDeletingStudent(false)}>Cancelar</button>
             </div>
         )
     }
+
     const handleDeleteStudent = () => {
         setDeletingStudent(true)
-
-    }
-    async function handleEdit() {
-        
+        setEditedThings(false)
     }
 
     async function handleDelete() {
-         const deleteInfos = await AxiosApi.Delete(window.location.pathname)
-         console.log(deleteInfos)
-         deleteInfos.status == 200 ? alert('cadastro Deletado') : alert('Erro interno')
-        // const connection = await AxiosApi.Put(window.location.pathname)
+        const deleteInfos = await AxiosApi.Delete(window.location.pathname)
+        deleteInfos.status == 200 ? alert('Cadastro Excluído') : alert('Erro interno, tente novamente mais tarde.')
+        return navigate('/')
     }
-    console.log(name)
-    if (dataState === undefined) {
+    if (!loadgindState) {
         return <p>Carregando...</p>;
     }
     else {
@@ -100,47 +114,51 @@ const StudentInfo = () => {
         return (
             <div>
                 {isEditing ? (
-                    <div className='mb-5'>
-                        <div className='mb-5 text-center'>
-                            <img src={profile} alt="" />
+                    <div className='mb-5 text-center'>
+                        <div className='mb-5 text-center rounded'>
+                            <img src={profile} alt="profile" className='rounded-circle w-25' />
                         </div>
-                        <div className='d-flex flex-column mb-3'>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control border-secondary w-50" value={name} onChange={e => setName(e.target.value)} placeholder="Nome Completo" />
-                                <label htmlFor='floatingFullName'>Nome Completo</label>
-                            </div>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control border-secondary w-50" value={birthday} onChange={e => setBirthday(e.target.value)} placeholder="Data de Nascimento" />
-                                <label htmlFor='floatingFullName'>Data de Nascimento</label>
-                            </div>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control border-secondary w-50" value={cpf} onChange={e => setCpf(e.target.value)} placeholder="CPF" />
-                                <label htmlFor='floatingFullName'>CPF</label>
-                            </div>
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control border-secondary w-50" value={registration} onChange={e => setRegistration(e.target.value)} placeholder="Matrícula" />
-                                <label htmlFor='floatingFullName'>Matrícula</label>
+                        <div className='d-flex justify-content-center'>
+                            <div className=" py-5 ms-5">
+                                <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)}/>
+                                <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary __input" htmlFor="birthday" label="Data de Nascimento" value={birthday} onChange={e => setBirthday(e.target.value)}/>
+                                <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)}/>
+                                <Input placeholder="Matrícula" className="form-control border-secondary __input" htmlFor="registration" label="Matrícula" value={registration} onChange={e => setRegistration(e.target.value)}/>
                             </div>
                         </div>
                         <div>
-                            <button className='btn-dark btn m-1' onClick={handleSaveClick}>Salvar</button>
-                            <button className='btn-dark btn m-1' onClick={handleCancelClick}>Cancelar</button>
+                            <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>
+                            <button className='btn-light btn m-1' onClick={handleCancelClick}>Cancelar</button>
                         </div>
 
                     </div>
                 ) : (
-                    <div className='mb-5'>
+                    <div className='mb-5 mx-3 text-white'>
                         <div className='text-center mb-5'>
-                            <img src={profile} alt="" />
+                            <img src={profile} alt="profile" className='rounded-circle w-25' />
+                            <div>
+                                {editedThings ? (
+                                    <p className='text-success text-center mt-5'>Cadastro Alterado com sucesso!</p>
+                                ) : (
+                                    <p></p>
+                                )}
+                            </div>
                         </div>
+                        
                         <p>Nome Completo: {data.nome}</p>
                         <p>Data de Nascimento: {data.dataNascimento}</p>
                         <p>CPF: {data.cpf}</p>
                         <p>Matrícula: {data.matricula}</p>
-                        <p>Turma: {!data.turma ? "Aluno não matriculado em nenhuma turma." : data.turma}</p>
-                        <button className='btn btn-dark' onClick={handleEditClick}>Editar Aluno</button>
-                        <button className='btn btn-dark text-end' onClick={handleDeleteStudent}>Deletar Cadastro</button>
+                        <p>Turma: {!data.turma ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : data.turma}</p>
+                        <div className='d-flex justify-content-between mt-5'>
+                            <div>
+                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar Aluno</button>
 
+                            </div>
+                            <div>
+                                <button className='btn btn-danger mx-2' onClick={handleDeleteStudent}>Deletar Cadastro</button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

@@ -1,11 +1,12 @@
 body {
-    /* background-color: black; */
+    background-color: black;
 }
 
 main {
-    min-height: 870px;
+    min-height: 970px;
 }
 
 .row {
     margin: auto 0;
+    min-width: none;
 }
