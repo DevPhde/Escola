@@ -1,98 +1,96 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Row from 'react-bootstrap/Row';
 
-const Example = () => {
-    const [values, setValues] = useState({
-        input1: "",
-        input2: "",
-        input3: "",
-        input4: ""
-    });
-    const [errors, setErrors] = useState({
-        input1: "",
-        input2: "",
-        input3: "",
-        input4: ""
-    });
+function FormExample() {
+  const [validated, setValidated] = useState(false);
 
-    const [enableCreate, setEnableCreate] = useState(false)
-    const handleChange = event => {
-        setValues({
-            ...values,
-            [event.target.name]: event.target.value
-        });
-    };
-
-    const handleCreate = () => {
-        for (let index = 0; index < errors.length; index++) {
-            const element = errors[index];
-            console.log(element)
-        }
-        if (errors == "") {
-            console.log("foi")
-
-        }
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
     }
 
-    const handleBlur = event => {
-        if (!values[event.target.name]) {
-            setErrors({
-                ...errors,
-                [event.target.name]: "Campo é obrigatório."
-            });
-            setEnableCreate(false)
-        } else {
-            setEnableCreate(true)
-            setErrors({
-                ...errors,
-                [event.target.name]: ""
-            });
-        }
-    };
+    setValidated(true);
+  };
 
-    return (
-        <div className="text-white">
-            <div>
-                <input
-                    name="input1"
-                    value={values.input1}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                {errors.input1 && <p>{errors.input1}</p>}
-            </div>
+  return (
+    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Row className="mb-3">
+        <Form.Group as={Col} md="4" controlId="validationCustom01">
+          <Form.Label>First name</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            placeholder="First name"
+            defaultValue="Mark"
+          />
+          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="validationCustom02">
+          <Form.Label>Last name</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            placeholder="Last name"
+            defaultValue="Otto"
+          />
+          <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+          <Form.Label>Username</Form.Label>
+          <InputGroup hasValidation>
+            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Username"
+              aria-describedby="inputGroupPrepend"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              Please choose a username.
+            </Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
+      </Row>
+      <Row className="mb-3">
+        <Form.Group as={Col} md="6" controlId="validationCustom03">
+          <Form.Label>City</Form.Label>
+          <Form.Control type="text" placeholder="City" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid city.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="3" controlId="validationCustom04">
+          <Form.Label>State</Form.Label>
+          <Form.Control type="text" placeholder="State" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid state.
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group as={Col} md="3" controlId="validationCustom05">
+          <Form.Label>Zip</Form.Label>
+          <Form.Control type="text" placeholder="Zip" required />
+          <Form.Control.Feedback type="invalid">
+            Please provide a valid zip.
+          </Form.Control.Feedback>
+        </Form.Group>
+      </Row>
+      <Form.Group className="mb-3">
+        <Form.Check
+          required
+          label="Agree to terms and conditions"
+          feedback="You must agree before submitting."
+          feedbackType="invalid"
+        />
+      </Form.Group>
+      <Button type="submit">Submit form</Button>
+    </Form>
+  );
+}
 
-            <div>
-                <input
-                    name="input2"
-                    value={values.input2}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                {errors.input2 && <p>{errors.input2}</p>}
-            </div>
-
-            <div>
-                <input
-                    name="input3"
-                    value={values.input3}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                {errors.input3 && <p>{errors.input3}</p>}
-            </div>
-
-            <div>
-                <input
-                    name="input4"
-                    value={values.input4}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                {errors.input4 && <p>{errors.input4}</p>}
-            </div>
-            <button onClick={handleCreate}> Cadastrar</button>
-        </div>
-    );
-};
-
-export default Example;
+export default FormExample
