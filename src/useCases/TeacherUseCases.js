@@ -7,4 +7,8 @@ export class TeacherUseCases {
         const connection = await AxiosApi.Post('/professores', teacher)
         return connection.status == 201 ? "Professor criado com sucesso!" : "Erro interno, Tente novamente mais tarde."
     }
+    static async DeleteTeacher(id){
+        const deleteInfos = await AxiosApi.Delete(id)
+       return deleteInfos.status == 200 ? 'Cadastro Excluído' :'Erro interno, tente novamente mais tarde.'
+    }
 }

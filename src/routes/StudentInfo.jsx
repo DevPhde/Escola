@@ -8,7 +8,7 @@ import "../styles/info.css"
 
 import Input from '../components/Input';
 
-const StudentInfo = () => {
+function StudentInfo() {
     const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
@@ -52,13 +52,13 @@ const StudentInfo = () => {
         return <p>Carregando informações do aluno...</p>;
     } else if (isLoading == "error") {
         return (
-            <div className='text-center text-white'>
+            <main className='text-center text-white'>
                 <h1>Erro 404!</h1>
                 <h4>Aluno não encontrado.</h4>
                 <div className='mt-4 mb-5'>
                     <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
                 </div>
-            </div>
+            </main>
         )
 
     }
@@ -86,12 +86,12 @@ const StudentInfo = () => {
 
     if (deletingStudent) {
         return (
-            <div className='mb-5 text-center text-white'>
+            <main className='mb-5 text-center text-white'>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
                 <button className='btn btn-light ms-5' onClick={() => setDeletingStudent(false)}>Cancelar</button>
-            </div>
+            </main>
         )
     }
 
@@ -112,19 +112,19 @@ const StudentInfo = () => {
 
 
         return (
-            <div>
+            <main>
                 {isEditing ? (
                     <div className='mb-5 text-center'>
                         <div className='mb-5 text-center rounded'>
                             <img src={profile} alt="profile" className='rounded-circle w-25' />
                         </div>
                         <div className='d-flex justify-content-center'>
-                            <div className=" py-5 ms-5">
+                            <form className=" py-5 ms-5">
                                 <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)}/>
                                 <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary __input" htmlFor="birthday" label="Data de Nascimento" value={birthday} onChange={e => setBirthday(e.target.value)}/>
                                 <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)}/>
                                 <Input placeholder="Matrícula" className="form-control border-secondary __input" htmlFor="registration" label="Matrícula" value={registration} onChange={e => setRegistration(e.target.value)}/>
-                            </div>
+                            </form>
                         </div>
                         <div>
                             <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>
@@ -152,7 +152,7 @@ const StudentInfo = () => {
                         <p>Turma: {!data.turma ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : data.turma}</p>
                         <div className='d-flex justify-content-between mt-5'>
                             <div>
-                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar Aluno</button>
+                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar cadastro</button>
 
                             </div>
                             <div>
@@ -161,7 +161,7 @@ const StudentInfo = () => {
                         </div>
                     </div>
                 )}
-            </div>
+            </main>
         );
     }
 };

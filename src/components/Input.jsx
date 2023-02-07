@@ -1,15 +1,17 @@
 import InputMask from 'react-input-mask';
 function Input(props) {
+  const { mask, placeholder, className, value, onChange, label, ...things } = props
   return (
     <div className='form-floating mb-3'>
       <InputMask
-        mask={props.mask}
-        placeholder={props.placeholder}
-        className={props.className}
-        value={props.value}
-        onChange={props.onChange}>
+        {...things}
+        mask={mask}
+        placeholder={placeholder}
+        className={className}
+        value={value}
+        onChange={onChange}>
       </InputMask>
-      <label htmlFor={props.htmlFor}>{props.label}</label>
+      <label>{label}</label>
     </div>
   );
 }

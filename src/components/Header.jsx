@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 
 function Header() {
     return (
-        <header className='row mb-5'>
+        <header className='row'>
             <div className='col text-end mt-5'>
                 <Navbar />
             </div>
