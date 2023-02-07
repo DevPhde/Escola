@@ -5,15 +5,14 @@ function NewTeacher() {
     // HOOKS
     const [fullNameInput, setFullNameInput] = useState('')
     const [cpfInput, setCpfInput] = useState('')
-    const [matterInput, setMatterInput] = useState('')
-
+    const [RegisterInput, setRegisterInput] = useState('')
     const [createTeacher, setCreateTeacher] = useState('')
 
 
 
     async function newTeacher(e) {
         e.preventDefault()
-        const create = await TeacherUseCases.CreateTeacher(fullNameInput, cpfInput, matterInput)
+        const create = await TeacherUseCases.CreateTeacher(fullNameInput, cpfInput, RegisterInput)
         setCreateTeacher(create)
 
     }
@@ -36,8 +35,8 @@ function NewTeacher() {
                         </div>
                         {/* <ErrorInput message={ErrorFullName}/> */}
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control border-secondary" value={matterInput} onChange={event => setMatterInput(event.target.value)} placeholder="Matéria" />
-                            <label htmlFor='floatingMatter'>Matéria</label>
+                            <input type="text" className="form-control border-secondary" value={RegisterInput} onChange={event => setRegisterInput(event.target.value)} placeholder="Matéria" />
+                            <label htmlFor='floatingRegister'>Matéria</label>
                         </div>
                         <div className="d-flex justify-content-center mb-5">
                             <button type="submit" className="btn btn-light" onClick={newTeacher}>Cadastrar</button>
