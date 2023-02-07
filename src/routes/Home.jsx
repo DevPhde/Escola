@@ -48,7 +48,7 @@ function Home() {
         if (selectedOption === "turmas") {
             result = requisitionData.filter(data => data.turma == search)
         } else {
-            result = requisitionData.filter(data => data.nome == search).length == 0  ? requisitionData.filter(data => data.matricula == search) : requisitionData.filter(data => data.nome == search);
+            result = requisitionData.filter(data => data.nome == search).length == 0 ? requisitionData.filter(data => data.matricula == search) : requisitionData.filter(data => data.nome == search);
         }
         if (result.length == 0) {
             setRequisitionData(result)
@@ -66,9 +66,9 @@ function Home() {
                 <div className="d-flex justify-content-center search__input">
                     <form onSubmit={submitSearch}>
                         <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} label="Buscar" />
-                        {/* <button>Buscar</button> */}
                     </form>
                 </div>
+                <h5 className="text-white text-center">Filtro</h5>
                 <section className="text-white d-flex justify-content-center border mx-5 pt-2 rounded-pill radios__ ">
                     <div className="text-center px-1">
                         <label htmlFor="student">Alunos</label>
