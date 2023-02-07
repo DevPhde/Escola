@@ -109,6 +109,7 @@ function TeacherInfo() {
     else {
         return (
             <main>
+                <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
                 {isEditing ? (
                     <div className='mb-5 text-center'>
                         <div className='mb-5 text-center rounded'>
