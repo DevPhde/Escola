@@ -11,44 +11,44 @@ function TeacherInfo() {
     const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
-    const [deletingTeacher, setDeletingTeacher] = useState(false)
-    const [editedThings, setEditedThings] = useState(false)
+    const [deletingTeacher, setDeletingTeacher] = useState(false);
+    const [editedThings, setEditedThings] = useState(false);
 
-    const [loadgindState, setLoadgindState] = useState(false)
+    const [loadgindState, setLoadgindState] = useState(false);
 
-    const [handleState, setHandleState] = useState(0)
+    const [handleState, setHandleState] = useState(0);
     const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
     const [register, setRegister] = useState('');
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function requisitionInfo() {
             AxiosApi.Get(window.location.pathname)
                 .then((connection) => {
-                    setData(connection.data)
-                    setLoadgindState(connection.data)
+                    setData(connection.data);
+                    setLoadgindState(connection.data);
                     if (data) {
-                        setName(data.nome)
-                        setCpf(data.cpf)
-                        setRegister(data.registro)
+                        setName(data.nome);
+                        setCpf(data.cpf);
+                        setRegister(data.registro);
                     }
 
-                    setIsLoading("false")
+                    setIsLoading("false");
                 }).catch((connection) => {
                     if (connection.response.status == 404) {
-                        setIsLoading("error")
+                        setIsLoading("error");
                     } else {
                         alert("Erro Inesperado, Tente novamente mais tarde.")
                     }
                 })
         }
-        requisitionInfo()
+        requisitionInfo();
     }, [handleState])
 
     if (isLoading == "true") {
-        return <p>Carregando informações do aluno...</p>;
+        return <p>Carregando informações do Professor...</p>;
     } else if (isLoading == "error") {
         return (
             <main className='text-center text-white'>
@@ -64,22 +64,22 @@ function TeacherInfo() {
 
     const handleEditClick = () => {
         setIsEditing(true);
-        setHandleState(handleState + 1)
+        setHandleState(handleState + 1);
 
     };
 
     const handleCancelClick = () => {
         setIsEditing(false);
-        setEditedThings(false)
+        setEditedThings(false);
     };
 
     const handleSaveClick = async () => {
-        let getInfo = await AxiosApi.Get(window.location.pathname)
-        const newInfos = new Teacher(name, cpf, register, getInfo.data.turma)
-        await AxiosApi.Put(window.location.pathname, newInfos)
-        setEditedThings(true)
+        let getInfo = await AxiosApi.Get(window.location.pathname);
+        const newInfos = new Teacher(name, cpf, register, getInfo.data.turma);
+        await AxiosApi.Put(window.location.pathname, newInfos);
+        setEditedThings(true);
         setIsEditing(false);
-        setHandleState(handleState + 1)
+        setHandleState(handleState + 1);
     };
 
     if (deletingTeacher) {
@@ -94,12 +94,12 @@ function TeacherInfo() {
     }
 
     const handleDeleteTeacher = () => {
-        setDeletingTeacher(true)
-        setEditedThings(false)
+        setDeletingTeacher(true);
+        setEditedThings(false);
     }
 
     async function handleDelete() {
-        alert(await TeacherUseCases.DeleteTeacher(window.location.pathname))
+        alert(await TeacherUseCases.DeleteTeacher(window.location.pathname));
         return navigate('/')
     }
 
@@ -115,11 +115,11 @@ function TeacherInfo() {
                             <img src={profile} alt="profile" className='rounded-circle w-25' />
                         </div>
                         <div className='d-flex justify-content-center'>
-                            <div className=" py-5 ms-5">
+                            <form className=" py-5 ms-5">
                                 <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)} />
                                 <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)} />
                                 <Input placeholder="Registro" className="form-control border-secondary __input" htmlFor="register" label="Registro" value={register} onChange={e => setRegister(e.target.value)} />
-                            </div>
+                            </form>
                         </div>
                         <div>
                             <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>

@@ -1,8 +1,7 @@
 import { StudentUseCases } from "../useCases/StudentUseCases"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "../styles/registry.css"
-import { ErrorInput } from "../components/ErrorInput"
-
+import Input from "../components/Input"
 //PEDENCIAS =>
 
 // FINALIZAR VALIDAÇÃO DE INPUTS
@@ -10,73 +9,78 @@ import { ErrorInput } from "../components/ErrorInput"
 // HOOK DE REGEX DATA DE NASCIMENTO
 
 function NewStudent() {
-
-    // HOOKS
-    const [registration, setRegistration] = useState('')
-    const [fullNameInput, setFullNameInput] = useState('')
-    const [cpfInput, setCpfInput] = useState('')
-    const [birthdayInput, setBirthdayInput] = useState('')
-
-    // ERROR HOOKS
-    // const [ErrorFullName, setErrorFullName] = useState('')
-    // const [ErrorBirthday, setErrorBirthday] = useState('')
-    // const [ErrorCPF, setErrorCPF] = useState('')
-    // const [ErrorRegistration, setErrorRegistration] = useState('')
+    const [values, setValues] = useState({
+        fullName: "",
+        cpf: "",
+        birthday: "",
+        registration: "",
+        error: false,
+        color: "border-secondary"
+    })
 
 
+    // const [color, setColor] = useState("form-control border-secondary");
+    // const handleClick = () => {
 
+    //         setValues({ color: "border-secondary" });
+    // };
 
-
-    const [createStudent, setCreateStudent] = useState('')
     async function createNewStudent(e) {
         e.preventDefault()
-        // const map = [fullNameInput, cpfInput, birthdayInput, registration]  //
-        // for (let index = 0; index < map.length; index++) {
-        //    if (map[index] == "") {
-        //    }   
-        // }
-        const student = await StudentUseCases.CreateStudent(fullNameInput, cpfInput, birthdayInput, registration)
-        setCreateStudent(student)
+        const hooks = [values.fullName, values.cpf, values.birthday, values.registration]
+        console.log(hooks)
 
+
+        for (let index = 0; index < hooks.length; index++) {
+            const element = hooks[index];
+            console.log(element)
+            if (element === "") {
+                console.log('error')
+                setValues({ color: 'invalid' });
+                setValues({error: true})
+                console.log(values.error)
+            }
+        }
     }
+    // const student = await StudentUseCases.CreateStudent(fullNameInput, cpfInput, birthdayInput, registration)
+    // setCreateStudent(student)
+    // return
+
+
     return (
         <main>
-            <h3 className='text-center mb-5'>Cadastrar novo aluno</h3>
+            <h3 className='text-center text-white mb-5'>Cadastrar Aluno</h3>
             <form>
-                <div className="container p-3 mt-5 border rounded-5">
+                <div className="container p-3 mt-5 border rounded-5 bg-light">
                     <div className="row align-items-center py-5 ms-5">
                         <section className="col-lg-5 px-2">
-                            {/* <ErrorInput message={ErrorFullName}/> */}
-                            <div className="form-floating mb-3">
-                                <input type="text" className="form-control border-secondary" value={fullNameInput} onChange={event => setFullNameInput(event.target.value)} placeholder="Nome Completo" />
-                                <label htmlFor='floatingFullName'>Nome Completo</label>
+                            <div>
+                                {/* {error && <p>{error}</p>} */}
+                                <Input placeholder="Nome Completo" className={`${values.color} form-control`} htmlFor="FullName" label="Nome Completo" value={values.fullName} onChange={event => setValues({ fullName: event.target.value })} />
                             </div>
-                            {/* <ErrorInput message={ErrorBirthday} /> */}
-                            <div className="form-floating mb-3">
-                                <input type="number" className="form-control border-secondary" value={cpfInput} onChange={event => setCpfInput(event.target.value)} placeholder="CPF" />
-                                <label htmlFor='floatingCPF'>CPF</label>
+
+                            <div>
+                                {/* <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary" htmlFor="CPF" label="CPF" value={cpfInput} onChange={event => setCpfInput(event.target.value)} /> */}
+
                             </div>
-                        </section>
-                        <section className="mx-auto col-lg-5 px-2">
-                            {/* <ErrorInput message={ErrorCPF} /> */}
-                            <div className="form-floating mb-3">
-                                <input type="number" className="form-control border-secondary" value={birthdayInput} onChange={event => setBirthdayInput(event.target.value)} placeholder="Data de Nascimento" />
-                                <label htmlFor='floatingBirthday'>Data de Nascimento</label>
+
+                            <div>
+                                {/* <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary" htmlFor="birthday" label="Data de Nascimento" value={birthdayInput} onChange={event => setBirthdayInput(event.target.value)} /> */}
                             </div>
-                            {/* <ErrorInput message={ErrorRegistration}/> */}
-                            <div className="input-group mb-3">
-                                <input type="text" readOnly className="form-control form-control-lg" placeholder="Matrícula" value={registration} />
+
+                            {/* <div className="input-group mb-3">
+                                <input type="text" readOnly className="form-control form-control-lg border-secondary" placeholder="Matrícula" value={registration} />
                                 <button className="btn btn-danger" type="button" onClick={async (e) => {
                                     e.preventDefault()
                                     setRegistration(await StudentUseCases.StudentRegistration())
                                 }}>Button</button>
-                            </div>
+                            </div> */}
                         </section>
                     </div>
                     <div className="d-flex justify-content-center mb-5">
                         <button type="submit" className="btn btn-light" onClick={createNewStudent}>Cadastrar</button>
                     </div>
-                    <p className="text-center mt-5">{createStudent}</p>
+                    {/* <p className="text-center mt-5 text-success">{createStudent}</p> */}
                 </div>
             </form>
         </main >

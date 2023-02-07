@@ -52,13 +52,13 @@ function StudentInfo() {
         return <p>Carregando informações do aluno...</p>;
     } else if (isLoading == "error") {
         return (
-            <div className='text-center text-white'>
+            <main className='text-center text-white'>
                 <h1>Erro 404!</h1>
                 <h4>Aluno não encontrado.</h4>
                 <div className='mt-4 mb-5'>
                     <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
                 </div>
-            </div>
+            </main>
         )
 
     }
@@ -86,12 +86,12 @@ function StudentInfo() {
 
     if (deletingStudent) {
         return (
-            <div className='mb-5 text-center text-white'>
+            <main className='mb-5 text-center text-white'>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
                 <button className='btn btn-light ms-5' onClick={() => setDeletingStudent(false)}>Cancelar</button>
-            </div>
+            </main>
         )
     }
 
@@ -119,12 +119,12 @@ function StudentInfo() {
                             <img src={profile} alt="profile" className='rounded-circle w-25' />
                         </div>
                         <div className='d-flex justify-content-center'>
-                            <div className=" py-5 ms-5">
+                            <form className=" py-5 ms-5">
                                 <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)}/>
                                 <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary __input" htmlFor="birthday" label="Data de Nascimento" value={birthday} onChange={e => setBirthday(e.target.value)}/>
                                 <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)}/>
                                 <Input placeholder="Matrícula" className="form-control border-secondary __input" htmlFor="registration" label="Matrícula" value={registration} onChange={e => setRegistration(e.target.value)}/>
-                            </div>
+                            </form>
                         </div>
                         <div>
                             <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>

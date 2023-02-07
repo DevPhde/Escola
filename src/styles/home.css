@@ -1,0 +1,21 @@
+.list_div {
+    height: 450px;
+    overflow: auto;
+}
+
+.info__ {
+    display: flex;
+    justify-content: space-between;
+}
+
+.radios__ {
+    min-width: 210px
+}
+
+
+@media only screen and (max-width: 360px) {
+    .info__{
+        display: block;
+        flex-direction: column;
+    }
+  }
