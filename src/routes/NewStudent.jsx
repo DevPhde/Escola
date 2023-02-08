@@ -1,153 +1,197 @@
-import { StudentUseCases } from "../useCases/StudentUseCases"
-import { useEffect, useState } from "react"
-import "../styles/registry.css"
-import Input from "../components/Input"
-import FormExample from "../components/New"
+import React, { useState, useRef } from 'react';
+import { Button } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import { StudentUseCases } from '../useCases/StudentUseCases';
+import { Link } from 'react-router-dom';
 
-function NewStudent() {
+function newStudent() {
+  //CPF
+  const cpfRef = useRef(null);
 
-    const colorError = {
-        true: "invalid",
-        false: "border-secondary"
-    }
+  const handleChange = (event) => {
+    let inputValue = event.target.value;
+    inputValue = inputValue.replace(/\D/g, "");
 
-    const [name, setName] = useState({
-        value: "",
-        color: colorError.false,
-        error: true,
-        message: ""
-    });
+    if (inputValue.length <= 11) {
+      let formattedValue = "";
 
-    const [cpf, setCpf] = useState({
-        value: "",
-        color: colorError.false,
-        error: true,
-        message: ""
-    });
-
-    const [birthday, setBirthday] = useState({
-        value: "",
-        color: colorError.false,
-        error: true,
-        message: ""
-    });
-
-    const [registration, setRegistration] = useState({
-        value: "",
-        color: colorError.false,
-        error: true,
-        message: ""
-    });
-
-    const handleRegistration = async (e) => {
-        e.preventDefault()
-        const registration = await StudentUseCases.StudentRegistration()
-        setRegistration((prevState) => ({ ...prevState, value: registration }))
-    }
-
-    const handleValidation = () => {
-        if (name.value.length < 3) { // name
-            setName((prevState) => ({ ...prevState, color: colorError.true, error: true, message: "Necessário 3 ou mais caractéres." }))
+      for (let i = 0; i < inputValue.length; i++) {
+        if (i === 3 || i === 6) {
+          formattedValue += ".";
         }
-        const numbers = '0123456789'.split('')
-        let completeCpf = null 
-        for (let index = 0; index < cpf.value.length; index++) {
-            for (let j = 0; j < numbers.length; j++){
-                if(cpf.value[index] == numbers[j]){
-                    completeCpf += j.toString()
-                    console.log(j)
-                    console.log(completeCpf)
-                }
-            }
+        if (i === 9) {
+          formattedValue += "-";
         }
-        
+        formattedValue += inputValue[i];
+      }
+
+      setValues((prevState) => ({ ...prevState, cpf: formattedValue }))
+      cpfRef.current.value = formattedValue;
     }
-console.log(birthday.value)
-    const ClearError = () => {
-        setName((prevState) => ({ ...prevState, color: colorError.false, error: false }));
+  };
+
+  //DATA DE NASCIMENTO
+
+  const handleBirthday = (event) => {
+    let value = event.target.value;
+
+    if (value.length === 11) {
+      return;
     }
 
-    async function createNewStudent(e) {
-        e.preventDefault()
-        handleValidation()
+    if (value.length === 2 || value.length === 5) {
+      value += '/';
     }
-    //     e.preventDefault()
-    //     // const hooks = [name.fullName]
-    //     const hooks = [
-    //         name,
-    //         cpf,
-    //         birthday,
-    //         registration
-    //     ]
-    //     console.log(hooks)
 
-    //     const objects = {
-    //         name: [setName, setError],
-    //         birthday: [setBirthday, setError],
-    //         cpf: [setCpf, setError],
-    //         registration: [setRegistration, setError]
-    //     }
+    setValues((prevState) => ({ ...prevState, birthday: value }))
+  };
 
-    //     for (let index = 0; index < hooks.length; index++) {
-    //         console.log(hooks[index].value)
-    //         if (hooks[index].value == "") {
-    //             console.log('error')
-    //             objects.hooks[index][0](prevState => {
-    //                 console.log(prevState)
-    //                 return { ...prevState, color: "invalid" }
-    //             });
-    //             objects.name[1](prevState => {
-    //                 console.log(prevState)
-    //                 return { ...prevState, name: "Campo Obrigatório" }
-    //             });
+  const [renderResponse, setRenderResponse] = useState({
+    response: "",
+    status: true
+  })
+  const [validated, setValidated] = useState(false);
+  const [error, setError] = useState(false)
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    if (values.registration == "") {
+      setError(true)
+    }
+    if (form.checkValidity() === false || valid < 4) {
+      event.preventDefault();
+      event.stopPropagation();
 
-    //             // setName({ error: true})
-    //             // console.log(values.error)
-    //         }
-    //     }
-    // }
+    } else {
+      event.preventDefault();
+      const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
+      setRenderResponse({ response: response, status: false })
 
-    // const student = await StudentUseCases.CreateStudent(fullNameInput, cpfInput, birthdayInput, registration)
-    // setCreateStudent(student)
-    // return
+    }
+    setValidated(true);
+  };
 
+  const [generate, setGenerete] = useState(false)
 
-    return (
-        <FormExample/>
-        // <main>
-        //     <h3 className='text-center text-white mb-5'>Cadastrar Aluno</h3>
-        //     <form>
-        //         <div className="container mt-5 border rounded-5 bg-light">
-        //             <div className="mb-2 py-5 d-flex justify-content-center">
-        //                 <section className="col-lg-5 px-2">
-        //                     <div>
-        //                         {/* {error.name && <p className="text-danger">{error.name}</p>} */}
-        //                         <Input placeholder="Nome Completo" required className={`${name.color} form-control`} htmlFor="FullName" label="Nome Completo" value={name.value} onChange={(event) => setName((prevState) => ({ ...prevState, value: event.target.value, color: colorError.false, error: false }))} />
-        //                     </div>
+  const [valid, setValid] = useState(0)
 
-        //                     <div>
-        //                         <Input mask="999.999.999-99" placeholder="CPF" className={`${cpf.color} form-control`} htmlFor="CPF" label="CPF" value={cpf.value} onChange={(event) => setCpf((prevState) => ({ ...prevState, value: event.target.value }))} />
+  const [values, setValues] = useState({
+    name: '',
+    cpf: '',
+    birthday: '',
+    registration: ''
+  })
+  const [validate, setValidate] = useState({
+    name: false,
+    cpf: false,
+    birthday: false,
+    registration: false
+  })
 
-        //                     </div>
+  const handleRegistration = async (e) => {
+    e.preventDefault()
+    const registration = await StudentUseCases.StudentRegistration()
+    setValues((prevState) => ({ ...prevState, registration: registration }))
+    setGenerete(true)
+    setValid(valid + 1)
+    setValidate((prevState) => ({ ...prevState, registration: false }))
+  }
 
-        //                     <div>
-        //                         <Input mask="99/99/9999" placeholder="Data de Nascimento" className={`${birthday.color} form-control`} htmlFor="birthday" label="Data de Nascimento" value={birthday.value} onChange={(event) => setBirthday((prevState) => ({ ...prevState, value: event.target.value }))} />
-        //                     </div>
-
-        //                     <div className="input-group mb-3">
-        //                         <input type="text" readOnly className={`form-control form-control-lg ${registration.color}`} placeholder="Matrícula" value={registration.value} />
-        //                         <button className="btn btn-danger" type="button" onClick={handleRegistration}>Button</button>
-        //                     </div>
-        //                 </section>
-        //             </div>
-        //             <div className="d-flex justify-content-center mb-5">
-        //                 <button type="submit" className="btn btn-dark" onClick={createNewStudent}>Cadastrar</button>
-        //             </div>
-        //             {/* <p className="text-center mt-5 text-success">{createStudent}</p> */}
-        //         </div>
-        //     </form>
-        // </main >
-    )
+  return (
+    <main>
+      {renderResponse.status ? (
+        <div className='text-white'>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Row className="mb-3">
+              <Form.Group as={Col} md="4" controlId="fullName">
+                <Form.Label>Nome Completo</Form.Label>
+                <Form.Control
+                  value={values.name}
+                  type="text"
+                  placeholder="Nome Completo"
+                  onChange={(event) => setValues((prevState) => ({ ...prevState, name: event.target.value }))}
+                  onBlur={(() => {
+                    if (values.name.length < 8) {
+                      setValidate((prevState) => ({ ...prevState, name: true }))
+                    } else {
+                      setValidate((prevState) => ({ ...prevState, name: false }))
+                      setValid(valid + 1)
+                    }
+                  })}
+                  required
+                  isInvalid={validate.name}
+                />
+                <Form.Control.Feedback type="invalid" className='text-danger'>
+                  Preencha com seu nome completo.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              <Form.Group as={Col} md="4" controlId="cpf">
+                <Form.Label>CPF</Form.Label>
+                <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
+                  onBlur={(() => {
+                    if (values.cpf.length == 14) {
+                      setValidate((prevState) => ({ ...prevState, cpf: false }))
+                      setValid(valid + 1)
+                    } else {
+                      setValidate((prevState) => ({ ...prevState, cpf: true }))
+                    }})}
+                  isInvalid={validate.cpf}
+                />
+                <Form.Control.Feedback type="invalid" className='text-danger'>
+                  Preencha com um CPF válido.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              <Form.Group as={Col} md="4" controlId="birthday">
+                <Form.Label>Data de Nascimento</Form.Label>
+                <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
+                  onBlur={(() => {
+                    if (values.birthday.length == 10) {
+                      setValidate((prevState) => ({ ...prevState, birthday: false }))
+                      setValid(valid + 1)
+                    } else {
+                      setValidate((prevState) => ({ ...prevState, birthday: true }))
+                    }})}
+                  isInvalid={validate.birthday} />
+                <Form.Control.Feedback type="invalid" className='text-danger'>
+                  Preencha com a data de nascimento.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              {!generate ? (
+                <Form.Group>
+                  <button
+                    className='btn btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
+                  {error ? (<p className='text-danger'>É obrigatório gerar a matrícula no momento do cadastro.</p>) : ""}
+                </Form.Group>
+              ) : (
+                <Form.Group as={Col} md="4" controlId="registration">
+                  <Form.Label>Matrícula</Form.Label>
+                  <Form.Control readOnly isValid={true} placeholder="Matrícula"
+                    value={values.registration}></Form.Control>
+                </Form.Group>
+              )}
+            </Row>
+            <div className='text-center'>
+              <Button className='text-center' type="submit">Cadastrar</Button>
+            </div>
+          </Form>
+        </div>
+      ) : (
+        <div className='mt-5'>
+          <h2 className='text-center text-white'>{renderResponse.response}</h2>
+          <div className='mt-4 mb-5 text-center'>
+            <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
+          </div>
+        </div>
+      )}
+    </main>
+  );
 }
 
-export default NewStudent
+export default newStudent
