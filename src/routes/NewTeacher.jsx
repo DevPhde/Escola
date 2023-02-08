@@ -92,7 +92,7 @@ function newStudent() {
                   isInvalid={validate.name}
                 />
                 <Form.Control.Feedback type="invalid" className='text-danger'>
-                  Preencha com seu nome completo.
+                  Preencha com nome completo.
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>

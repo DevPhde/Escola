@@ -24,6 +24,8 @@ function StudentInfo() {
     const [registration, setRegistration] = useState('');
     const navigate = useNavigate()
 
+
+
     useEffect(() => {
         async function requisitionInfo() {
             AxiosApi.Get(window.location.pathname)
@@ -120,11 +122,12 @@ function StudentInfo() {
                         </div>
                         <div className='d-flex justify-content-center'>
                             <form className=" py-5 ms-5">
-                                <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)}/>
-                                <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary __input" htmlFor="birthday" label="Data de Nascimento" value={birthday} onChange={e => setBirthday(e.target.value)}/>
-                                <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)}/>
-                                <Input placeholder="Matrícula" className="form-control border-secondary __input" htmlFor="registration" label="Matrícula" value={registration} onChange={e => setRegistration(e.target.value)}/>
+                                <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)} />
+                                <Input mask="99/99/9999" placeholder="Data de Nascimento" className="form-control border-secondary __input" htmlFor="birthday" label="Data de Nascimento" value={birthday} onChange={e => setBirthday(e.target.value)} />
+                                <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)} />
+                                <Input placeholder="Matrícula" className="form-control border-secondary __input" htmlFor="registration" label="Matrícula" value={registration} onChange={e => setRegistration(e.target.value)} />
                             </form>
+
                         </div>
                         <div>
                             <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>
@@ -144,7 +147,7 @@ function StudentInfo() {
                                 )}
                             </div>
                         </div>
-                        
+
                         <p>Nome Completo: {data.nome}</p>
                         <p>Data de Nascimento: {data.dataNascimento}</p>
                         <p>CPF: {data.cpf}</p>
