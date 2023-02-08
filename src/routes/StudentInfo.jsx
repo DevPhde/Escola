@@ -75,7 +75,6 @@ function StudentInfo() {
     };
 
     const handleSaveClick = async () => {
-        // FAZER MENSAGEM NA TELA DE USUÁRIO ALTERADO OU ERROR
         let getInfo = await AxiosApi.Get(window.location.pathname)
         const newInfos = new Student(name, cpf, birthday, registration, getInfo.data.turma)
         await AxiosApi.Put(window.location.pathname, newInfos)
