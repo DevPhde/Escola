@@ -5,7 +5,7 @@ import "../styles/classRoomRegister.css"
 function NewClass() {
 
     const [values, setValues] = useState({
-        turma: "",
+        classRoom: "",
         professor: "",
         students: "",
         year: ""
@@ -16,10 +16,9 @@ function NewClass() {
         three: false,
         four: false
     })
-    const [data, setData] = useState(false)
     const [teachers, setTeachers] = useState([]);
 
-    const filteredProfessors = teachers.filter(teacher => !teacher.turma);
+    const filteredProfessors = teachers.filter(teacher => !teacher.classRoom);
 
     const [selectedTeacher, setSelectedTeacher] = useState('');
     const handleChange = (event) => {
@@ -27,7 +26,7 @@ function NewClass() {
             (teacher) => teacher.nome === event.target.value
         );
         setSelectedTeacher(selectedOption);
-        setSteps(prevStats => ({...prevStats,  two: false, three: true }))
+        setSteps(prevStats => ({ ...prevStats, two: false, three: true }))
     };
     // console.log(teachers)
     useEffect(() => {
@@ -36,15 +35,33 @@ function NewClass() {
             setTeachers(connection.data)
         }
         console.log(teachers)
-        // setData(true)
         axiosData()
     }, [selectedTeacher])
 
     const [invalidInput, setInvalidInput] = useState({
-        pass: false,
-        error: false
+        classRoom: false,
+        year: false,
+        errorClassRoom: false,
+        errorYear: false,
+        inputsPassed: 0
     })
-console.log(steps)
+    console.log(invalidInput)
+    const handleClassRoomBlur = () => {
+        if (values.classRoom.length == 4) {
+            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false, classRoom: true }))
+        } else {
+            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: true }))
+
+        }
+    }
+    const handleYearBlur = () => {
+        if ((values.year.length < 3) && (values.year.length > 0)) {
+            setInvalidInput(prevState => ({ ...prevState, errorYear: false, year: true }))
+        } else {
+            setInvalidInput(prevState => ({ ...prevState, errorYear: true }))
+
+        }
+    }
     return (
         <main>
             {teachers ? (
@@ -56,41 +73,54 @@ console.log(steps)
                     {steps.one &&
                         steps.one ? (
                         <div className="m-5 text-center">
+                            <section>
+                                <Row className="mb-3  d-flex justify-content-between">
+                                    <Form.Group as={Col} md="3" controlId="classRoomCode">
+                                        <Form.Label className="text-white">Turma</Form.Label>
+                                        <Form.Control
+                                            value={values.classRoom}
+                                            type="number"
+                                            placeholder="Ex.: 1001"
+                                            onChange={(event) => setValues((prevState) => ({ ...prevState, classRoom: event.target.value }))}
+                                            onBlur={handleClassRoomBlur}
+                                            isInvalid={invalidInput.errorClassRoom}
+                                        />
+                                        <Form.Control.Feedback type="invalid" className='text-danger'>
+                                            Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
 
-                            <Form.Group className="mx-5" controlId="classRoomCode">
-                                <Form.Label className="text-white">Turma</Form.Label>
-                                <Form.Control
-                                    value={values.turma}
-                                    type="number"
-                                    placeholder="Ex.: 1001"
-                                    onChange={(event) => setValues((prevState) => ({ ...prevState, turma: event.target.value }))}
-                                    onBlur={(() => {
-                                        if (values.turma.length == 4) {
-                                            setInvalidInput(() => ({error: false, pass: true}))
-                                        } else {
-                                            setInvalidInput(prevState => ({...prevState, error: true}))
+                                    <Form.Group as={Col} md="3" controlId="classRoomCode">
+                                        <Form.Label className="text-white">Série</Form.Label>
+                                        <Form.Control
+                                            value={values.year}
+                                            type="number"
+                                            placeholder="Ex.: 1"
+                                            onChange={(event) => setValues((prevState) => ({ ...prevState, year: event.target.value }))}
+                                            onBlur={handleYearBlur}
+                                            isInvalid={invalidInput.errorYear}
+                                        />
+                                        <Form.Control.Feedback type="invalid" className='text-danger'>
+                                            Preencha com a série, apenas números.
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Row>
+                            </section>
 
-                                        }
-                                    })}
-                                    isInvalid={invalidInput.error}
-                                />
-                                <Form.Control.Feedback type="invalid" className='text-danger'>
-                                    Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
-                                </Form.Control.Feedback>
-                            </Form.Group>
 
                             <button onClick={(e) => {
                                 e.preventDefault()
-                                if (invalidInput.pass) {
+                                if ((invalidInput.classRoom) && (invalidInput.year)) {
                                     setSteps(prevState => ({ ...prevState, one: false, two: true }))
                                 } else {
-                                    setInvalidInput(prevState => ({...prevState, error: true}))
+                                    handleClassRoomBlur()
+                                    handleYearBlur()
                                 }
                             }} className=' mt-5 btn-light btn'>Prosseguir</button>
                         </div>
                     ) : (
                         <div className="teacher__selected border rounded-pill d-flex justify-content-center">
-                            <p className="text-white mt-1">Turma: {values.turma}</p>
+                            <p className="text-white mt-1">Turma: {values.classRoom}</p>
                         </div>
                     )}
 
