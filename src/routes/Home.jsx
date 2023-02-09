@@ -3,7 +3,7 @@ import Input from "../components/Input"
 import { useState, useEffect } from "react"
 import "../styles/home.css"
 import { AxiosApi } from "../services/RequisitionAPI"
-
+import Loading from "../components/Loading"
 
 function Home() {
     const [search, setSearch] = useState("")
@@ -11,7 +11,7 @@ function Home() {
     const [requisitionData, setRequisitionData] = useState(undefined);
     const [searchError, setSearchError] = useState('')
     const [selectedOption, setSelectedOption] = useState('alunos')
-    const [loadingScreen, setLoadingScreen] = useState("Carregando informações...")
+    const [loadingScreen, setLoadingScreen] = useState(true)
 
 
     const handleOptionChange = (event) => {
@@ -22,10 +22,9 @@ function Home() {
         async function requisitionInfo() {
             try {
                 const connection = await AxiosApi.Get(`/${selectedOption}`)
-                // console.log(connection)
                 setRequisitionData(connection.data)
             } catch (error) {
-                setLoadingScreen("Erro Interno, Tente novamente mais tarde.")
+                setLoadingScreen(false)
             }
 
         }
@@ -96,9 +95,20 @@ function Home() {
                             ))}
                         </div>
                     ) : (
-                        <p className="mt-5 text-center">{loadingScreen}</p>
-                    )
-                    }
+                        <div>
+                            {loadingScreen ?
+                                (
+                                    <div>
+                                        <Loading />
+                                        <p className="mt-5 text-center">Carregando informações...</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <p className="mt-5 text-center">Erro Interno, Tente novamente mais tarde.(error code: 28L H)</p>
+                                    </div>
+                                )}
+                        </div>
+                    )}
                 </div>
             </div>
         </main >

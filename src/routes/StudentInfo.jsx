@@ -4,7 +4,7 @@ import profile from "../assets/profile.webp"
 import { Student } from '../entities/Student';
 import { Link, useNavigate } from 'react-router-dom';
 import "../styles/info.css"
-
+import Loading from '../components/Loading';
 
 import Input from '../components/Input';
 
@@ -51,7 +51,10 @@ function StudentInfo() {
     }, [handleState])
 
     if (isLoading == "true") {
-        return <p>Carregando informações do aluno...</p>;
+        return (
+            <main>
+            <Loading />
+        </main>)
     } else if (isLoading == "error") {
         return (
             <main className='text-center text-white'>
@@ -103,11 +106,15 @@ function StudentInfo() {
 
     async function handleDelete() {
         const deleteInfos = await AxiosApi.Delete(window.location.pathname)
-        deleteInfos.status == 200 ? alert('Cadastro Excluído') : alert('Erro interno, tente novamente mais tarde.')
+        deleteInfos.status == 200 ? alert('Cadastro Excluído') : alert('Erro interno, tente novamente mais tarde.(error code: 106L SI)')
         return navigate('/')
     }
     if (!loadgindState) {
-        return <p>Carregando...</p>;
+        return (
+            <main>
+                <Loading />
+            </main>
+        )
     }
     else {
 

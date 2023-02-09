@@ -12,7 +12,7 @@ export class StudentUseCases {
     static async CreateStudent(fullName, cpf, birthday, registration) {
         const student = new Student(fullName, cpf, birthday, registration)
         const connection = await AxiosApi.Post('/alunos', student)
-        return connection.status == 201 ? "Aluno Criado com sucesso!" : "Erro interno, Tente novamente mais tarde."
+        return connection.status == 201 ? "Aluno Criado com sucesso!" : "Erro interno, Tente novamente mais tarde.(error code: 15L SUC)"
     }
     static async DeleteStudent(){
 

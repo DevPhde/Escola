@@ -11,3 +11,9 @@ input[type=number] {
    appearance: textfield;
 
 }
+
+.list_students {
+    overflow: auto;
+    height: 200px;
+    min-width: 300px
+}

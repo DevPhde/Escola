@@ -6,7 +6,7 @@ import { Teacher } from '../entities/Teacher';
 import { TeacherUseCases } from '../useCases/TeacherUseCases';
 import "../styles/info.css"
 import Input from '../components/Input';
-
+import Loading from '../components/Loading';
 function TeacherInfo() {
     const [data, setData] = useState(false);
     const [isLoading, setIsLoading] = useState("true");
@@ -48,7 +48,10 @@ function TeacherInfo() {
     }, [handleState])
 
     if (isLoading == "true") {
-        return <p>Carregando informações do Professor...</p>;
+        return (
+            <main>
+            <Loading />
+        </main>)
     } else if (isLoading == "error") {
         return (
             <main className='text-center text-white'>
@@ -104,7 +107,10 @@ function TeacherInfo() {
     }
 
     if (!loadgindState) {
-        return <p>Carregando...</p>;
+        return (
+            <main>
+            <Loading />
+        </main>)
     }
     else {
         return (

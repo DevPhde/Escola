@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react"
 import { Form, Col, Row } from "react-bootstrap"
 import { AxiosApi } from "../services/RequisitionAPI"
+import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases"
 import "../styles/classRoomRegister.css"
+import removeStudent from "../assets/removeUser.png"
+import addStudent from "../assets/addUser.png"
+import { Link } from "react-router-dom"
+
 function NewClass() {
 
     const [values, setValues] = useState({
@@ -16,27 +21,18 @@ function NewClass() {
         three: false,
         four: false
     })
+
+
     const [teachers, setTeachers] = useState([]);
-
-    const filteredProfessors = teachers.filter(teacher => !teacher.classRoom);
-
     const [selectedTeacher, setSelectedTeacher] = useState('');
-    const handleChange = (event) => {
+
+    const handleChangeTeacher = (event) => {
         const selectedOption = teachers.find(
             (teacher) => teacher.nome === event.target.value
         );
         setSelectedTeacher(selectedOption);
-        setSteps(prevStats => ({ ...prevStats, two: false, three: true }))
+        setSteps(prevStats => ({ ...prevStats, two: false, three: true, four: true }))
     };
-    // console.log(teachers)
-    useEffect(() => {
-        async function axiosData() {
-            const connection = await AxiosApi.Get('/professores')
-            setTeachers(connection.data)
-        }
-        console.log(teachers)
-        axiosData()
-    }, [selectedTeacher])
 
     const [invalidInput, setInvalidInput] = useState({
         classRoom: false,
@@ -45,7 +41,7 @@ function NewClass() {
         errorYear: false,
         inputsPassed: 0
     })
-    console.log(invalidInput)
+
     const handleClassRoomBlur = () => {
         if (values.classRoom.length == 4) {
             setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false, classRoom: true }))
@@ -62,6 +58,63 @@ function NewClass() {
 
         }
     }
+
+
+    //ALUNOS
+    const [students, setStudents] = useState([]);
+    const [selectedStudents, setSelectedStudents] = useState([]);
+    const [uniqueKey, setUniqueKey] = useState(0);
+    useEffect(() => {
+        async function dataRequisitons() {
+            const students = await AxiosApi.Get('/alunos')
+            const filteredStudents = students.data.filter(students => !students.turma);
+            setStudents(filteredStudents)
+
+            const teachers = await AxiosApi.Get('/professores')
+            const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
+            setTeachers(filteredTeachers)
+
+        }
+        dataRequisitons()
+    }, [selectedTeacher])
+
+    const handleStudentSelection = (student) => {
+        setSelectedStudents([...selectedStudents, student]);
+        setStudents(students.filter((s) => s.id !== student.id));
+    };
+
+    const handleStudentDeselection = (student) => {
+        setStudents([...students, student]);
+        setSelectedStudents(selectedStudents.filter((s) => s.id !== student.id));
+        setUniqueKey(uniqueKey + 1);
+    };
+    const [create, setCreate] = useState({
+        message: "200",
+        status: false
+    })
+
+    if (create.status) {
+        return (
+            <main className="text-center text-white">
+                {create.message == "200" ? (<h4 className="mt-5">Turma Criada com sucesso!</h4>) : (<div>
+                    <h4 className="mt-5">{create.message}</h4>
+                </div>
+                )}
+                <Link to="/"><button className='btn-light btn mt-5'>Voltar para Tela Inicial</button></Link>
+            </main>
+        )
+    }
+
+    const CreateNewClassRoom = async (e) => {
+        e.preventDefault()
+
+        const createClassRoom = await ClassRoomUseCases.CreateClassRoom(values.classRoom, values.year, selectedStudents, selectedTeacher)
+        const editStudents = createClassRoom == '200' ? await ClassRoomUseCases.EditStudent(values.classRoom, selectedStudents) : setCreate(() => ({ message: createClassRoom, status: true }));
+        const editTeacher = editStudents == '200' ? await ClassRoomUseCases.EditTeacher(values.classRoom, selectedTeacher) : setCreate(() => ({ message: editStudents, status: true }));
+        editTeacher == '200' ? setCreate(prevState => ({...prevState, status: true })) : setCreate(() => ({ message: editTeacher, status: true }));
+    }
+
+    // console.log(teachers)
     return (
         <main>
             {teachers ? (
@@ -119,8 +172,9 @@ function NewClass() {
                             }} className=' mt-5 btn-light btn'>Prosseguir</button>
                         </div>
                     ) : (
-                        <div className="teacher__selected border rounded-pill d-flex justify-content-center">
+                        <div className="teacher__selected border rounded-pill d-flex justify-content-between px-5">
                             <p className="text-white mt-1">Turma: {values.classRoom}</p>
+                            <p className="text-white mt-1">Série: {values.year}°</p>
                         </div>
                     )}
 
@@ -130,9 +184,9 @@ function NewClass() {
                             <section className="col-lg-5 row text-center">
                                 <Form.Group controlId="ControlSelect1">
                                     <Form.Label className="text-white">Professores</Form.Label>
-                                    <Form.Control as="select" value={selectedTeacher} onChange={handleChange}>
+                                    <Form.Control as="select" value={selectedTeacher} onChange={handleChangeTeacher}>
                                         <option value="" disabled>Selecionar professor</option>
-                                        {filteredProfessors.map((teacher) => (
+                                        {teachers.map((teacher) => (
                                             <option key={teacher.id}>{teacher.nome}</option>
                                         ))}
                                     </Form.Control>
@@ -141,7 +195,7 @@ function NewClass() {
                         </div>}
 
                     {steps.three &&
-                        <div>
+                        <div className="mt-5">
                             <div className="teacher__selected border rounded-pill d-flex justify-content-center">
                                 <p className="text-white mt-1">Professor(a): {selectedTeacher.nome}</p>
                             </div>
@@ -149,18 +203,45 @@ function NewClass() {
 
                     {steps.four &&
                         (
-                            <div className="text-white mt-5">
-                                <section className="col-lg-5 row text-center">
-                                    <Form.Group controlId="ControlSelect1">
-                                        <Form.Label className="text-white">Professores</Form.Label>
-                                        <Form.Control as="select" value={selectedTeacher} onChange={handleChange}>
-                                            <option value="" disabled>Selecionar professor</option>
-                                            {teachers.map((teacher) => (
-                                                <option key={teacher.id}>{teacher.nome}</option>
-                                            ))}
-                                        </Form.Control>
-                                    </Form.Group>
-                                </section>
+                            <div className="mt-5">
+                                <div className="d-flex bg-white d-flex justify-content-between p-5">
+                                    <section className="border rounded">
+                                        <h4 className="text-center">Lista de Alunos</h4>
+                                        <hr />
+                                        <div className=" list_students px-2">
+                                            <ul>
+                                                {students.map((student) => (
+                                                    <li key={student.id}>
+                                                        <img src={addStudent} width={'18px'} onClick={() => handleStudentSelection(student)} />
+                                                        {/* <input
+                                                            type="checkbox"
+                                                            onClick={() => handleStudentSelection(student)}
+                                                        /> */}
+                                                        {student.nome}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </section>
+                                    <section className="border rounded">
+                                        <h4 className="text-center">Alunos Selecionados</h4>
+                                        <hr />
+                                        <div className="list_students px-2">
+                                            <ul>
+                                                {selectedStudents.map((student) => (
+                                                    <li key={student.id + '-' + uniqueKey}>
+                                                        {student.nome}
+                                                        <img src={removeStudent} width={'18px'} onClick={() => handleStudentDeselection(student)} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                    </section>
+                                </div>
+                                <div className="text-center">
+                                    <button onClick={CreateNewClassRoom} className=' mt-5 btn-light btn'>Cadastrar</button>
+                                </div>
                             </div>
                         )}
                 </div>

@@ -1,8 +1,8 @@
 export class ClassRoom {
     constructor(ClassRoom, teacher, year, students){
-        this.ClassRoom = ClassRoom;
-        this.teacher = teacher;
-        this.year = year;
-        this.students = students;
+        this.turma = ClassRoom;
+        this.professor = teacher;
+        this.serie = year;
+        this.alunos = students || [];
     }
 }
