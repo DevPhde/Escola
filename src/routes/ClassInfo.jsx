@@ -1,5 +1,5 @@
 import { ClassRoom } from "../entities/ClassRoom"
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AxiosApi } from "../services/RequisitionAPI"
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Row, Col } from "react-bootstrap";
@@ -25,6 +25,10 @@ function ClassInfo() {
     const [availableStudents, setAvailableStudents] = useState([]);
     const [uniqueKey, setUniqueKey] = useState(0);
 
+    const [prevUpdate, setPrevUpdate] = useState({
+        students: [],
+        teacher: undefined
+    })
 
     const [values, setValues] = useState({
         classRoom: undefined,
@@ -33,12 +37,11 @@ function ClassInfo() {
         students: []
     })
 
-    const [invalidInput, setInvalidInput] = useState({
+    const [invalidInput, setInvalidInput] = useState({ // validação
         classRoom: false,
         year: false,
         errorClassRoom: false,
         errorYear: false,
-        inputsPassed: 0,
         errorMessage: ""
     })
 
@@ -53,7 +56,6 @@ function ClassInfo() {
         const selectedOption = teachers.find(
             (teacher) => teacher.nome === event.target.value
         );
-        console.log(selectedOption)
         setSelectedTeacher(selectedOption);
     };
 
@@ -62,35 +64,41 @@ function ClassInfo() {
         async function dataRequisitons() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
-                console.log(connection)
                 setValues(() => ({ classRoom: connection.data.turma, teacher: connection.data.professor, year: connection.data.serie, students: connection.data.alunos }))
                 setIsLoading(true)
                 setData(true)
+                setPrevUpdate(() => ({ teacher: connection.data.professor, students: connection.data.alunos }))
             } catch (error) {
                 console.log(error)
             }
         }
         dataRequisitons()
     }, [handleState])
+    console.log(prevUpdate)
 
 
     useEffect(() => {
         async function dataRequisitons() {
-            const teachers = await AxiosApi.Get('/professores')
-            const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
-            setTeachers(filteredTeachers)
-            if (data) {
-                setSelectedTeacher(values.teacher)
+            try {
+                const teachers = await AxiosApi.Get('/professores')
+                const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
+                setTeachers(filteredTeachers)
+                if (data) {
+                    setSelectedTeacher(values.teacher)
+                }
+
+                const students = await AxiosApi.Get('/alunos')
+                const filteredStudents = students.data.filter(students => !students.turma);
+                setStudents(values.students)
+                setAvailableStudents(filteredStudents)
+            } catch (error) {
+                console.log(error)
             }
 
-            const students = await AxiosApi.Get('/alunos')
-            const filteredStudents = students.data.filter(students => !students.turma);
-            setStudents(values.students)
-            setAvailableStudents(filteredStudents)
         }
         dataRequisitons()
-    }, [reloadInfos])
-    console.log(selectedTeacher)
+    }, [handleState])
+    // console.log(selectedTeacher)
     if (isLoading == "true") {
         return (
             <main>
@@ -122,12 +130,29 @@ function ClassInfo() {
         setIsEditing(false);
         setEditedThings(false);
     };
+    // console.log(students.length)
 
     const handleSaveClick = async () => {
 
+        // ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,)
+        // const newTeacher = selectedTeacher == prevUpdate.teacher ? selectedTeacher : selectedTeacher
+
+        const lista1 = ['Diego', 'João', 'Maria'];
+        const lista2 = ['Diego', 'Joaquim', 'Ruan'];
+
+        const adicionados = lista2.filter(aluno => !lista1.includes(aluno));
+        const removidos = lista1.filter(aluno => !lista2.includes(aluno));
+
+        console.log('Adicionados:', adicionados);
+        console.log('Removidos:', removidos);
+        
+        console.log('aaaaa')
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
+
+
+
     };
 
     const handleDeleteTeacher = () => {
@@ -136,40 +161,21 @@ function ClassInfo() {
     }
 
     const handleDelete = async () => {
-        alert(await ClassRoomUseCases.DeleteClassRoom(window.location.pathname));
+        alert(await ClassRoomUseCases.DeleteClassRoom(window.location.pathname, values.teacher, values.students));
         return navigate('/')
     }
 
-    const handleClassRoomBlur = () => {
-        if (values.classRoom.length == 4) {
-            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false, classRoom: true }))
-        } else {
-            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: true }))
+    // const handleStudentSelection = (student) => {
+    //     setAvailableStudents([...availableStudents, student]);
+    //     setStudents(students.filter((s) => s.id !== student.id));
+    //     setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
+    // };
 
-        }
-    }
-
-    const handleYearBlur = () => {
-        if ((values.year.length < 3) && (values.year.length > 0)) {
-            setInvalidInput(prevState => ({ ...prevState, errorYear: false, year: true }))
-        } else {
-            setInvalidInput(prevState => ({ ...prevState, errorYear: true }))
-
-        }
-    }
-
-
-    const handleStudentSelection = (student) => {
-        setAvailableStudents([...availableStudents, student]);
-        setStudents(students.filter((s) => s.id !== student.id));
-        setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
-    };
-
-    const handleStudentDeselection = (student) => {
-        setStudents([...students, student]);
-        setAvailableStudents(availableStudents.filter((s) => s.id !== student.id));
-        setUniqueKey(uniqueKey + 1);
-    };
+    // const handleStudentDeselection = (student) => {
+    //     setStudents([...students, student]);
+    //     setAvailableStudents(availableStudents.filter((s) => s.id !== student.id));
+    //     setUniqueKey(uniqueKey + 1);
+    // };
 
     if (deletingClassRoom) {
         return (
@@ -202,7 +208,7 @@ function ClassInfo() {
                                     type="number"
                                     placeholder="Ex.: 1001"
                                     onChange={(event) => setValues((prevState) => ({ ...prevState, classRoom: event.target.value }))}
-                                    onBlur={handleClassRoomBlur}
+                                    onFocus={() => { setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false })) }}
                                     isInvalid={invalidInput.errorClassRoom}
                                 />
                                 <Form.Control.Feedback type="invalid" className='text-danger'>
@@ -217,7 +223,7 @@ function ClassInfo() {
                                     type="number"
                                     placeholder="Ex.: 1"
                                     onChange={(event) => setValues((prevState) => ({ ...prevState, year: event.target.value }))}
-                                    onBlur={handleYearBlur}
+                                    onFocus={() => { setInvalidInput(prevState => ({ ...prevState, errorYear: false })) }}
                                     isInvalid={invalidInput.errorYear}
                                 />
                                 <Form.Control.Feedback type="invalid" className='text-danger'>

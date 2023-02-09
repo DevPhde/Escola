@@ -27,8 +27,28 @@ export class ClassRoomUseCases {
         return data.status == 200 ? "200" : "Erro interno, tenve novamente mais tarde.(error code: L25 CRUC)"
     }
 
-    static async DeleteClassRoom(id) {
-        const deleteInfos = await AxiosApi.Delete(id)
-        return deleteInfos.status == 200 ? 'Cadastro Excluído' : 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
+    static async DeleteClassRoom(id, teacher, students) {
+        const updateTeacher = await this.EditTeacher(false, teacher)
+        if (updateTeacher == '200') {
+            const updateStudents = await this.EditStudent(false, students)
+            if (updateStudents == '200') {
+                const deleteInfos = await AxiosApi.Delete(id)
+                return deleteInfos.status == 200 ? 'Cadastro Excluído' : 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
+            } else {
+                return 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
+            }
+        } else{
+            return 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
+        }
+
+    }
+    static async UpdateClassRoom(id, classRoom, year, students, teacher) {
+        console.log(id, classRoom, year, students, teacher)
+        // const newUpdate = new ClassRoom(classRoom, teacher, year, students)
+        // console.log(newUpdate)
+        // const connection = await AxiosApi.Put(id, newUpdate)
+        // if(connection.status == 200) {
+        //     const updateTeacher = await this.EditTeacher(false, teacher)
+        // }
     }
 }
