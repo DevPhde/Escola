@@ -11,7 +11,6 @@ function NewClass() {
 
     const [values, setValues] = useState({
         classRoom: "",
-        professor: "",
         students: "",
         year: ""
     })
@@ -21,7 +20,6 @@ function NewClass() {
         three: false,
         four: false
     })
-
 
     const [teachers, setTeachers] = useState([]);
     const [selectedTeacher, setSelectedTeacher] = useState('');
@@ -39,7 +37,8 @@ function NewClass() {
         year: false,
         errorClassRoom: false,
         errorYear: false,
-        inputsPassed: 0
+        inputsPassed: 0,
+        errorMessage: ""
     })
 
     const handleClassRoomBlur = () => {
@@ -81,6 +80,7 @@ function NewClass() {
     const handleStudentSelection = (student) => {
         setSelectedStudents([...selectedStudents, student]);
         setStudents(students.filter((s) => s.id !== student.id));
+        setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
     };
 
     const handleStudentDeselection = (student) => {
@@ -107,14 +107,15 @@ function NewClass() {
 
     const CreateNewClassRoom = async (e) => {
         e.preventDefault()
-
-        const createClassRoom = await ClassRoomUseCases.CreateClassRoom(values.classRoom, values.year, selectedStudents, selectedTeacher)
-        const editStudents = createClassRoom == '200' ? await ClassRoomUseCases.EditStudent(values.classRoom, selectedStudents) : setCreate(() => ({ message: createClassRoom, status: true }));
-        const editTeacher = editStudents == '200' ? await ClassRoomUseCases.EditTeacher(values.classRoom, selectedTeacher) : setCreate(() => ({ message: editStudents, status: true }));
-        editTeacher == '200' ? setCreate(prevState => ({...prevState, status: true })) : setCreate(() => ({ message: editTeacher, status: true }));
+        if (selectedStudents.length == 0) {
+            setInvalidInput(prevState => ({ ...prevState, errorMessage: "É obrigatório a escolha de pelo menos um aluno." }))
+        } else {
+            const createClassRoom = await ClassRoomUseCases.CreateClassRoom(values.classRoom, values.year, selectedStudents, selectedTeacher)
+            const editStudents = createClassRoom == '200' ? await ClassRoomUseCases.EditStudent(values.classRoom, selectedStudents) : setCreate(() => ({ message: createClassRoom, status: true }));
+            const editTeacher = editStudents == '200' ? await ClassRoomUseCases.EditTeacher(values.classRoom, selectedTeacher) : setCreate(() => ({ message: editStudents, status: true }));
+            editTeacher == '200' ? setCreate(prevState => ({ ...prevState, status: true })) : setCreate(() => ({ message: editTeacher, status: true }));
+        }
     }
-
-    // console.log(teachers)
     return (
         <main>
             {teachers ? (
@@ -213,10 +214,6 @@ function NewClass() {
                                                 {students.map((student) => (
                                                     <li key={student.id}>
                                                         <img src={addStudent} width={'18px'} onClick={() => handleStudentSelection(student)} />
-                                                        {/* <input
-                                                            type="checkbox"
-                                                            onClick={() => handleStudentSelection(student)}
-                                                        /> */}
                                                         {student.nome}
                                                     </li>
                                                 ))}
@@ -236,9 +233,11 @@ function NewClass() {
                                                 ))}
                                             </ul>
                                         </div>
-
                                     </section>
+
                                 </div>
+                                <p className="text-center text-danger">{invalidInput.errorMessage}</p>
+
                                 <div className="text-center">
                                     <button onClick={CreateNewClassRoom} className=' mt-5 btn-light btn'>Cadastrar</button>
                                 </div>
@@ -252,7 +251,9 @@ function NewClass() {
             )}
 
 
-
+            <div>
+                <Link to="/cadastro"><button className='btn-light btn mt-5 ms-2'>Cancelar Cadastro</button></Link>
+            </div>
 
         </main>
     )

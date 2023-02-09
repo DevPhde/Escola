@@ -2,69 +2,102 @@ import { ClassRoom } from "../entities/ClassRoom"
 import { useState, useEffect, useLayoutEffect } from 'react';
 import { AxiosApi } from "../services/RequisitionAPI"
 import { Link, useNavigate } from 'react-router-dom';
+import { Form, Row, Col } from "react-bootstrap";
+import Loading from "../components/Loading";
 import "../styles/info.css"
-import Input from '../components/Input';
+import removeStudent from "../assets/removeUser.png"
+import addStudent from "../assets/addUser.png"
+import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 
 function ClassInfo() {
-    const [data, setData] = useState(false);
-    const [isLoading, setIsLoading] = useState("true");
-    const [isEditing, setIsEditing] = useState(false);
-    const [deletingClassRoom, setDeletingClassRoom] = useState(false);
-    const [editedThings, setEditedThings] = useState(false);
+    const [data, setData] = useState(null)
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState("true"); // tela de carregamento ou tela com conteudo
+    const [isEditing, setIsEditing] = useState(false); // muda para tela de edição (render)
+    const [deletingClassRoom, setDeletingClassRoom] = useState(false); // DELETA CADASTRO
+    const [editedThings, setEditedThings] = useState(false); //muda para tela de edição
 
-    const [loadgindState, setLoadgindState] = useState(false);
+    const [handleState, setHandleState] = useState(0); // contador para useEffect
+    const [reloadInfos, setReloadInfos] = useState(0);
 
-    const [handleState, setHandleState] = useState(0);
-    const [classRoom, setClassRoom] = useState('')
-    const [teacher, setTeacher] = useState('')
-    const [year, setYear] = useState('')
-    const [students, setStudents] = useState('')
+    // STUDENTS
+    const [students, setStudents] = useState([]);
+    const [availableStudents, setAvailableStudents] = useState([]);
+    const [uniqueKey, setUniqueKey] = useState(0);
+
+
+    const [values, setValues] = useState({
+        classRoom: undefined,
+        teacher: undefined,
+        year: undefined,
+        students: []
+    })
+
+    const [invalidInput, setInvalidInput] = useState({
+        classRoom: false,
+        year: false,
+        errorClassRoom: false,
+        errorYear: false,
+        inputsPassed: 0,
+        errorMessage: ""
+    })
+
+    // EDIT CLASSROOM
+
+    //TEACHER
+    const [teachers, setTeachers] = useState([]);
+    const [selectedTeacher, setSelectedTeacher] = useState('');
+
+    const handleChangeTeacher = (event) => {
+
+        const selectedOption = teachers.find(
+            (teacher) => teacher.nome === event.target.value
+        );
+        console.log(selectedOption)
+        setSelectedTeacher(selectedOption);
+    };
+
 
     useEffect(() => {
-        async function requisitionInfo() {
-            AxiosApi.Get(window.location.pathname)
-                .then((connection) => {
-                    console.log(connection.data)
-                    if (connection) {
-                        console.log("aaaa")
-                        setData(true)
-                        console.log(data)
-                    }
-
-                    setLoadgindState(connection.data);
-                    console.log(loadgindState)
-                    if (data) {
-                        setClassRoom(data.turma);
-                        setYear(data.ano);
-                        setStudents(data.alunos)
-                        setHandleState(handleState + 1);
-                        AxiosApi.Get(`/professores/${data.professor}`).then((connection) => {
-                            if (connection.status == 200)
-                                setTeacher(connection.data.nome)
-                        })
-                    }
-                    setIsLoading("false");
-                }).catch((connection) => {
-                    console.log(connection)
-                    if (connection.response.status == 404) {
-                        setIsLoading("error");
-                    } else {
-                        alert("Erro Inesperado, Tente novamente mais tarde.")
-                    }
-                })
+        async function dataRequisitons() {
+            try {
+                const connection = await AxiosApi.Get(window.location.pathname)
+                console.log(connection)
+                setValues(() => ({ classRoom: connection.data.turma, teacher: connection.data.professor, year: connection.data.serie, students: connection.data.alunos }))
+                setIsLoading(true)
+                setData(true)
+            } catch (error) {
+                console.log(error)
+            }
         }
-        requisitionInfo();
-    console.log(testando())
+        dataRequisitons()
+    }, [handleState])
 
-    }, [])
-    console.log(teacher)
-    console.log(handleState)
+
+    useEffect(() => {
+        async function dataRequisitons() {
+            const teachers = await AxiosApi.Get('/professores')
+            const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
+            setTeachers(filteredTeachers)
+            if (data) {
+                setSelectedTeacher(values.teacher)
+            }
+
+            const students = await AxiosApi.Get('/alunos')
+            const filteredStudents = students.data.filter(students => !students.turma);
+            setStudents(values.students)
+            setAvailableStudents(filteredStudents)
+        }
+        dataRequisitons()
+    }, [reloadInfos])
+    console.log(selectedTeacher)
     if (isLoading == "true") {
-        return(
+        return (
             <main>
-                <p className="text-white">Carregando informações da Turma...</p>;
+                <Loading />
+                <p className="text-white text-center">Carregando informações da Turma...</p>;
             </main>
-        ) 
+        )
     } else if (isLoading == "error") {
         return (
             <main className='text-center text-white'>
@@ -76,11 +109,12 @@ function ClassInfo() {
             </main>
         )
     }
-    
+
 
     const handleEditClick = () => {
         setIsEditing(true);
         setHandleState(handleState + 1);
+        setReloadInfos(reloadInfos + 1)
 
     };
 
@@ -90,9 +124,7 @@ function ClassInfo() {
     };
 
     const handleSaveClick = async () => {
-        // let getInfo = await AxiosApi.Get(window.location.pathname);
-        // const newInfos = new Teacher(name, cpf, register, getInfo.data.turma);
-        // await AxiosApi.Put(window.location.pathname, newInfos);
+
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
@@ -103,10 +135,41 @@ function ClassInfo() {
         setEditedThings(false);
     }
 
-    async function handleDelete() {
-        // alert(await TeacherUseCases.DeleteTeacher(window.location.pathname));
+    const handleDelete = async () => {
+        alert(await ClassRoomUseCases.DeleteClassRoom(window.location.pathname));
         return navigate('/')
     }
+
+    const handleClassRoomBlur = () => {
+        if (values.classRoom.length == 4) {
+            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false, classRoom: true }))
+        } else {
+            setInvalidInput(prevState => ({ ...prevState, errorClassRoom: true }))
+
+        }
+    }
+
+    const handleYearBlur = () => {
+        if ((values.year.length < 3) && (values.year.length > 0)) {
+            setInvalidInput(prevState => ({ ...prevState, errorYear: false, year: true }))
+        } else {
+            setInvalidInput(prevState => ({ ...prevState, errorYear: true }))
+
+        }
+    }
+
+
+    const handleStudentSelection = (student) => {
+        setAvailableStudents([...availableStudents, student]);
+        setStudents(students.filter((s) => s.id !== student.id));
+        setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
+    };
+
+    const handleStudentDeselection = (student) => {
+        setStudents([...students, student]);
+        setAvailableStudents(availableStudents.filter((s) => s.id !== student.id));
+        setUniqueKey(uniqueKey + 1);
+    };
 
     if (deletingClassRoom) {
         return (
@@ -118,26 +181,101 @@ function ClassInfo() {
             </main>
         )
     }
-    if (!loadgindState) {
-        return <p>Carregando...</p>;
+    if (!isLoading) {
+        return (
+            <main>
+                <Loading />
+            </main>
+        )
     }
     else {
         return (
             <main>
+                <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
                 {isEditing ? (
-                    <div className='mb-5 text-center'>
-                        <div className='d-flex justify-content-center'>
-                            <form className=" py-5 ms-5">
-                                {/* <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)} />
-                                <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)} />
-                                <Input placeholder="Registro" className="form-control border-secondary __input" htmlFor="register" label="Registro" value={register} onChange={e => setRegister(e.target.value)} /> */}
-                            </form>
+                    <div>
+                        <Row className="mb-3 mx-5 mt-5  d-flex justify-content-between">
+                            <Form.Group as={Col} md="3" controlId="classRoomCode">
+                                <Form.Label className="text-white">Turma</Form.Label>
+                                <Form.Control
+                                    value={values.classRoom}
+                                    type="number"
+                                    placeholder="Ex.: 1001"
+                                    onChange={(event) => setValues((prevState) => ({ ...prevState, classRoom: event.target.value }))}
+                                    onBlur={handleClassRoomBlur}
+                                    isInvalid={invalidInput.errorClassRoom}
+                                />
+                                <Form.Control.Feedback type="invalid" className='text-danger'>
+                                    Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group as={Col} md="3" controlId="yearCode">
+                                <Form.Label className="text-white">Série</Form.Label>
+                                <Form.Control
+                                    value={values.year}
+                                    type="number"
+                                    placeholder="Ex.: 1"
+                                    onChange={(event) => setValues((prevState) => ({ ...prevState, year: event.target.value }))}
+                                    onBlur={handleYearBlur}
+                                    isInvalid={invalidInput.errorYear}
+                                />
+                                <Form.Control.Feedback type="invalid" className='text-danger'>
+                                    Preencha com a série, apenas números.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Row>
+                        <div className="d-flex justify-content-center">
+                            <section className="col-lg-5 row text-center">
+                                <Form.Group controlId="ControlSelect1">
+                                    <Form.Label className="text-white">Professores</Form.Label>
+                                    <Form.Control as="select" value={selectedTeacher.nome} onChange={handleChangeTeacher}>
+                                        <option value="" disabled>Selecionar professor</option>
+                                        {teachers.map((teacher) => (
+                                            <option key={teacher.id}>{teacher.nome}</option>
+                                        ))}
+                                    </Form.Control>
+                                </Form.Group>
+                            </section>
                         </div>
-                        <div>
+
+                        <div className="mt-5">
+                            <div className="d-flex bg-white d-flex justify-content-between p-5">
+                                <section className="border rounded">
+                                    <h4 className="text-center">Alunos Matrículados</h4>
+                                    <hr />
+                                    <div className=" list_students px-2">
+                                        <ul>
+                                            {students.map((student) => (
+                                                <li key={student.id}>
+                                                    <img src={removeStudent} width={'18px'} onClick={() => handleStudentSelection(student)} />
+                                                    {student.nome}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </section>
+                                <section className="border rounded">
+                                    <h4 className="text-center">Alunos Disponíveis</h4>
+                                    <hr />
+                                    <div className="list_students px-2">
+                                        <ul>
+                                            {availableStudents.map((student) => (
+                                                <li key={student.id + '-' + uniqueKey}>
+                                                    {student.nome}
+                                                    <img src={addStudent} width={'18px'} onClick={() => handleStudentDeselection(student)} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </section>
+                            </div>
+                            <p className="text-center text-danger">{invalidInput.errorMessage}</p>
+                        </div>
+                        <div className="mt-5 text-center">
                             <button className='btn-success btn mx-5 m-1' onClick={handleSaveClick}>Salvar</button>
                             <button className='btn-light btn m-1' onClick={handleCancelClick}>Cancelar</button>
                         </div>
-
                     </div>
                 ) : (
                     <div className='mb-5 mx-3 text-white'>
@@ -151,23 +289,27 @@ function ClassInfo() {
                             </div>
                         </div>
 
-                        <h2 className="p-2 border rounded text-center mb-5">Turma {data.turma}</h2>
-                        <p className="mb-4">Professor: {teacher}</p>
-                        <p className="mb-4">Ano: {year}º</p>
-                        <section>
-                            <div>
-                                {/* {students ? (
-                                    <div>
-                                        {students.map(students => (
-                                            <div key={students.id}>
-                                                <h2>{data.nome}</h2>
-                                                <p>{data.matricula}</p>
+                        <h2 className="p-2 border rounded text-center mb-5">Turma {values.classRoom}</h2>
+                        <p className="mb-4">Professor: {values.teacher.nome}</p>
+                        <p className="mb-4">Série: {values.year}º</p>
+                        <section className="border rounded">
+                            <h4 className="text-center mb-4">Alunos Matriculados</h4>
+                            <hr />
+
+                            <div className="list_students">
+                                {values.students ? (
+                                    <div >
+
+                                        {values.students.map(students => (
+                                            <div className="d-flex border m-2 p-1 rounded" key={students.id}>
+                                                <b>{students.nome}</b>
+                                                <p className="mx-5">Matrícula: {students.matricula}</p>
                                             </div>
                                         ))}
                                     </div>
                                 ) : (
                                     <p>Carregando informações dos alunos...</p>
-                                )} */}
+                                )}
                             </div>
                         </section>
                         <div className='d-flex justify-content-between mt-5'>
