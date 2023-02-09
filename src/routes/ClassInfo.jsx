@@ -137,15 +137,18 @@ function ClassInfo() {
         // ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,)
         // const newTeacher = selectedTeacher == prevUpdate.teacher ? selectedTeacher : selectedTeacher
 
-        const lista1 = ['Diego', 'João', 'Maria'];
-        const lista2 = ['Diego', 'Joaquim', 'Ruan'];
+        const listaAntiga = prevUpdate.students
+        const listaNova = students
 
-        const adicionados = lista2.filter(aluno => !lista1.includes(aluno));
-        const removidos = lista1.filter(aluno => !lista2.includes(aluno));
+        const adicionados = listaNova.filter(aluno => !listaAntiga.includes(aluno));
+        const removidos = listaAntiga.filter(aluno => !listaNova.includes(aluno));
+        const continuam = listaAntiga.filter(aluno => listaNova.includes(aluno));
+
 
         console.log('Adicionados:', adicionados);
         console.log('Removidos:', removidos);
-        
+        console.log('Continuam:', continuam);
+
         console.log('aaaaa')
         setEditedThings(true);
         setIsEditing(false);
@@ -165,17 +168,17 @@ function ClassInfo() {
         return navigate('/')
     }
 
-    // const handleStudentSelection = (student) => {
-    //     setAvailableStudents([...availableStudents, student]);
-    //     setStudents(students.filter((s) => s.id !== student.id));
-    //     setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
-    // };
+    const handleStudentSelection = (student) => {
+        setAvailableStudents([...availableStudents, student]);
+        setStudents(students.filter((s) => s.id !== student.id));
+        setInvalidInput(prevState => ({ ...prevState, errorMessage: "" }))
+    };
 
-    // const handleStudentDeselection = (student) => {
-    //     setStudents([...students, student]);
-    //     setAvailableStudents(availableStudents.filter((s) => s.id !== student.id));
-    //     setUniqueKey(uniqueKey + 1);
-    // };
+    const handleStudentDeselection = (student) => {
+        setStudents([...students, student]);
+        setAvailableStudents(availableStudents.filter((s) => s.id !== student.id));
+        setUniqueKey(uniqueKey + 1);
+    };
 
     if (deletingClassRoom) {
         return (
