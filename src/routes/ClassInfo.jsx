@@ -74,7 +74,7 @@ function ClassInfo() {
         }
         dataRequisitons()
     }, [handleState])
-    console.log(prevUpdate)
+    // console.log(prevUpdate)
 
 
     useEffect(() => {
@@ -82,6 +82,10 @@ function ClassInfo() {
             try {
                 const teachers = await AxiosApi.Get('/professores')
                 const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
+                filteredTeachers.push(values.teacher)
+                // console.log(values.teacher)
+                // console.log(filteredTeachers)
+
                 setTeachers(filteredTeachers)
                 if (data) {
                     setSelectedTeacher(values.teacher)
@@ -97,7 +101,7 @@ function ClassInfo() {
 
         }
         dataRequisitons()
-    }, [handleState])
+    }, [handleState, values])
     // console.log(selectedTeacher)
     if (isLoading == "true") {
         return (
@@ -134,7 +138,7 @@ function ClassInfo() {
 
     const handleSaveClick = async () => {
 
-        // ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,)
+        const first = await  ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,values.students, selectedTeacher)
         // const newTeacher = selectedTeacher == prevUpdate.teacher ? selectedTeacher : selectedTeacher
 
         const listaAntiga = prevUpdate.students
@@ -145,19 +149,17 @@ function ClassInfo() {
         const continuam = listaAntiga.filter(aluno => listaNova.includes(aluno));
 
 
-        console.log('Adicionados:', adicionados);
-        console.log('Removidos:', removidos);
-        console.log('Continuam:', continuam);
+        // console.log('Adicionados:', adicionados);
+        // console.log('Removidos:', removidos);
+        // console.log('Continuam:', continuam);
 
         console.log('aaaaa')
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
 
-
-
     };
-
+console.log(selectedTeacher)
     const handleDeleteTeacher = () => {
         setDeletingClassRoom(true);
         setEditedThings(false);
