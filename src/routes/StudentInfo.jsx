@@ -3,6 +3,7 @@ import { AxiosApi } from "../services/RequisitionAPI"
 import profile from "../assets/profile.webp"
 import { Student } from '../entities/Student';
 import { Link, useNavigate } from 'react-router-dom';
+import { StudentUseCases } from '../useCases/StudentUseCases';
 import "../styles/info.css"
 import Loading from '../components/Loading';
 
@@ -105,8 +106,7 @@ function StudentInfo() {
     }
 
     async function handleDelete() {
-        const deleteInfos = await AxiosApi.Delete(window.location.pathname)
-        deleteInfos.status == 200 ? alert('Cadastro Excluído') : alert('Erro interno, tente novamente mais tarde.(error code: 106L SI)')
+        alert(StudentUseCases.DeleteStudent(window.location.pathname))
         return navigate('/')
     }
     if (!loadgindState) {
