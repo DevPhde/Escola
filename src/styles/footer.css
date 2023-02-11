@@ -4,4 +4,11 @@
 
 .icones{
   font-size: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.logos{
+  margin-left: 5px;
+  margin-right: 5px;
 }
