@@ -1,13 +1,14 @@
 import React from 'react'
 import Navbar from './Navbar'
+import '../styles/header.css'
 
 function Header() {
     return (
-        <header className='row'>
+        <header className='row header'>
             <div className='col text-end mt-5'>
                 <Navbar />
             </div>
-            <hr className='mt-2 text-white'/>
+            <hr className='mt-2 text-white' />
         </header>
     )
 }

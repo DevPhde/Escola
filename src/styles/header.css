@@ -1,0 +1,15 @@
+.header{
+  background-color: #000;
+}
+
+nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button{
+  background-color: #000;
+  color: #0D9DFF;
+  border: none;
+}

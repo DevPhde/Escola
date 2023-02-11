@@ -1,0 +1,8 @@
+.font{
+  color: #0D9DFF;
+}
+
+.icones{
+  display: flex;
+  justify-content: space-evenly;
+}
