@@ -55,17 +55,13 @@ function newStudent() {
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState(false)
   const handleSubmit = async (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (values.registration == "") {
       setError(true)
     }
-    if (form.checkValidity() === false || valid < 4) {
-      event.preventDefault();
-      event.stopPropagation();
-
-    } else {
-      event.preventDefault();
-      const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
+    if (form.checkValidity() === true || valid > 4) {
+       const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
       setRenderResponse({ response: response, status: false })
 
     }

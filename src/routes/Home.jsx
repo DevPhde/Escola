@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-import Input from "../components/Input"
 import { useState, useEffect } from "react"
 import "../styles/home.css"
 import { AxiosApi } from "../services/RequisitionAPI"
@@ -64,22 +63,25 @@ function Home() {
             <div>
                 <div className="d-flex justify-content-center search__input">
                     <form onSubmit={submitSearch}>
-                        <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} label="Buscar" />
+                        <div className="form-floating mb-3">
+                            <input type="text" placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} />
+                            <label>Buscar</label>
+                        </div>
                     </form>
                 </div>
                 <h5 className="text-white text-center">Filtro</h5>
                 <section className="text-white d-flex justify-content-center border mx-5 pt-2 rounded-pill radios__ ">
                     <div className="text-center px-1">
                         <label htmlFor="student">Alunos</label>
-                        <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
+                        <input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
                     </div>
                     <div className="text-center px-1">
-                        <label htmlFor="student">Professores</label>
-                        <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} />
+                        <label htmlFor="teacher">Professores</label>
+                        <input type="radio" value="professores" checked={selectedOption === "professores"} onChange={handleOptionChange} />
                     </div>
                     <div className="text-center px-1">
-                        <label htmlFor="student">Turmas</label>
-                        <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} />
+                        <label htmlFor="class">Turmas</label>
+                        <input type="radio" value="turmas" checked={selectedOption === "turmas"} onChange={handleOptionChange} />
                     </div>
                 </section>
                 <div className="list_div border mt-5 mx-5 text-white">

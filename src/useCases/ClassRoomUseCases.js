@@ -30,7 +30,7 @@ export class ClassRoomUseCases {
     }
 
     static async EditTeacher(classRoom, teacher) {
-        classRoom == false ? teacher.tuma = false : teacher.turma = parseInt(classRoom)
+        classRoom == false ? teacher.turma = false : teacher.turma = parseInt(classRoom)
 
         const data = await AxiosApi.Put(`/professores/${teacher.id}`, teacher)
         return data.status == 200 ? "200" : "Erro interno, tenve novamente mais tarde.(error code: L25 CRUC)"
@@ -68,7 +68,7 @@ export class ClassRoomUseCases {
                 await this.EditStudent(false, students.removedStudent)
             }
         }
-        // 3 -
+        // 3 - update
         const newUpdate = new ClassRoom(classRoom, teacher.selectedTeacher, year, students.studentList)
         console.log(newUpdate)
         const connection = await AxiosApi.Put(id, newUpdate)

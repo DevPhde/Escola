@@ -5,7 +5,6 @@ import profile from "../assets/profile.webp"
 import { Teacher } from '../entities/Teacher';
 import { TeacherUseCases } from '../useCases/TeacherUseCases';
 import "../styles/info.css"
-import Input from '../components/Input';
 import Loading from '../components/Loading';
 function TeacherInfo() {
     const [data, setData] = useState(false);
@@ -123,9 +122,6 @@ function TeacherInfo() {
                         </div>
                         <div className='d-flex justify-content-center'>
                             <form className=" py-5 ms-5">
-                                <Input placeholder="Nome Completo" className="form-control border-secondary __input" htmlFor="FullName" label="Nome Completo" value={name} onChange={e => setName(e.target.value)} />
-                                <Input mask="999.999.999-99" placeholder="CPF" className="form-control border-secondary __input" htmlFor="CPF" label="CPF" value={cpf} onChange={e => setCpf(e.target.value)} />
-                                <Input placeholder="Registro" className="form-control border-secondary __input" htmlFor="register" label="Registro" value={register} onChange={e => setRegister(e.target.value)} />
                             </form>
                         </div>
                         <div>

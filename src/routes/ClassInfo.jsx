@@ -9,14 +9,13 @@ import addStudent from "../assets/addUser.png"
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 
 function ClassInfo() {
-    const [data, setData] = useState(null)
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState("true"); // tela de carregamento ou tela com conteudo
-    const [isEditing, setIsEditing] = useState(false); // muda para tela de edição (render)
-    const [deletingClassRoom, setDeletingClassRoom] = useState(false); // DELETA CADASTRO
-    const [editedThings, setEditedThings] = useState(false); //muda para tela de edição
+    const [isLoading, setIsLoading] = useState("true");
+    const [isEditing, setIsEditing] = useState(false);
+    const [deletingClassRoom, setDeletingClassRoom] = useState(false);
+    const [editedThings, setEditedThings] = useState(false);
 
-    const [handleState, setHandleState] = useState(0); // contador para useEffect
+    const [handleState, setHandleState] = useState(0);
     const [reloadInfos, setReloadInfos] = useState(0);
 
     // STUDENTS
@@ -36,7 +35,7 @@ function ClassInfo() {
         students: []
     })
 
-    const [invalidInput, setInvalidInput] = useState({ // validação
+    const [invalidInput, setInvalidInput] = useState({
         classRoom: false,
         year: false,
         errorClassRoom: false,
@@ -64,11 +63,10 @@ function ClassInfo() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 setValues(() => ({ classRoom: connection.data.turma, teacher: connection.data.professor, year: connection.data.serie, students: connection.data.alunos }))
-                setIsLoading(true)
-                setData(true)
+                setIsLoading('false')
                 setPrevUpdate(() => ({ teacher: connection.data.professor, students: connection.data.alunos }))
             } catch (error) {
-                console.log(error)
+                setIsLoading("error")
             }
         }
         dataRequisitons()
@@ -82,8 +80,6 @@ function ClassInfo() {
                 const teachers = await AxiosApi.Get('/professores')
                 const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
                 filteredTeachers.push(values.teacher)
-                // console.log(values.teacher)
-                // console.log(filteredTeachers)
 
                 setTeachers(filteredTeachers)
                 setSelectedTeacher(values.teacher)
@@ -93,31 +89,14 @@ function ClassInfo() {
                 setStudents(values.students)
                 setAvailableStudents(filteredStudents)
             } catch (error) {
-                console.log(error)
+                alert("erro ao recuperar dados, reiniciando conexão.")
+                window.location.reload
             }
-
         }
         dataRequisitons()
     }, [handleState, values])
-    // console.log(selectedTeacher)
-    if (isLoading == "true") {
-        return (
-            <main>
-                <Loading />
-                <p className="text-white text-center">Carregando informações da Turma...</p>;
-            </main>
-        )
-    } else if (isLoading == "error") {
-        return (
-            <main className='text-center text-white'>
-                <h1>Erro 404!</h1>
-                <h4>Turma não encontrada.</h4>
-                <div className='mt-4 mb-5'>
-                    <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
-                </div>
-            </main>
-        )
-    }
+
+
 
 
     const handleEditClick = () => {
@@ -134,25 +113,25 @@ function ClassInfo() {
     // console.log(students.length)
 
     const handleSaveClick = async () => {
-        let updateTeacher = {selectedTeacher: selectedTeacher}
-        let updateStudents = {studentList: students}
+        let updateTeacher = { selectedTeacher: selectedTeacher }
+        let updateStudents = { studentList: students }
 
         if (selectedTeacher != prevUpdate.teacher) {
             const prevTeacher = prevUpdate.teacher
-            updateTeacher = {selectedTeacher, prevTeacher, update: true}            
+            updateTeacher = { selectedTeacher, prevTeacher, update: true }
         }
 
         const { entered, exited } = compareStudentLists(prevUpdate.students, students, values.classRoom);
 
         if ((entered.length || exited.length) != 0) {
-            updateStudents = {newStudent : entered, removedStudent: exited,  studentList : students,update: true}
+            updateStudents = { newStudent: entered, removedStudent: exited, studentList: students, update: true }
         }
 
 
         console.log("Entered:", entered);
         console.log("Exited:", exited);
 
-        const first = await  ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
+        const first = await ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
 
         setEditedThings(true);
         setIsEditing(false);
@@ -210,14 +189,25 @@ function ClassInfo() {
             </main>
         )
     }
-    if (!isLoading) {
+
+    if (isLoading == "true") {
         return (
             <main>
                 <Loading />
+                <p className="text-white text-center">Carregando informações da Turma...</p>;
             </main>
         )
-    }
-    else {
+    } else if (isLoading == "error") {
+        return (
+            <main className='text-center text-white'>
+                <h1>Erro 404!</h1>
+                <h4>Turma não encontrada.</h4>
+                <div className='mt-4 mb-5'>
+                    <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
+                </div>
+            </main>
+        )
+    } else {
         return (
             <main>
                 <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
@@ -353,7 +343,7 @@ function ClassInfo() {
                     </div>
                 )}
             </main>
-        );
+        )
     }
 }
 
