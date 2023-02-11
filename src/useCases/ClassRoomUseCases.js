@@ -3,14 +3,22 @@ import { ClassRoom } from "../entities/ClassRoom";
 
 export class ClassRoomUseCases {
     static async CreateClassRoom(classRoom, year, students, teacher) {
+        teacher.turma = parseInt(classRoom)
+        if (teacher.turma == null) {
+            teacher.turma = false
+        }
+        for (let index = 0; index < students.length; index++) {
+            classRoom == false ? students[index.turma] = false : students[index].turma = parseInt(classRoom)
+        }
         const newClass = new ClassRoom(parseInt(classRoom), teacher, parseInt(year), students)
         const connection = await AxiosApi.Post('/turmas', newClass)
         return connection.status == 201 ? "200" : "Erro interno, tente novamente mais tarde.(error code: 13L CRUC)"
     }
+
     static async EditStudent(classRoom, students) {
         for (let index = 0; index < students.length; index++) {
             const element = students[index];
-            element.turma = classRoom
+            classRoom == false ? element.turma = false : element.turma = parseInt(classRoom)
             const data = await AxiosApi.Put(`/alunos/${element.id}`, element)
             if (data.status == 200) {
                 continue
@@ -22,7 +30,8 @@ export class ClassRoomUseCases {
     }
 
     static async EditTeacher(classRoom, teacher) {
-        teacher.turma = classRoom
+        classRoom == false ? teacher.tuma = false : teacher.turma = parseInt(classRoom)
+
         const data = await AxiosApi.Put(`/professores/${teacher.id}`, teacher)
         return data.status == 200 ? "200" : "Erro interno, tenve novamente mais tarde.(error code: L25 CRUC)"
     }
@@ -37,18 +46,34 @@ export class ClassRoomUseCases {
             } else {
                 return 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
             }
-        } else{
+        } else {
             return 'Erro interno, tente novamente mais tarde.(error code: 33L CRUC)'
         }
-
     }
     static async UpdateClassRoom(id, classRoom, year, students, teacher) {
-        console.log(id, classRoom, year, students, teacher)
-        // const newUpdate = new ClassRoom(classRoom, teacher, year, students)
-        // console.log(newUpdate)
-        // const connection = await AxiosApi.Put(id, newUpdate)
-        // if(connection.status == 200) {
-        //     const updateTeacher = await this.EditTeacher(false, teacher)
-        // }
+
+        console.log(teacher)
+        // 1- modificar na rota professor
+        if (teacher.update) {
+            await this.EditTeacher(false, teacher.prevTeacher)
+            await this.EditTeacher(classRoom, teacher.selectedTeacher)
+        }
+        // 2- modificar alunos
+        if (students.update) {
+            if (students.newStudent.length != 0) {
+                await this.EditStudent(classRoom, students.newStudent)
+            }
+            if (students.removedStudent.length != 0) {
+                console.log("sim")
+                await this.EditStudent(false, students.removedStudent)
+            }
+        }
+        // 3 -
+        const newUpdate = new ClassRoom(classRoom, teacher.selectedTeacher, year, students.studentList)
+        console.log(newUpdate)
+        const connection = await AxiosApi.Put(id, newUpdate)
+        if (connection.status == 200) {
+            return "true"
+        }
     }
 }

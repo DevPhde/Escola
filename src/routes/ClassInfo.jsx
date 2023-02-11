@@ -1,4 +1,3 @@
-import { ClassRoom } from "../entities/ClassRoom"
 import { useState, useEffect } from 'react';
 import { AxiosApi } from "../services/RequisitionAPI"
 import { Link, useNavigate } from 'react-router-dom';
@@ -87,9 +86,7 @@ function ClassInfo() {
                 // console.log(filteredTeachers)
 
                 setTeachers(filteredTeachers)
-                if (data) {
-                    setSelectedTeacher(values.teacher)
-                }
+                setSelectedTeacher(values.teacher)
 
                 const students = await AxiosApi.Get('/alunos')
                 const filteredStudents = students.data.filter(students => !students.turma);
@@ -137,29 +134,50 @@ function ClassInfo() {
     // console.log(students.length)
 
     const handleSaveClick = async () => {
+        let updateTeacher = {selectedTeacher: selectedTeacher}
+        let updateStudents = {studentList: students}
 
-        const first = await  ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,values.students, selectedTeacher)
-        // const newTeacher = selectedTeacher == prevUpdate.teacher ? selectedTeacher : selectedTeacher
+        if (selectedTeacher != prevUpdate.teacher) {
+            const prevTeacher = prevUpdate.teacher
+            updateTeacher = {selectedTeacher, prevTeacher, update: true}            
+        }
 
-        const listaAntiga = prevUpdate.students
-        const listaNova = students
+        const { entered, exited } = compareStudentLists(prevUpdate.students, students, values.classRoom);
 
-        const adicionados = listaNova.filter(aluno => !listaAntiga.includes(aluno));
-        const removidos = listaAntiga.filter(aluno => !listaNova.includes(aluno));
-        const continuam = listaAntiga.filter(aluno => listaNova.includes(aluno));
+        if ((entered.length || exited.length) != 0) {
+            updateStudents = {newStudent : entered, removedStudent: exited,  studentList : students,update: true}
+        }
 
 
-        // console.log('Adicionados:', adicionados);
-        // console.log('Removidos:', removidos);
-        // console.log('Continuam:', continuam);
+        console.log("Entered:", entered);
+        console.log("Exited:", exited);
 
-        console.log('aaaaa')
+        const first = await  ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
+
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
 
     };
-console.log(selectedTeacher)
+
+    const compareStudentLists = (previousStudents, newStudents, classId) => {
+        const entered = [];
+        const exited = [];
+
+        previousStudents.forEach(student => {
+            if (student.turma === classId && !newStudents.includes(student)) {
+                exited.push(student);
+            }
+        });
+
+        newStudents.forEach(student => {
+            if (student.turma === false && !previousStudents.includes(student)) {
+                entered.push(student);
+            }
+        });
+
+        return { entered, exited };
+    };
     const handleDeleteTeacher = () => {
         setDeletingClassRoom(true);
         setEditedThings(false);
