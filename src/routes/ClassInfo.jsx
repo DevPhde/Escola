@@ -7,6 +7,8 @@ import "../styles/info.css"
 import removeStudent from "../assets/removeUser.png"
 import addStudent from "../assets/addUser.png"
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 function ClassInfo() {
     const navigate = useNavigate()
@@ -40,7 +42,7 @@ function ClassInfo() {
         year: false,
         errorClassRoom: false,
         errorYear: false,
-        errorMessage: ""
+        errorMessage: "",
     })
 
     // EDIT CLASSROOM
@@ -89,8 +91,8 @@ function ClassInfo() {
                 setStudents(values.students)
                 setAvailableStudents(filteredStudents)
             } catch (error) {
-                alert("erro ao recuperar dados, reiniciando conexão.")
-                window.location.reload
+                alert("erro ao recuperar dados, tente novamente mais tarde.(error code: 93L CI)")
+
             }
         }
         dataRequisitons()
@@ -110,9 +112,12 @@ function ClassInfo() {
         setIsEditing(false);
         setEditedThings(false);
     };
-    // console.log(students.length)
 
     const handleSaveClick = async () => {
+        if(values.year == ''){
+            setInvalidInput(prevState => ({ ...prevState, errorYear: true }))
+            return
+        }
         let updateTeacher = { selectedTeacher: selectedTeacher }
         let updateStudents = { studentList: students }
 
@@ -126,13 +131,7 @@ function ClassInfo() {
         if ((entered.length || exited.length) != 0) {
             updateStudents = { newStudent: entered, removedStudent: exited, studentList: students, update: true }
         }
-
-
-        console.log("Entered:", entered);
-        console.log("Exited:", exited);
-
-        const first = await ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
-
+        await ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
@@ -157,6 +156,7 @@ function ClassInfo() {
 
         return { entered, exited };
     };
+
     const handleDeleteTeacher = () => {
         setDeletingClassRoom(true);
         setEditedThings(false);
@@ -214,29 +214,28 @@ function ClassInfo() {
                 {isEditing ? (
                     <div>
                         <Row className="mb-3 mx-5 mt-5  d-flex justify-content-between">
-                            <Form.Group as={Col} md="3" controlId="classRoomCode">
-                                <Form.Label className="text-white">Turma</Form.Label>
-                                <Form.Control
-                                    value={values.classRoom}
-                                    type="number"
-                                    placeholder="Ex.: 1001"
-                                    onChange={(event) => setValues((prevState) => ({ ...prevState, classRoom: event.target.value }))}
-                                    onFocus={() => { setInvalidInput(prevState => ({ ...prevState, errorClassRoom: false })) }}
-                                    isInvalid={invalidInput.errorClassRoom}
-                                />
-                                <Form.Control.Feedback type="invalid" className='text-danger'>
-                                    Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
-                                </Form.Control.Feedback>
-                            </Form.Group>
-
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Não é possível modificar a numeração da turma após sua criação.</Tooltip>}>
+                                <span className="d-inline-block">
+                                    <Form.Group as={Col} md="3" controlId="classRoomCode">
+                                        <Form.Label className="text-white">Turma</Form.Label>
+                                        <Form.Control className='text-center'
+                                            disabled
+                                            value={values.classRoom}
+                                            type="number"
+                                        />
+                                    </Form.Group>
+                                </span>
+                            </OverlayTrigger>
                             <Form.Group as={Col} md="3" controlId="yearCode">
                                 <Form.Label className="text-white">Série</Form.Label>
                                 <Form.Control
                                     value={values.year}
                                     type="number"
                                     placeholder="Ex.: 1"
-                                    onChange={(event) => setValues((prevState) => ({ ...prevState, year: event.target.value }))}
-                                    onFocus={() => { setInvalidInput(prevState => ({ ...prevState, errorYear: false })) }}
+                                    onChange={(event) => {
+                                        setValues((prevState) => ({ ...prevState, year: event.target.value }))
+                                        setInvalidInput(prevState => ({ ...prevState, errorYear: false }))
+                                    }}
                                     isInvalid={invalidInput.errorYear}
                                 />
                                 <Form.Control.Feedback type="invalid" className='text-danger'>

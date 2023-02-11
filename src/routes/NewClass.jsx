@@ -64,7 +64,6 @@ function NewClass() {
         async function testClassRoom() {
             try {
                 const connection = await AxiosApi.Get(`/turmas?turma=${values.classRoom}`)
-                console.log(connection.data)
                 if (connection.data.length != 0) {
                     setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: true, errorClassRoom: false, classRoom: false }))
                 }
