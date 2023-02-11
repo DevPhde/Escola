@@ -18,4 +18,19 @@ export class StudentUseCases {
         const deleteInfos = await AxiosApi.Delete(id)
         return deleteInfos.status == 200 ? 'Cadastro Excluído' : 'Erro interno, tente novamente mais tarde.(error code: 19L SUC)'
     }
+    static async EditStudent(id, student) {
+        student.id = id
+        if(student.turma) {
+            const connection = await AxiosApi.Get(`/turmas/?turma=${student.turma}`)
+            const updateClassRoom = connection.data['0']
+            updateClassRoom.alunos.forEach((aluno, index) => {
+                if(aluno.id === id) {
+                    updateClassRoom.alunos[index] = student;
+                }
+            });
+            await AxiosApi.Put(`/turmas/${updateClassRoom.id}`, updateClassRoom)
+        }
+        const update = await AxiosApi.Put(`/alunos/${id}`, student)
+        return update.status == 200 ? "200" : "Erro interno, tente novamente mais tarde.(error code: 34L SUC)"
+    }
 }
