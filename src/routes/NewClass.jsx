@@ -38,7 +38,8 @@ function NewClass() {
         errorClassRoom: false,
         errorYear: false,
         inputsPassed: 0,
-        errorMessage: ""
+        errorMessage: "",
+        invalidClassRoom: false
     })
 
     const handleClassRoomBlur = () => {
@@ -58,6 +59,21 @@ function NewClass() {
         }
     }
 
+    useEffect(() => { 
+        setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: false, classRoom: false}))
+        async function testClassRoom() {
+            try {
+                const connection = await AxiosApi.Get(`/turmas?turma=${values.classRoom}`)
+                console.log(connection.data)
+                if (connection.data.length != 0) {
+                    setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: true, errorClassRoom: false, classRoom: false }))
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        testClassRoom()
+    }, [values.classRoom])
 
     //ALUNOS
     const [students, setStudents] = useState([]);
@@ -139,6 +155,7 @@ function NewClass() {
                                             onBlur={handleClassRoomBlur}
                                             isInvalid={invalidInput.errorClassRoom}
                                         />
+                                        {invalidInput.invalidClassRoom && <p className="text-danger">Turma já existente.</p>}
                                         <Form.Control.Feedback type="invalid" className='text-danger'>
                                             Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
                                         </Form.Control.Feedback>
@@ -164,7 +181,7 @@ function NewClass() {
 
                             <button onClick={(e) => {
                                 e.preventDefault()
-                                if ((invalidInput.classRoom) && (invalidInput.year)) {
+                                if ((invalidInput.classRoom) && (invalidInput.year) && (!invalidInput.invalidClassRoom)) {
                                     setSteps(prevState => ({ ...prevState, one: false, two: true }))
                                 } else {
                                     handleClassRoomBlur()
@@ -249,8 +266,6 @@ function NewClass() {
                     <h1>Loading</h1>
                 </div>
             )}
-
-
             <div>
                 <Link to="/cadastro"><button className='btn-light btn mt-5 ms-2'>Cancelar Cadastro</button></Link>
             </div>

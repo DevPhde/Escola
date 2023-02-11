@@ -1,4 +1,3 @@
-import { ClassRoom } from "../entities/ClassRoom"
 import { useState, useEffect } from 'react';
 import { AxiosApi } from "../services/RequisitionAPI"
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,14 +9,13 @@ import addStudent from "../assets/addUser.png"
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 
 function ClassInfo() {
-    const [data, setData] = useState(null)
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState("true"); // tela de carregamento ou tela com conteudo
-    const [isEditing, setIsEditing] = useState(false); // muda para tela de edição (render)
-    const [deletingClassRoom, setDeletingClassRoom] = useState(false); // DELETA CADASTRO
-    const [editedThings, setEditedThings] = useState(false); //muda para tela de edição
+    const [isLoading, setIsLoading] = useState("true");
+    const [isEditing, setIsEditing] = useState(false);
+    const [deletingClassRoom, setDeletingClassRoom] = useState(false);
+    const [editedThings, setEditedThings] = useState(false);
 
-    const [handleState, setHandleState] = useState(0); // contador para useEffect
+    const [handleState, setHandleState] = useState(0);
     const [reloadInfos, setReloadInfos] = useState(0);
 
     // STUDENTS
@@ -37,7 +35,7 @@ function ClassInfo() {
         students: []
     })
 
-    const [invalidInput, setInvalidInput] = useState({ // validação
+    const [invalidInput, setInvalidInput] = useState({
         classRoom: false,
         year: false,
         errorClassRoom: false,
@@ -65,11 +63,10 @@ function ClassInfo() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 setValues(() => ({ classRoom: connection.data.turma, teacher: connection.data.professor, year: connection.data.serie, students: connection.data.alunos }))
-                setIsLoading(true)
-                setData(true)
+                setIsLoading('false')
                 setPrevUpdate(() => ({ teacher: connection.data.professor, students: connection.data.alunos }))
             } catch (error) {
-                console.log(error)
+                setIsLoading("error")
             }
         }
         dataRequisitons()
@@ -83,44 +80,23 @@ function ClassInfo() {
                 const teachers = await AxiosApi.Get('/professores')
                 const filteredTeachers = teachers.data.filter(teacher => !teacher.turma);
                 filteredTeachers.push(values.teacher)
-                // console.log(values.teacher)
-                // console.log(filteredTeachers)
 
                 setTeachers(filteredTeachers)
-                if (data) {
-                    setSelectedTeacher(values.teacher)
-                }
+                setSelectedTeacher(values.teacher)
 
                 const students = await AxiosApi.Get('/alunos')
                 const filteredStudents = students.data.filter(students => !students.turma);
                 setStudents(values.students)
                 setAvailableStudents(filteredStudents)
             } catch (error) {
-                console.log(error)
+                alert("erro ao recuperar dados, reiniciando conexão.")
+                window.location.reload
             }
-
         }
         dataRequisitons()
     }, [handleState, values])
-    // console.log(selectedTeacher)
-    if (isLoading == "true") {
-        return (
-            <main>
-                <Loading />
-                <p className="text-white text-center">Carregando informações da Turma...</p>;
-            </main>
-        )
-    } else if (isLoading == "error") {
-        return (
-            <main className='text-center text-white'>
-                <h1>Erro 404!</h1>
-                <h4>Turma não encontrada.</h4>
-                <div className='mt-4 mb-5'>
-                    <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
-                </div>
-            </main>
-        )
-    }
+
+
 
 
     const handleEditClick = () => {
@@ -137,29 +113,50 @@ function ClassInfo() {
     // console.log(students.length)
 
     const handleSaveClick = async () => {
+        let updateTeacher = { selectedTeacher: selectedTeacher }
+        let updateStudents = { studentList: students }
 
-        const first = await  ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year,values.students, selectedTeacher)
-        // const newTeacher = selectedTeacher == prevUpdate.teacher ? selectedTeacher : selectedTeacher
+        if (selectedTeacher != prevUpdate.teacher) {
+            const prevTeacher = prevUpdate.teacher
+            updateTeacher = { selectedTeacher, prevTeacher, update: true }
+        }
 
-        const listaAntiga = prevUpdate.students
-        const listaNova = students
+        const { entered, exited } = compareStudentLists(prevUpdate.students, students, values.classRoom);
 
-        const adicionados = listaNova.filter(aluno => !listaAntiga.includes(aluno));
-        const removidos = listaAntiga.filter(aluno => !listaNova.includes(aluno));
-        const continuam = listaAntiga.filter(aluno => listaNova.includes(aluno));
+        if ((entered.length || exited.length) != 0) {
+            updateStudents = { newStudent: entered, removedStudent: exited, studentList: students, update: true }
+        }
 
 
-        // console.log('Adicionados:', adicionados);
-        // console.log('Removidos:', removidos);
-        // console.log('Continuam:', continuam);
+        console.log("Entered:", entered);
+        console.log("Exited:", exited);
 
-        console.log('aaaaa')
+        const first = await ClassRoomUseCases.UpdateClassRoom(window.location.pathname, values.classRoom, values.year, updateStudents, updateTeacher)
+
         setEditedThings(true);
         setIsEditing(false);
         setHandleState(handleState + 1);
 
     };
-console.log(selectedTeacher)
+
+    const compareStudentLists = (previousStudents, newStudents, classId) => {
+        const entered = [];
+        const exited = [];
+
+        previousStudents.forEach(student => {
+            if (student.turma === classId && !newStudents.includes(student)) {
+                exited.push(student);
+            }
+        });
+
+        newStudents.forEach(student => {
+            if (student.turma === false && !previousStudents.includes(student)) {
+                entered.push(student);
+            }
+        });
+
+        return { entered, exited };
+    };
     const handleDeleteTeacher = () => {
         setDeletingClassRoom(true);
         setEditedThings(false);
@@ -192,14 +189,25 @@ console.log(selectedTeacher)
             </main>
         )
     }
-    if (!isLoading) {
+
+    if (isLoading == "true") {
         return (
             <main>
                 <Loading />
+                <p className="text-white text-center">Carregando informações da Turma...</p>;
             </main>
         )
-    }
-    else {
+    } else if (isLoading == "error") {
+        return (
+            <main className='text-center text-white'>
+                <h1>Erro 404!</h1>
+                <h4>Turma não encontrada.</h4>
+                <div className='mt-4 mb-5'>
+                    <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
+                </div>
+            </main>
+        )
+    } else {
         return (
             <main>
                 <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
@@ -335,7 +343,7 @@ console.log(selectedTeacher)
                     </div>
                 )}
             </main>
-        );
+        )
     }
 }
 

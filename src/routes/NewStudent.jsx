@@ -52,29 +52,33 @@ function newStudent() {
     response: "",
     status: true
   })
+
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState(false)
+  
   const handleSubmit = async (event) => {
-    const form = event.currentTarget;
+    event.preventDefault();
+    setValidated(true);
     if (values.registration == "") {
       setError(true)
+      return
     }
-    if (form.checkValidity() === false || valid < 4) {
-      event.preventDefault();
-      event.stopPropagation();
 
-    } else {
-      event.preventDefault();
+    const result = Object.values(valid).every(value => value === true);
+    if (result) {
       const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
-      setRenderResponse({ response: response, status: false })
-
+        setRenderResponse({ response: response, status: false })
     }
-    setValidated(true);
   };
 
   const [generate, setGenerete] = useState(false)
 
-  const [valid, setValid] = useState(0)
+  const [valid, setValid] = useState({
+    name: false,
+    cpf: false,
+    birthday: false,
+    registration: false
+  })
 
   const [values, setValues] = useState({
     name: '',
@@ -94,10 +98,9 @@ function newStudent() {
     const registration = await StudentUseCases.StudentRegistration()
     setValues((prevState) => ({ ...prevState, registration: registration }))
     setGenerete(true)
-    setValid(valid + 1)
+    setValid((prevState) => ({ ...prevState, registration: true }))
     setValidate((prevState) => ({ ...prevState, registration: false }))
   }
-
   return (
     <main>
       {renderResponse.status ? (
@@ -114,9 +117,10 @@ function newStudent() {
                   onBlur={(() => {
                     if (values.name.length < 8) {
                       setValidate((prevState) => ({ ...prevState, name: true }))
+                      setValid((prevState) => ({ ...prevState, name: false }))
                     } else {
                       setValidate((prevState) => ({ ...prevState, name: false }))
-                      setValid(valid + 1)
+                      setValid((prevState) => ({ ...prevState, name: true }))
                     }
                   })}
                   required
@@ -134,10 +138,12 @@ function newStudent() {
                   onBlur={(() => {
                     if (values.cpf.length == 14) {
                       setValidate((prevState) => ({ ...prevState, cpf: false }))
-                      setValid(valid + 1)
+                      setValid((prevState) => ({ ...prevState, cpf: true }))
                     } else {
                       setValidate((prevState) => ({ ...prevState, cpf: true }))
-                    }})}
+                      setValid((prevState) => ({ ...prevState, cpf: false }))
+                    }
+                  })}
                   isInvalid={validate.cpf}
                 />
                 <Form.Control.Feedback type="invalid" className='text-danger'>
@@ -152,10 +158,12 @@ function newStudent() {
                   onBlur={(() => {
                     if (values.birthday.length == 10) {
                       setValidate((prevState) => ({ ...prevState, birthday: false }))
-                      setValid(valid + 1)
+                      setValid((prevState) => ({ ...prevState, birthday: true }))
                     } else {
                       setValidate((prevState) => ({ ...prevState, birthday: true }))
-                    }})}
+                      setValid((prevState) => ({ ...prevState, birthday: false }))
+                    }
+                  })}
                   isInvalid={validate.birthday} />
                 <Form.Control.Feedback type="invalid" className='text-danger'>
                   Preencha com a data de nascimento.
