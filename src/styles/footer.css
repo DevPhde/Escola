@@ -3,6 +3,5 @@
 }
 
 .icones{
-  display: flex;
-  justify-content: space-evenly;
+  font-size: 28px;
 }
