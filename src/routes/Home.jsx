@@ -3,7 +3,13 @@ import Input from "../components/Input"
 import { useState, useEffect } from "react"
 import "../styles/home.css"
 import { AxiosApi } from "../services/RequisitionAPI"
-
+import aluno from '../assets/aluno.png'
+import professor from '../assets/professor.png'
+import turma from '../assets/turma.png'
+import Carousel from 'react-bootstrap/Carousel';
+import img1 from '../assets/img1.png'
+import img2 from '../assets/img2.png'
+import img3 from '../assets/img3.png'
 
 function Home() {
     const [search, setSearch] = useState("")
@@ -63,30 +69,63 @@ function Home() {
     return (
         <main>
             <div>
+                <div>
+                    <Carousel>
+                        <Carousel.Item>
+                            <img
+                                className="d-block w-100"
+                                src={img1}
+                                alt="First slide"
+                            />
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <img
+                                className="d-block w-100"
+                                src={img2}
+                                alt="Second slide"
+                            />
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <img
+                                className="d-block w-100"
+                                src={img3}
+                                alt="Third slide"
+                            />
+                        </Carousel.Item>
+                    </Carousel>
+                </div><br />
                 <div className="d-flex justify-content-center search__input">
                     <form onSubmit={submitSearch}>
-                        <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} label="Buscar" />
+                        <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill" onChange={e => setSearch(e.target.value)} label="Buscar" />
                     </form>
                 </div>
-                <h5 className="text-white text-center">Filtro</h5>
-                <section className="text-white d-flex justify-content-center border mx-5 pt-2 rounded-pill radios__ ">
-                    <div className="text-center px-1">
-                        <label htmlFor="student">Alunos</label>
-                        <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
-                    </div>
-                    <div className="text-center px-1">
-                        <label htmlFor="student">Professores</label>
-                        <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} />
-                    </div>
-                    <div className="text-center px-1">
-                        <label htmlFor="student">Turmas</label>
-                        <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} />
+                <section className="d-flex justify-content-center border mx-5 rounded-pill radios__ sectionHome">
+                    <div>
+                        <h4 className="text-center sectionHome">Filtro</h4>
+                        <div className="linhaHome">
+                            <div className="text-center px-1 sectionHome">
+                                <label htmlFor="student"><h5>Alunos</h5></label><br />
+                                <img src={aluno} alt="aluno" className="iconesHome" />
+                                <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
+                            </div>
+                            <div className="text-center px-1 sectionHome">
+                                <label htmlFor="student"><h5>Professores</h5></label><br />
+                                <img src={professor} alt="aluno" className="iconesHome" />
+                                <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} />
+                            </div>
+                            <div className="text-center px-1 sectionHome">
+                                <label htmlFor="student"><h5>Turmas</h5></label><br />
+                                <img src={turma} alt="aluno" className="iconesHome" />
+                                <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} />
+                            </div>
+
+                        </div>
                     </div>
                 </section>
-                <div className="list_div border mt-5 mx-5 text-white">
+                <div className="list_div border mt-5 mx-5 text-white inferiorHome">
                     <p>{searchError}</p>
                     {requisitionData ? (
-                        <div>
+                        <div className="dadosHome">
                             {requisitionData.map((info) => (
                                 <div className="border m-3 px-2 info__ justify-content-between " key={info.id}>
                                     <p className="m-2">{info.nome ? (`Nome: ${info.nome}`) : (`Turma: ${info.turma}`)}</p>

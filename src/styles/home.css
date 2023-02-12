@@ -14,8 +14,35 @@
 
 
 @media only screen and (max-width: 360px) {
-    .info__{
+    .info__ {
         display: block;
         flex-direction: column;
     }
-  }
+}
+
+.sectionHome{
+    background-color: #beb8ac;
+    color: #000;
+    margin: 5px;
+}
+
+.iconesHome{
+    width: 70px;
+    height: 70px;
+    background-color: #0D9DFF;
+    padding: 10px;
+    border-radius: 40px;
+}
+
+.linhaHome{
+    display: flex;
+    flex-direction: row;
+}
+
+.inferiorHome{
+    background-color: #0D9DFF;
+}
+
+.dadosHome{
+    background-color: #45c0be;
+}
