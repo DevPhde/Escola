@@ -143,7 +143,7 @@ function StudentInfo() {
     }
 
     async function handleDelete() {
-        alert(StudentUseCases.DeleteStudent(window.location.pathname))
+        alert(await StudentUseCases.DeleteStudent(window.location.pathname))
         return navigate('/')
     }
     if (isLoading == "true") {
