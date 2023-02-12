@@ -1,0 +1,81 @@
+.font{
+  color: #0D5FE7;
+}
+
+.icones{
+  font-size: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.logoF{
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 35px;
+  height: 45px;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.logoF:hover{
+  background-color: #fff;
+  border-radius: 50px;
+}
+
+.logoI{
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 35px;
+  height: 45px;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.logoI:hover{
+  background-color: #fff;
+  border-radius: 50px;
+  color: #fb00df;
+}
+
+.logoG{
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 35px;
+  height: 45px;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.logoG:hover{
+  background-color: #fff;
+  border-radius: 50px;
+  color: #ff0000;
+}
+
+.logoW{
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 35px;
+  height: 45px;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.logoW:hover{
+  background-color: #fff;
+  border-radius: 50px;
+  color: #1ad03f;
+}
