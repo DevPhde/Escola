@@ -146,7 +146,7 @@ function newStudent() {
         <div className='mt-5'>
           <h2 className='text-center text-white'>{renderResponse.response}</h2>
           <div className='mt-4 mb-5 text-center'>
-            <Link to="/"><button className='btn-light btn'>Voltar para Tela Inicial</button></Link>
+            <Link to="/"><button className='btn-light btn button'>Voltar para Tela Inicial</button></Link>
           </div>
         </div>
       )}
