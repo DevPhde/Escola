@@ -9,6 +9,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import img1 from '../assets/img1.png'
 import img2 from '../assets/img2.png'
 import img3 from '../assets/img3.png'
+import Loading from "../components/Loading"
+
 
 function Home() {
     const [search, setSearch] = useState("")
@@ -94,7 +96,8 @@ function Home() {
                 </div><br />
                 <div className="d-flex justify-content-center search__input">
                     <form onSubmit={submitSearch}>
-                        <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill" onChange={e => setSearch(e.target.value)} label="Buscar" />
+                        {/* <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill" onChange={e => setSearch(e.target.value)} label="Buscar" /> */}
+                        <input type="text" placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} />
                     </form>
                 </div>
                 <section className="d-flex justify-content-center border mx-5 rounded-pill radios__ sectionHome">
@@ -104,17 +107,20 @@ function Home() {
                             <div className="text-center px-1 sectionHome">
                                 <label htmlFor="student"><h5>Alunos</h5></label><br />
                                 <img src={aluno} alt="aluno" className="iconesHome" />
-                                <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
+                                {/* <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} /> */}
+                                <input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
                             </div>
                             <div className="text-center px-1 sectionHome">
                                 <label htmlFor="student"><h5>Professores</h5></label><br />
                                 <img src={professor} alt="aluno" className="iconesHome" />
-                                <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} />
+                                {/* <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} /> */}
+                                <input type="radio" value="professores" checked={selectedOption === "professores"} onChange={handleOptionChange} />
                             </div>
                             <div className="text-center px-1 sectionHome">
                                 <label htmlFor="student"><h5>Turmas</h5></label><br />
                                 <img src={turma} alt="aluno" className="iconesHome" />
-                                <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} />
+                                {/* <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} /> */}
+                                <input type="radio" value="turmas" checked={selectedOption === "turmas"} onChange={handleOptionChange} />
                             </div>
 
                         </div>
