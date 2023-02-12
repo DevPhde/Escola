@@ -39,33 +39,33 @@ function TeacherInfo() {
 
     })
 
-      //CPF
-      const cpfRef = useRef(null);
+    //CPF
+    const cpfRef = useRef(null);
 
-      const handleChange = (event) => {
-          let inputValue = event.target.value;
-          inputValue = inputValue.replace(/\D/g, "");
-  
-          if (inputValue.length <= 11) {
-              let formattedValue = "";
-  
-              for (let i = 0; i < inputValue.length; i++) {
-                  if (i === 3 || i === 6) {
-                      formattedValue += ".";
-                  }
-                  if (i === 9) {
-                      formattedValue += "-";
-                  }
-                  formattedValue += inputValue[i];
-              }
-  
-              setValues((prevState) => ({ ...prevState, cpf: formattedValue }))
-              cpfRef.current.value = formattedValue;
-          }
-      };
-  
+    const handleChange = (event) => {
+        let inputValue = event.target.value;
+        inputValue = inputValue.replace(/\D/g, "");
 
-      useEffect(() => {
+        if (inputValue.length <= 11) {
+            let formattedValue = "";
+
+            for (let i = 0; i < inputValue.length; i++) {
+                if (i === 3 || i === 6) {
+                    formattedValue += ".";
+                }
+                if (i === 9) {
+                    formattedValue += "-";
+                }
+                formattedValue += inputValue[i];
+            }
+
+            setValues((prevState) => ({ ...prevState, cpf: formattedValue }))
+            cpfRef.current.value = formattedValue;
+        }
+    };
+
+
+    useEffect(() => {
         async function requisitionInfo() {
             try {
                 const connection = await AxiosApi.Get(window.location.pathname)
@@ -83,7 +83,7 @@ function TeacherInfo() {
 
 
 
-    
+
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -132,11 +132,11 @@ function TeacherInfo() {
     async function handleDelete() {
         const remove = await TeacherUseCases.DeleteTeacher(window.location.pathname)
         alert(remove);
-        if(remove == 'Cadastro Excluído') {
+        if (remove == 'Cadastro Excluído') {
             return navigate('/')
         }
-        
-        
+
+
     }
 
     if (isLoading == "true") {
