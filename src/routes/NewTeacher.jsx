@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { TeacherUseCases } from '../useCases/TeacherUseCases';
 import { Link } from 'react-router-dom';
+import "../styles/NewStudent.css"
 
 function newStudent() {
   //CPF
@@ -137,8 +138,8 @@ function newStudent() {
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <div className='text-center'>
-              <Button className='text-center' type="submit">Cadastrar</Button>
+            <div className='text-center2'>
+              <Button className='text-center2' type="submit">Cadastrar</Button>
             </div>
           </Form>
         </div>

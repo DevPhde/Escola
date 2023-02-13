@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { StudentUseCases } from '../useCases/StudentUseCases';
 import { Link } from 'react-router-dom';
+import "../styles/NewStudent.css"
 
 function newStudent() {
   //CPF
@@ -174,7 +175,7 @@ function newStudent() {
               {!generate ? (
                 <Form.Group>
                   <button
-                    className='btn btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
+                    className='btng btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
                   {error ? (<p className='text-danger'>É obrigatório gerar a matrícula no momento do cadastro.</p>) : ""}
                 </Form.Group>
               ) : (
@@ -185,8 +186,8 @@ function newStudent() {
                 </Form.Group>
               )}
             </Row>
-            <div className='text-center'>
-              <Button className='text-center' type="submit">Cadastrar</Button>
+            <div className='text-center2'>
+              <Button className='text-center2' type="submit">Cadastrar</Button>
             </div>
           </Form>
         </div>
