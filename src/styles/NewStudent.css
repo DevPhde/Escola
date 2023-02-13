@@ -1,18 +1,16 @@
-.text-white{
-    
-   margin: 100px 0 0 500px;
-}
-
-.btng{
+.button__quality{
     background-color:#0D9DFF ;
     border-radius: 15px;
     padding: 5px 10px;
     border-color: #0D9DFF ;
     color: #FFF;
 }
+.main__quality {
+    display: grid;
+    place-items: center;
+}
 
-.text-center2{
-
+.allign__{
     border-radius: 15px;
     padding: 5px 10px;
     color: #FFF;

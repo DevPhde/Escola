@@ -5,7 +5,7 @@ import '../styles/header.css'
 function Header() {
     return (
         <header className='row bg-dark'>
-            <div className='col text-end mt-2'>
+            <div className='col text-end'>
                 <Navbar />
             </div>
         </header>

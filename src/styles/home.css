@@ -6,6 +6,8 @@
 .info__ {
     display: flex;
     justify-content: space-between;
+    color: black !important;
+    border-color: #000 !important;
 }
 
 .radios__ {
@@ -20,18 +22,27 @@
     }
 }
 
+.color__home {
+    background-color: #0D9DFF;
+}
+
 .sectionHome{
     background-color: #beb8ac;
     color: #000;
     margin: 5px;
 }
 
+.radios__ {
+    background-color: #beb8ac;
+}
+
 .iconesHome{
-    width: 70px;
-    height: 70px;
+    width: 150px;
+    height: 150px;
     background-color: #0D9DFF;
     padding: 10px;
-    border-radius: 40px;
+    border-radius: 80px;
+    border: 3px solid #050081;
 }
 
 .linhaHome{
@@ -43,6 +54,12 @@
     background-color: #0D9DFF;
 }
 
-.dadosHome{
-    background-color: #45c0be;
+.list__button {
+    background-color: #050081;
+    color: white !important;;
+}
+
+.list__button:hover {
+    background-color: #0D9DFF;
+
 }

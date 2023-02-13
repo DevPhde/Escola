@@ -11,7 +11,7 @@ function Footer() {
                     <a href="https://mail.google.com/" className='font logoG'><i className="fa fa-envelope"></i></a>
                     <a href="https://web.whatsapp.com/" className='font logoW'><i className="fa fa-whatsapp"></i></a>
                 </p>
-                <p className='mt-21 text-center font'>© 2023 - Aplicação de gerenciamento de alunos, professores e turmas.</p>
+                <p className='color_footer text-center font'>© 2023 - Aplicação de gerenciamento de alunos, professores e turmas.</p>
             </div>
         </footer>
     )

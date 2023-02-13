@@ -7,12 +7,12 @@ function HeaderNav() {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container>
-        <Link className="m-4 link__router" to="/"><button className="bg-dark button"><h4>AGAPT</h4></button></Link>            
+        <Link className="m-4 link__router" to="/"><button className="bg-dark button"><h2>AGAPT</h2></button></Link>            
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ms-auto">
-              <Link className="m-1 link__router" to="/"><button className=" bg-dark button">HOME</button></Link>
-              <Link className="m-1 link__router" to="/cadastro"><button className="bg-dark button">CADASTRO</button></Link>
+              <Link className="m-1 link__router" to="/"><button className=" bg-dark font__nav button">HOME</button></Link>
+              <Link className="m-1 link__router" to="/cadastro"><button className="bg-dark font__nav  button">CADASTRO</button></Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -103,12 +103,12 @@ function newStudent() {
     setValidate((prevState) => ({ ...prevState, registration: false }))
   }
   return (
-    <main>
+    <main className='main__quality p-0'>
       {renderResponse.status ? (
         <div className='text-white'>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="fullName">
+              <Form.Group as={Col} md="" controlId="fullName">
                 <Form.Label>Nome Completo</Form.Label>
                 <Form.Control
                   value={values.name}
@@ -133,7 +133,7 @@ function newStudent() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="cpf">
+              <Form.Group as={Col} md="" controlId="cpf">
                 <Form.Label>CPF</Form.Label>
                 <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
                   onBlur={(() => {
@@ -153,7 +153,7 @@ function newStudent() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="birthday">
+              <Form.Group as={Col} md="" controlId="birthday">
                 <Form.Label>Data de Nascimento</Form.Label>
                 <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
                   onBlur={(() => {
@@ -175,19 +175,19 @@ function newStudent() {
               {!generate ? (
                 <Form.Group>
                   <button
-                    className='btng btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
+                    className='button__quality btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
                   {error ? (<p className='text-danger'>É obrigatório gerar a matrícula no momento do cadastro.</p>) : ""}
                 </Form.Group>
               ) : (
-                <Form.Group as={Col} md="4" controlId="registration">
+                <Form.Group as={Col} md="" controlId="registration">
                   <Form.Label>Matrícula</Form.Label>
                   <Form.Control readOnly isValid={true} placeholder="Matrícula"
                     value={values.registration}></Form.Control>
                 </Form.Group>
               )}
             </Row>
-            <div className='text-center2'>
-              <Button className='text-center2' type="submit">Cadastrar</Button>
+            <div className='align__'>
+              <Button className='align__' type="submit">Cadastrar</Button>
             </div>
           </Form>
         </div>

@@ -68,7 +68,7 @@ function Home() {
     }
     return (
         <main>
-            <div>
+            <div className="color__home pb-5">
                 <div>
                     <Carousel>
                         <Carousel.Item>
@@ -93,48 +93,53 @@ function Home() {
                             />
                         </Carousel.Item>
                     </Carousel>
-                </div><br />
-                <div className="d-flex justify-content-center search__input">
-                    <form onSubmit={submitSearch}>
-                        {/* <Input placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill" onChange={e => setSearch(e.target.value)} label="Buscar" /> */}
-                        <input type="text" placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} />
-                    </form>
                 </div>
-                <section className="d-flex justify-content-center border mx-5 rounded-pill radios__ sectionHome">
+
+                <section className="d-flex justify-content-center radios__ py-5 ">
                     <div>
-                        <h4 className="text-center sectionHome">Filtro</h4>
+                        <div className="d-flex justify-content-center search__input mt-2">
+                            <form onSubmit={submitSearch}>
+                                <input type="text" placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} />
+                            </form>
+                        </div>
+
                         <div className="linhaHome">
-                            <div className="text-center px-1 sectionHome">
-                                <label htmlFor="student"><h5>Alunos</h5></label><br />
-                                <img src={aluno} alt="aluno" className="iconesHome" />
-                                {/* <Input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} /> */}
-                                <input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} />
+                            <div className="text-center ">
+                                <label><h3>Alunos</h3></label><br />
+                                <div className="d-flex flex-column">
+                                    <img src={aluno} alt="aluno" className="iconesHome mb-2" />
+                                    {/* <input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} /> */}
+                                </div>
+
                             </div>
-                            <div className="text-center px-1 sectionHome">
-                                <label htmlFor="student"><h5>Professores</h5></label><br />
-                                <img src={professor} alt="aluno" className="iconesHome" />
-                                {/* <Input type="radio" value="professores" checked={selectedOption === 'professores'} onChange={handleOptionChange} /> */}
-                                <input type="radio" value="professores" checked={selectedOption === "professores"} onChange={handleOptionChange} />
+                            <div className="text-center ">
+                                <label><h3>Professores</h3></label><br />
+                                <div className="d-flex flex-column">
+                                    <img src={professor} alt="aluno" className="iconesHome mb-2" />
+                                    {/* <input type="radio" value="professores" checked={selectedOption === "professores"} onChange={handleOptionChange} /> */}
+                                </div>
                             </div>
-                            <div className="text-center px-1 sectionHome">
-                                <label htmlFor="student"><h5>Turmas</h5></label><br />
-                                <img src={turma} alt="aluno" className="iconesHome" />
-                                {/* <Input type="radio" value="turmas" checked={selectedOption === 'turmas'} onChange={handleOptionChange} /> */}
-                                <input type="radio" value="turmas" checked={selectedOption === "turmas"} onChange={handleOptionChange} />
+                            <div className="text-center ">
+                                <label><h3>Turmas</h3></label><br />
+                                <div className="d-flex flex-column">
+                                    <img src={turma} alt="aluno" className="iconesHome mb-2" />
+                                    {/* <input type="radio" value="turmas" checked={selectedOption === "turmas"} onChange={handleOptionChange} /> */}
+                                </div>
+
                             </div>
 
                         </div>
                     </div>
                 </section>
-                <div className="list_div border mt-5 mx-5 text-white inferiorHome">
+                <div className="list_div border mt-5 mx-5 rounded">
                     <p>{searchError}</p>
                     {requisitionData ? (
                         <div className="dadosHome">
                             {requisitionData.map((info) => (
-                                <div className="border m-3 px-2 info__ justify-content-between " key={info.id}>
+                                <div className="border m-3 bg-white px-2 info__ justify-content-between rounded " key={info.id}>
                                     <p className="m-2">{info.nome ? (`Nome: ${info.nome}`) : (`Turma: ${info.turma}`)}</p>
                                     <p className="m-2">{info.matricula ? (`Matrícula: ${info.matricula}`) : (null)}</p>
-                                    <Link to={`/${selectedOption}/${info.id}`}> <button className="btn btn-light px-3 me-2 my-2">info</button></Link>
+                                    <Link to={`/${selectedOption}/${info.id}`}> <button className="btn list__button px-3 me-2 my-2">info</button></Link>
                                 </div>
                             ))}
                         </div>

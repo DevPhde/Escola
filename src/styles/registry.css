@@ -26,12 +26,17 @@
   
 }
 
-  .btn1 {
+  .button__ {
     background-color:#0D9DFF ;
     border-radius: 15px;
     padding: 5px 10px;
     border-color: #0D9DFF ;
     color: #FFF;
+  }
+
+  .button__:hover {
+    background-color: #050081;
+    border-color: #050081;
   }
 
   .btn1 a:hover{

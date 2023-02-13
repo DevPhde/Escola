@@ -8,7 +8,7 @@ function Index() {
   return (
     <div>
       <Header />
-      <Outlet /><br />
+      <Outlet />
       <Footer />
     </div>
   )

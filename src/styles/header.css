@@ -1,11 +1,7 @@
-.nav{
-  /* display: flex;
-  justify-content: space-between; */
-  /* align-items: center; */
+.font__nav {
+  font-size: 20px;
 }
-
 .button{
-  /* background-color: #000; */
   color: #0D5FE7;
   border: none;
 }
