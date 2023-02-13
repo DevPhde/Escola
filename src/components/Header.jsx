@@ -4,7 +4,7 @@ import '../styles/header.css'
 
 function Header() {
     return (
-        <header className='row header'>
+        <header className='row bg-dark'>
             <div className='col text-end mt-5'>
                 <Navbar />
             </div>
