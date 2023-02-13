@@ -11,8 +11,8 @@ function HeaderNav() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link><Link className="m-4 link__router" to="/"><button className=" bg-dark button">HOME</button></Link></Nav.Link>
-              <Nav.Link><Link className="m-1 link__router" to="/cadastro"><button className="bg-dark button">CADASTRO</button></Link></Nav.Link>
+              <Link className="m-1 link__router" to="/"><button className=" bg-dark button">HOME</button></Link>
+              <Link className="m-1 link__router" to="/cadastro"><button className="bg-dark button">CADASTRO</button></Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
