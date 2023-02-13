@@ -6,6 +6,7 @@ import "../styles/classRoomRegister.css"
 import removeStudent from "../assets/removeUser.png"
 import addStudent from "../assets/addUser.png"
 import { Link } from "react-router-dom"
+import "../styles/NewClass.css"
 
 function NewClass() {
 
@@ -186,7 +187,7 @@ function NewClass() {
                                     handleClassRoomBlur()
                                     handleYearBlur()
                                 }
-                            }} className=' mt-5 btn-light btn'>Prosseguir</button>
+                            }} className=' mt-6 btn-light btn'>Prosseguir</button>
                         </div>
                     ) : (
                         <div className="teacher__selected border rounded-pill d-flex justify-content-between px-5">
