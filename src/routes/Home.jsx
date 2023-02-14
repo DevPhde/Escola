@@ -125,7 +125,7 @@ function Home() {
                             </form>
                         </div>
 
-                        <div className="linhaHome">
+                        <div>
                             <div className="text-center ">
                                 {/* <label><h3>Alunos</h3></label> */}
                                 <div className="d-flex flex-column">

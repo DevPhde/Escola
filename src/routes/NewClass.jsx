@@ -7,7 +7,7 @@ import removeStudent from "../assets/removeUser.png"
 import addStudent from "../assets/addUser.png"
 import { Link } from "react-router-dom"
 import "../styles/NewClass.css"
-
+import background from "../assets/classRegister.png"
 function NewClass() {
 
     const [values, setValues] = useState({
@@ -60,8 +60,8 @@ function NewClass() {
         }
     }
 
-    useEffect(() => { 
-        setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: false, classRoom: false}))
+    useEffect(() => {
+        setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: false, classRoom: false }))
         async function testClassRoom() {
             try {
                 const connection = await AxiosApi.Get(`/turmas?turma=${values.classRoom}`)
@@ -133,9 +133,12 @@ function NewClass() {
         }
     }
     return (
-        <main>
+        <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center'}}>
             {teachers ? (
                 <div>
+                    <div>
+                        <Link to="/cadastro"><button className='btn-light btn mt-5 ms-2'>⇦ Voltar</button></Link>
+                    </div>
                     <div className="mb-5">
                         <h5 className="text-white text-center">Criar Turma</h5>
                     </div>
@@ -221,9 +224,9 @@ function NewClass() {
 
                     {steps.four &&
                         (
-                            <div className="mt-5">
-                                <div className="d-flex bg-white d-flex justify-content-between p-5">
-                                    <section className="border rounded">
+                            <div className=" background_list ">
+                                <div className="d-flex  d-flex justify-content-between p-5 flex-wrap">
+                                    <section className="border rounded bg-white">
                                         <h4 className="text-center">Lista de Alunos</h4>
                                         <hr />
                                         <div className=" list_students px-2">
@@ -237,7 +240,7 @@ function NewClass() {
                                             </ul>
                                         </div>
                                     </section>
-                                    <section className="border rounded">
+                                    <section className="border rounded bg-white">
                                         <h4 className="text-center">Alunos Selecionados</h4>
                                         <hr />
                                         <div className="list_students px-2">
@@ -266,9 +269,7 @@ function NewClass() {
                     <h1>Loading</h1>
                 </div>
             )}
-            <div>
-                <Link to="/cadastro"><button className='btn-light btn mt-5 ms-2'>Cancelar Cadastro</button></Link>
-            </div>
+
 
         </main>
     )

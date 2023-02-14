@@ -34,12 +34,6 @@
     border-radius: 80px;
     
 }
-
-.linhaHome{
-    display: flex;
-    flex-direction: row;
-}
-
 .inferiorHome{
     background-color: #0D9DFF;
 }
@@ -61,13 +55,5 @@
     }
 }
 @media only screen and (max-width: 670px) {
-    .linhaHome {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .icon_filter{
-        width: 60px;
-        height: 60px;
-    }
+    
 }
