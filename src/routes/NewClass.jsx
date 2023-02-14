@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { Form, Col, Row } from "react-bootstrap"
 import { AxiosApi } from "../services/RequisitionAPI"
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases"
-import "../styles/classRoomRegister.css"
 import removeStudent from "../assets/removeUser.png"
 import addStudent from "../assets/addUser.png"
 import { Link } from "react-router-dom"
@@ -133,21 +132,21 @@ function NewClass() {
         }
     }
     return (
-        <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center'}}>
+        <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
             {teachers ? (
-                <div>
-                    <div>
-                        <Link to="/cadastro"><button className='btn-light btn mt-5 ms-2'>⇦ Voltar</button></Link>
+                <div className="">
+                    <div className="text-end">
+                        <Link to="/cadastro"><button className='btn-light btn mt-5 me-5'>⇦ Voltar</button></Link>
                     </div>
-                    <div className="mb-5">
-                        <h5 className="text-white text-center">Criar Turma</h5>
+                    <div className="mb-5 mt-5 mx-5 ">
+                        <h1 className="ms-3 text-white">Criar Turma</h1>
                     </div>
 
                     {steps.one &&
                         steps.one ? (
-                        <div className="m-5 text-center">
-                            <section>
-                                <Row className="mb-3  d-flex justify-content-between">
+                        <div className="m-5 text-start">
+                            <section className="me-5 pe-5">
+                                <Row className="mb-3">
                                     <Form.Group as={Col} md="3" controlId="classRoomCode">
                                         <Form.Label className="text-white">Turma</Form.Label>
                                         <Form.Control
@@ -163,7 +162,9 @@ function NewClass() {
                                             Preencha com a numeração da turma, a numeração deve conter 4 dígitos.
                                         </Form.Control.Feedback>
                                     </Form.Group>
+                                </Row>
 
+                                <Row>
                                     <Form.Group as={Col} md="3" controlId="classRoomCode">
                                         <Form.Label className="text-white">Série</Form.Label>
                                         <Form.Control
@@ -179,30 +180,33 @@ function NewClass() {
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Row>
+                                <div className="mt-5 ms-3">
+                                    <button onClick={(e) => {
+                                        e.preventDefault()
+                                        if ((invalidInput.classRoom) && (invalidInput.year) && (!invalidInput.invalidClassRoom)) {
+                                            setSteps(prevState => ({ ...prevState, one: false, two: true }))
+                                        } else {
+                                            handleClassRoomBlur()
+                                            handleYearBlur()
+                                        }
+                                    }} className=' mt-6 btn-light btn'>Prosseguir</button>
+                                </div>
                             </section>
 
 
-                            <button onClick={(e) => {
-                                e.preventDefault()
-                                if ((invalidInput.classRoom) && (invalidInput.year) && (!invalidInput.invalidClassRoom)) {
-                                    setSteps(prevState => ({ ...prevState, one: false, two: true }))
-                                } else {
-                                    handleClassRoomBlur()
-                                    handleYearBlur()
-                                }
-                            }} className=' mt-6 btn-light btn'>Prosseguir</button>
+
                         </div>
                     ) : (
-                        <div className="teacher__selected border rounded-pill d-flex justify-content-between px-5">
-                            <p className="text-white mt-1">Turma: {values.classRoom}</p>
-                            <p className="text-white mt-1">Série: {values.year}°</p>
+                        <div className="d-flex px-5">
+                            <p className="text-white mt-1 border px-3 py-2 rounded m-2 mb-0">Turma: {values.classRoom}</p>
+                            <p className="text-white mt-1 border px-4 py-2 rounded m-2 mb-0">Série: {values.year}°</p>
                         </div>
                     )}
 
 
                     {steps.two &&
                         <div>
-                            <section className="col-lg-5 row text-center">
+                            <section className="col-lg-3 row text-center">
                                 <Form.Group controlId="ControlSelect1">
                                     <Form.Label className="text-white">Professores</Form.Label>
                                     <Form.Control as="select" value={selectedTeacher} onChange={handleChangeTeacher}>
@@ -216,17 +220,17 @@ function NewClass() {
                         </div>}
 
                     {steps.three &&
-                        <div className="mt-5">
-                            <div className="teacher__selected border rounded-pill d-flex justify-content-center">
+                        <div className="mt-5 d-flex">
+                            <div className="text-white mt-1 border px-4 py-2 rounded m-2 ms-5">
                                 <p className="text-white mt-1">Professor(a): {selectedTeacher.nome}</p>
                             </div>
                         </div>}
 
                     {steps.four &&
                         (
-                            <div className=" background_list ">
-                                <div className="d-flex  d-flex justify-content-between p-5 flex-wrap">
-                                    <section className="border rounded bg-white">
+                            <div className="background_list ">
+                                <div className="d-flex  d-flex justify-content-center mt-2 mx-5 flex-wrap">
+                                    <section className="border rounded mt-5 mx-2 bg-white">
                                         <h4 className="text-center">Lista de Alunos</h4>
                                         <hr />
                                         <div className=" list_students px-2">
@@ -240,7 +244,7 @@ function NewClass() {
                                             </ul>
                                         </div>
                                     </section>
-                                    <section className="border rounded bg-white">
+                                    <section className="border rounded mx-2 mt-5 bg-white">
                                         <h4 className="text-center">Alunos Selecionados</h4>
                                         <hr />
                                         <div className="list_students px-2">
@@ -259,7 +263,7 @@ function NewClass() {
                                 <p className="text-center text-danger">{invalidInput.errorMessage}</p>
 
                                 <div className="text-center">
-                                    <button onClick={CreateNewClassRoom} className=' mt-5 btn-light btn'>Cadastrar</button>
+                                    <button onClick={CreateNewClassRoom} className=' mt-0 btn-light btn'>Cadastrar</button>
                                 </div>
                             </div>
                         )}
