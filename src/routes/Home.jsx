@@ -10,6 +10,29 @@ import img1 from '../assets/img1.png'
 import img2 from '../assets/img2.png'
 import img3 from '../assets/img3.png'
 import Loading from "../components/Loading"
+import RadioButton from "../components/RadioButton"
+
+
+const options = [
+    {
+        id: 1,
+        value: 'alunos',
+        label: 'Aluno',
+        imageUrl: `${aluno}`,
+    },
+    {
+        id: 2,
+        value: "professores",
+        label: 'Professor',
+        imageUrl: `${professor}`,
+    },
+    {
+        id: 3,
+        value: 'turmas',
+        label: 'Turma',
+        imageUrl: `${turma}`,
+    },
+];
 
 
 function Home() {
@@ -22,7 +45,7 @@ function Home() {
 
 
     const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value)
+        setSelectedOption(event)
     };
 
     useEffect(() => {
@@ -63,9 +86,8 @@ function Home() {
             setRequisitionData(result)
 
         }
-
-
     }
+    console.log(selectedOption)
     return (
         <main>
             <div className="color__home pb-5">
@@ -95,8 +117,8 @@ function Home() {
                     </Carousel>
                 </div>
 
-                <section className="d-flex justify-content-center radios__ py-5 ">
-                    <div>
+                <section className="d-flex justify-content-center filter__home py-5 ">
+                    <div >
                         <div className="d-flex justify-content-center search__input mt-2">
                             <form onSubmit={submitSearch}>
                                 <input type="text" placeholder="Buscar" value={search} className="form-control border-secondary rounded-pill " onChange={e => setSearch(e.target.value)} />
@@ -105,29 +127,22 @@ function Home() {
 
                         <div className="linhaHome">
                             <div className="text-center ">
-                                <label><h3>Alunos</h3></label><br />
+                                {/* <label><h3>Alunos</h3></label> */}
                                 <div className="d-flex flex-column">
-                                    <img src={aluno} alt="aluno" className="iconesHome mb-2" />
-                                    {/* <input type="radio" value="alunos" checked={selectedOption === "alunos"} onChange={handleOptionChange} /> */}
+                                    {/* <img src={aluno} alt="aluno" className="mb-2" /> */}
+                                    <h2 className="mb-4">Escolha uma opção:</h2>
+                                    <div className="d-flex">
+                                    <RadioButton
+                                        options={options}
+                                        name="opcoes"
+                                        checkedValue={selectedOption}
+                                        onChange={handleOptionChange}
+                                    />
+                                    </div>
+                                    
                                 </div>
 
                             </div>
-                            <div className="text-center ">
-                                <label><h3>Professores</h3></label><br />
-                                <div className="d-flex flex-column">
-                                    <img src={professor} alt="aluno" className="iconesHome mb-2" />
-                                    {/* <input type="radio" value="professores" checked={selectedOption === "professores"} onChange={handleOptionChange} /> */}
-                                </div>
-                            </div>
-                            <div className="text-center ">
-                                <label><h3>Turmas</h3></label><br />
-                                <div className="d-flex flex-column">
-                                    <img src={turma} alt="aluno" className="iconesHome mb-2" />
-                                    {/* <input type="radio" value="turmas" checked={selectedOption === "turmas"} onChange={handleOptionChange} /> */}
-                                </div>
-
-                            </div>
-
                         </div>
                     </div>
                 </section>
