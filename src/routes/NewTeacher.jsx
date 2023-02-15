@@ -5,7 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { TeacherUseCases } from '../useCases/TeacherUseCases';
 import { Link } from 'react-router-dom';
-import "../styles/NewStudent.css"
+import "../styles/NewRegister.css"
+import background from "../assets/editBackground.jpg"
 
 function newStudent() {
   //CPF
@@ -70,12 +71,12 @@ function newStudent() {
     register: false
   })
   return (
-    <main>
-      {renderResponse.status ? (
-        <div className='text-white'>
+    <main className='main__quality' style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
+      {!renderResponse.status ? (
+        <div className='text-white border background_quality p-5'>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="fullName">
+              <Form.Group as={Col}  controlId="fullName">
                 <Form.Label>Nome Completo</Form.Label>
                 <Form.Control
                   value={values.name}
@@ -100,7 +101,7 @@ function newStudent() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="cpf">
+              <Form.Group as={Col}  controlId="cpf">
                 <Form.Label>CPF</Form.Label>
                 <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
                   onBlur={(() => {
@@ -120,7 +121,7 @@ function newStudent() {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="register">
+              <Form.Group as={Col}  controlId="register">
                 <Form.Label>Registro</Form.Label>
                 <Form.Control type="text" placeholder="Registro" value={values.register} onChange={(event) => setValues((prevState) => ({ ...prevState, register: event.target.value }))} required
                   onBlur={(() => {
@@ -138,16 +139,16 @@ function newStudent() {
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <div className='text-center2'>
-              <Button className='text-center2' type="submit">Cadastrar</Button>
+            <div className='text-center'>
+              <Button type="submit">Cadastrar</Button>
             </div>
           </Form>
         </div>
       ) : (
         <div className='mt-5'>
-          <h2 className='text-center text-white'>{renderResponse.response}</h2>
+          <h2 className='text-center'>{renderResponse.response}</h2>
           <div className='mt-4 mb-5 text-center'>
-            <Link to="/"><button className='btn-light btn button'>Voltar para Tela Inicial</button></Link>
+            <Link to="/"><button className='button__quality btn '>Voltar para Tela Inicial</button></Link>
           </div>
         </div>
       )}

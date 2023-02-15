@@ -6,3 +6,15 @@
   overflow: auto;
   height: 200px;
 }
+
+.button_info_quality {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+@media only screen and (max-width: 420px) {
+  .button_info_quality {
+    display: block;  
+  }
+}

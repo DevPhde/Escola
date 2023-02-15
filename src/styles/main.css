@@ -10,3 +10,7 @@ main {
     margin: auto 0;
     min-width: none;
 }
+
+a {
+    text-decoration: none;
+}

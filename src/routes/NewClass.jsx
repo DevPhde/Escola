@@ -110,12 +110,12 @@ function NewClass() {
 
     if (create.status) {
         return (
-            <main className="text-center text-white">
-                {create.message == "200" ? (<h4 className="mt-5">Turma Criada com sucesso!</h4>) : (<div>
+            <main className="text-center pt-5" style={{background: '#050081'}}>
+                {create.message == "200" ? (<h4 className="mt-5 text-success">Turma Criada com sucesso!</h4>) : (<div>
                     <h4 className="mt-5">{create.message}</h4>
                 </div>
                 )}
-                <Link to="/"><button className='btn-light btn mt-5'>Voltar para Tela Inicial</button></Link>
+                <Link to="/"><button className='button__quality btn mt-5'>Voltar para Tela Inicial</button></Link>
             </main>
         )
     }
@@ -270,7 +270,7 @@ function NewClass() {
                 </div>
             ) : (
                 <div>
-                    <h1>Loading</h1>
+                    <Loading/>
                 </div>
             )}
 

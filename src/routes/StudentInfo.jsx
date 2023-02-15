@@ -9,7 +9,6 @@ import "../styles/info.css"
 import Loading from '../components/Loading';
 
 
-
 function StudentInfo() {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState("true");
@@ -148,12 +147,12 @@ function StudentInfo() {
     }
     if (isLoading == "true") {
         return (
-            <main>
+            <main style={{ backgroundColor: '#050081' }}>
                 <Loading />
             </main>)
     } else if (isLoading == "error") {
         return (
-            <main className='text-center text-white'>
+            <main style={{ backgroundColor: '#050081' }} className='text-center text-white'>
                 <h1>Erro 404!</h1>
                 <h4>Aluno não encontrado.</h4>
                 <div className='mt-4 mb-5'>
@@ -164,117 +163,121 @@ function StudentInfo() {
     }
     else {
         return (
-            <main>
-                <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
+            <main style={{ backgroundColor: '#050081' }}>
                 {isEditing ? (
-                    <div className='mb-5 text-center'>
-                        <div className='mb-5 text-center rounded'>
-                            <img src={profile} alt="profile" className='rounded-circle w-25' />
+                    <div>
+                        <div className='mb-5 pt-5 text-center'>
+                            <section className='d-flex flex-column border mx-5 pb-4 rounded'>
+                                <div className='mb-5 pt-5 text-center rounded'>
+                                    <img src={profile} alt="profile" width={'70em'} className='rounded-circle' />
+                                </div>
+                                <div className='d-flex justify-content-center text-white'>
+                                    <Form noValidate validated={validated}>
+                                        <Row className="mb-3">
+                                            <Form.Group md="4" controlId="fullName">
+                                                <Form.Label>Nome Completo</Form.Label>
+                                                <Form.Control
+                                                    value={values.name}
+                                                    type="text"
+                                                    placeholder="Nome Completo"
+                                                    onChange={(event) => setValues((prevState) => ({ ...prevState, name: event.target.value }))}
+                                                    onBlur={(() => {
+                                                        if (values.name.length < 8) {
+                                                            setValidate((prevState) => ({ ...prevState, name: true }))
+                                                            setValid((prevState) => ({ ...prevState, name: false }))
+                                                        } else {
+                                                            setValidate((prevState) => ({ ...prevState, name: false }))
+                                                            setValid((prevState) => ({ ...prevState, name: true }))
+                                                        }
+                                                    })}
+                                                    required
+                                                    isInvalid={validate.name}
+                                                />
+                                                <Form.Control.Feedback type="invalid" className='text-danger'>
+                                                    Preencha com nome completo.
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                        </Row>
+                                        <Row className="mb-3">
+                                            <Form.Group md="4" controlId="cpf">
+                                                <Form.Label>CPF</Form.Label>
+                                                <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
+                                                    onBlur={(() => {
+                                                        if (values.cpf.length == 14) {
+                                                            setValidate((prevState) => ({ ...prevState, cpf: false }))
+                                                            setValid((prevState) => ({ ...prevState, cpf: true }))
+                                                        } else {
+                                                            setValidate((prevState) => ({ ...prevState, cpf: true }))
+                                                            setValid((prevState) => ({ ...prevState, cpf: false }))
+                                                        }
+                                                    })}
+                                                    isInvalid={validate.cpf}
+                                                />
+                                                <Form.Control.Feedback type="invalid" className='text-danger'>
+                                                    Preencha com um CPF válido.
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                        </Row>
+                                        <Row className="mb-3">
+                                            <Form.Group md="4" controlId="birthday">
+                                                <Form.Label>Data de Nascimento</Form.Label>
+                                                <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
+                                                    onBlur={(() => {
+                                                        if (values.birthday.length == 10) {
+                                                            setValidate((prevState) => ({ ...prevState, birthday: false }))
+                                                            setValid((prevState) => ({ ...prevState, birthday: true }))
+                                                        } else {
+                                                            setValidate((prevState) => ({ ...prevState, birthday: true }))
+                                                            setValid((prevState) => ({ ...prevState, birthday: false }))
+                                                        }
+                                                    })}
+                                                    isInvalid={validate.birthday} />
+                                                <Form.Control.Feedback type="invalid" className='text-danger'>
+                                                    Preencha com a data de nascimento.
+                                                </Form.Control.Feedback>
+                                            </Form.Group>
+                                        </Row>
+                                    </Form>
+
+                                </div>
+                                <div className='mt-5'>
+                                    <button className='btn-success btn mx-5 mt-4' onClick={handleSaveClick}>Salvar</button>
+                                    <button className='btn-light btn mx-5 mt-4' onClick={handleCancelClick}>Cancelar</button>
+                                </div>
+                            </section>
                         </div>
-                        <section className='d-flex flex-column'>
-
-                            <div className='d-flex justify-content-center text-white'>
-                                <Form noValidate validated={validated}>
-                                    <Row className="mb-3">
-                                        <Form.Group md="4" controlId="fullName">
-                                            <Form.Label>Nome Completo</Form.Label>
-                                            <Form.Control
-                                                value={values.name}
-                                                type="text"
-                                                placeholder="Nome Completo"
-                                                onChange={(event) => setValues((prevState) => ({ ...prevState, name: event.target.value }))}
-                                                onBlur={(() => {
-                                                    if (values.name.length < 8) {
-                                                        setValidate((prevState) => ({ ...prevState, name: true }))
-                                                        setValid((prevState) => ({ ...prevState, name: false }))
-                                                    } else {
-                                                        setValidate((prevState) => ({ ...prevState, name: false }))
-                                                        setValid((prevState) => ({ ...prevState, name: true }))
-                                                    }
-                                                })}
-                                                required
-                                                isInvalid={validate.name}
-                                            />
-                                            <Form.Control.Feedback type="invalid" className='text-danger'>
-                                                Preencha com nome completo.
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group md="4" controlId="cpf">
-                                            <Form.Label>CPF</Form.Label>
-                                            <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
-                                                onBlur={(() => {
-                                                    if (values.cpf.length == 14) {
-                                                        setValidate((prevState) => ({ ...prevState, cpf: false }))
-                                                        setValid((prevState) => ({ ...prevState, cpf: true }))
-                                                    } else {
-                                                        setValidate((prevState) => ({ ...prevState, cpf: true }))
-                                                        setValid((prevState) => ({ ...prevState, cpf: false }))
-                                                    }
-                                                })}
-                                                isInvalid={validate.cpf}
-                                            />
-                                            <Form.Control.Feedback type="invalid" className='text-danger'>
-                                                Preencha com um CPF válido.
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group md="4" controlId="birthday">
-                                            <Form.Label>Data de Nascimento</Form.Label>
-                                            <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
-                                                onBlur={(() => {
-                                                    if (values.birthday.length == 10) {
-                                                        setValidate((prevState) => ({ ...prevState, birthday: false }))
-                                                        setValid((prevState) => ({ ...prevState, birthday: true }))
-                                                    } else {
-                                                        setValidate((prevState) => ({ ...prevState, birthday: true }))
-                                                        setValid((prevState) => ({ ...prevState, birthday: false }))
-                                                    }
-                                                })}
-                                                isInvalid={validate.birthday} />
-                                            <Form.Control.Feedback type="invalid" className='text-danger'>
-                                                Preencha com a data de nascimento.
-                                            </Form.Control.Feedback>
-                                        </Form.Group>
-                                    </Row>
-                                </Form>
-
-                            </div>
-                            <div className='mt-5'>
-                                <button className='btn-success btn mx-5' onClick={handleSaveClick}>Salvar</button>
-                                <button className='btn-light btn mx-5' onClick={handleCancelClick}>Cancelar</button>
-                            </div>
-                        </section>
-
-
                     </div>
                 ) : (
-                    <div className='mb-5 mx-3 text-white'>
-                        <div className='text-center mb-5'>
-                            <img src={profile} alt="profile" className='rounded-circle w-25' />
-                            <div>
-                                {editedThings ? (
-                                    <p className='text-success text-center mt-5'>Cadastro Alterado com sucesso!</p>
-                                ) : (
-                                    <p></p>
-                                )}
-                            </div>
-                        </div>
+                    <div style={{ backgroundColor: '#050081' }}>
+                        <div><Link to="/"><button className='btn-light btn mt-3'>⇦ Voltar</button></Link></div>
+                        <div className='main__quality text-white rounded border p-5 m-5'>
 
-                        <p>Nome Completo: {values.name}</p>
-                        <p>Data de Nascimento: {values.birthday}</p>
-                        <p>CPF: {values.cpf}</p>
-                        <p>Matrícula: {values.registration}</p>
-                        <p>Turma: {!values.classRoom ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : values.classRoom}</p>
-                        <div className='d-flex justify-content-between mt-5'>
-                            <div>
-                                <button className='btn btn-light mx-2' onClick={handleEditClick}>Editar cadastro</button>
-
+                            <div className='text-center mb-5'>
+                                <img src={profile} alt="profile" width={'70em'} className='rounded-circle' />
+                                <div>
+                                    {editedThings ? (
+                                        <p className='text-success text-center mt-5'>Cadastro Alterado com sucesso!</p>
+                                    ) : (
+                                        <p></p>
+                                    )}
+                                </div>
                             </div>
                             <div>
-                                <button className='btn btn-danger mx-2' onClick={handleDeleteStudent}>Deletar Cadastro</button>
+                                <p>Nome Completo: {values.name}</p>
+                                <p>Data de Nascimento: {values.birthday}</p>
+                                <p>CPF: {values.cpf}</p>
+                                <p>Matrícula: {values.registration}</p>
+                                <p>Turma: {!values.classRoom ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : values.classRoom}</p>
+                            </div>
+
+                            <div className='button_info_quality mt-5'>
+                                <div>
+                                    <button className='btn btn-light mt-4 mx-2' onClick={handleEditClick}>Editar cadastro</button>
+
+                                </div>
+                                <div>
+                                    <button className='btn btn-danger mt-4 mx-2' onClick={handleDeleteStudent}>Deletar Cadastro</button>
+                                </div>
                             </div>
                         </div>
                     </div>

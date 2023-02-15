@@ -10,25 +10,23 @@ function Registry() {
     return (
         <>
             <main className="p-5">
-                <section className='d-flex wrap mt-5 justify-content-center flex-wrap'>
-                    <div className="div_registry m-4 rounded">
-                    <img src={alun} alt="aluno" className="iconesH" />
+                <section className='d-flex wrap mt-3 justify-content-center flex-wrap'>
+                    <div className="div_registry m-4 my-5 rounded d-flex flex-column">
+                        <img src={alun} alt="aluno" className="iconesH mt-3" />
                         <h3 className="text-center  #050081">Aluno</h3>
-                 
-                        <Link to="/new/aluno"><button className="button__ btn-light m-5">CADASTRAR</button></Link>
-                        
+                        <button className="button__ btn-light m-5"><Link to="/new/aluno" className="text-white">CADASTRAR</Link></button>
                     </div>
-                    <div className="div_registry m-4 rounded">
-                    <img src={prof} alt="professor" className="iconesH" />
+                    <div className="div_registry m-4 my-5 rounded d-flex flex-column">
+                        <img src={prof} alt="professor" className="iconesH mt-3" />
                         <h3 className="text-center #050081">Professor</h3>
-                        
-                        <Link to="/new/professor"><button className="button__ btn-light m-5">CADASTRAR</button></Link>
+
+                        <button className="button__ btn-light m-5"><Link to="/new/professor" className="text-white">CADASTRAR</Link></button>
                     </div>
-                    <div className="div_registry m-4 rounded">
-                    <img src={turm} alt="turma" className="iconesH" />
+                    <div className="div_registry m-4 my-5 rounded d-flex flex-column">
+                        <img src={turm} alt="turma" className="iconesH mt-3" />
                         <h3 className="text-center #050081 ">Turma</h3>
-                   
-                        <Link to="/new/turma"><button className="button__ btn-light m-5">CADASTRAR</button></Link>
+
+                        <button className="button__ btn-light m-5"><Link to="/new/turma" className="text-white">CADASTRAR</Link></button>
                     </div>
                 </section>
             </main>

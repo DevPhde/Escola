@@ -210,7 +210,7 @@ function ClassInfo() {
     } else {
         return (
             <main>
-                <div><Link to="/"><button className='btn-light btn'>Voltar</button></Link></div>
+                <div><Link to="/"><button className='btn-light btn'>⇦ Voltar</button></Link></div>
                 {isEditing ? (
                     <div>
                         <Row className="mb-3 mx-5 mt-5  d-flex justify-content-between">
