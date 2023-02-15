@@ -245,8 +245,9 @@ function TeacherInfo() {
                         </div>
                     </div>
                 ) : (
-                    <div className='mb-5 text-white'>
-                        <div><Link to="/"><button className='btn-light btn'>⇦ Voltar</button></Link></div>
+                    <div className='text-white'>
+                        <div><Link to="/"><button className='btn-light btn mt-3'>⇦ Voltar</button></Link></div>
+                        <h2 className=" mx-5 d-flex justify-content-center">Informações do Professor</h2>
                         <div className='main__quality text-white border rounded p-5 m-5'>
 
                             <div className='text-center mb-5'>

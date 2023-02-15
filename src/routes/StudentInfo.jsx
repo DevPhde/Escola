@@ -248,8 +248,9 @@ function StudentInfo() {
                         </div>
                     </div>
                 ) : (
-                    <div style={{ backgroundColor: '#050081' }}>
+                    <div className='text-white'>
                         <div><Link to="/"><button className='btn-light btn mt-3'>⇦ Voltar</button></Link></div>
+                        <h2 className=" mx-5 d-flex justify-content-center">Informações do Aluno</h2>
                         <div className='main__quality text-white rounded border p-5 m-5'>
 
                             <div className='text-center mb-5'>

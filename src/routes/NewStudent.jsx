@@ -57,7 +57,7 @@ function newStudent() {
 
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState(false)
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setValidated(true);
@@ -69,7 +69,7 @@ function newStudent() {
     const result = Object.values(valid).every(value => value === true);
     if (result) {
       const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
-        setRenderResponse({ response: response, status: false })
+      setRenderResponse({ response: response, status: false })
     }
   };
 
@@ -104,104 +104,110 @@ function newStudent() {
     setValidate((prevState) => ({ ...prevState, registration: false }))
   }
   return (
-    <main className='main__quality p-0' style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
-      {renderResponse.status ? (
-        <div className='text-white border background_quality p-5' >
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="fullName">
-                <Form.Label className='text-black'>Nome Completo</Form.Label>
-                <Form.Control
-                  value={values.name}
-                  type="text"
-                  placeholder="Nome Completo"
-                  onChange={(event) => setValues((prevState) => ({ ...prevState, name: event.target.value }))}
-                  onBlur={(() => {
-                    if (values.name.length < 8) {
-                      setValidate((prevState) => ({ ...prevState, name: true }))
-                      setValid((prevState) => ({ ...prevState, name: false }))
-                    } else {
-                      setValidate((prevState) => ({ ...prevState, name: false }))
-                      setValid((prevState) => ({ ...prevState, name: true }))
-                    }
-                  })}
-                  required
-                  isInvalid={validate.name}
-                />
-                <Form.Control.Feedback type="invalid" className='text-danger'>
-                  Preencha com nome completo.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="cpf">
-                <Form.Label className='text-black'>CPF</Form.Label>
-                <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
-                  onBlur={(() => {
-                    if (values.cpf.length == 14) {
-                      setValidate((prevState) => ({ ...prevState, cpf: false }))
-                      setValid((prevState) => ({ ...prevState, cpf: true }))
-                    } else {
-                      setValidate((prevState) => ({ ...prevState, cpf: true }))
-                      setValid((prevState) => ({ ...prevState, cpf: false }))
-                    }
-                  })}
-                  isInvalid={validate.cpf}
-                />
-                <Form.Control.Feedback type="invalid" className='text-danger'>
-                  Preencha com um CPF válido.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="birthday">
-                <Form.Label className='text-black'>Data de Nascimento</Form.Label>
-                <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
-                  onBlur={(() => {
-                    if (values.birthday.length == 10) {
-                      setValidate((prevState) => ({ ...prevState, birthday: false }))
-                      setValid((prevState) => ({ ...prevState, birthday: true }))
-                    } else {
-                      setValidate((prevState) => ({ ...prevState, birthday: true }))
-                      setValid((prevState) => ({ ...prevState, birthday: false }))
-                    }
-                  })}
-                  isInvalid={validate.birthday} />
-                <Form.Control.Feedback type="invalid" className='text-danger'>
-                  Preencha com a data de nascimento.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              {!generate ? (
-                <Form.Group>
-                  <button
-                    className='button__quality btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
-                  {error ? (<p className='text-danger'>É obrigatório gerar a matrícula no momento do cadastro.</p>) : ""}
+    <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
+      <div><Link to="/"><button className='btn-light btn mt-3 ms-2'>⇦ Voltar</button></Link></div>
+      <div className='main__quality p-5'>
+
+        {renderResponse.status ? (
+          <div className=' border background_quality p-5 mt-5' >
+            <h2 className='mb-5'>Cadastrar Aluno</h2>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="fullName">
+                  <Form.Label className='text-black'>Nome Completo</Form.Label>
+                  <Form.Control
+                    value={values.name}
+                    type="text"
+                    placeholder="Nome Completo"
+                    onChange={(event) => setValues((prevState) => ({ ...prevState, name: event.target.value }))}
+                    onBlur={(() => {
+                      if (values.name.length < 8) {
+                        setValidate((prevState) => ({ ...prevState, name: true }))
+                        setValid((prevState) => ({ ...prevState, name: false }))
+                      } else {
+                        setValidate((prevState) => ({ ...prevState, name: false }))
+                        setValid((prevState) => ({ ...prevState, name: true }))
+                      }
+                    })}
+                    required
+                    isInvalid={validate.name}
+                  />
+                  <Form.Control.Feedback type="invalid" className='text-danger'>
+                    Preencha com nome completo.
+                  </Form.Control.Feedback>
                 </Form.Group>
-              ) : (
-                <Form.Group as={Col} controlId="registration">
-                  <Form.Label>Matrícula</Form.Label>
-                  <Form.Control readOnly isValid={true} placeholder="Matrícula"
-                    value={values.registration}></Form.Control>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="cpf">
+                  <Form.Label className='text-black'>CPF</Form.Label>
+                  <Form.Control type="text" placeholder="000.000.000-00" ref={cpfRef} value={values.cpf} onChange={handleChange} required
+                    onBlur={(() => {
+                      if (values.cpf.length == 14) {
+                        setValidate((prevState) => ({ ...prevState, cpf: false }))
+                        setValid((prevState) => ({ ...prevState, cpf: true }))
+                      } else {
+                        setValidate((prevState) => ({ ...prevState, cpf: true }))
+                        setValid((prevState) => ({ ...prevState, cpf: false }))
+                      }
+                    })}
+                    isInvalid={validate.cpf}
+                  />
+                  <Form.Control.Feedback type="invalid" className='text-danger'>
+                    Preencha com um CPF válido.
+                  </Form.Control.Feedback>
                 </Form.Group>
-              )}
-            </Row>
-            <div className='text-center'>
-              <Button className='align__' type="submit">Cadastrar</Button>
-            </div>
-          </Form>
-        </div>
-      ) : (
-        <div className='mt-5 '>
-          <h2 className='text-center'>{renderResponse.response}</h2>
-          <div className='mt-4 mb-5 text-center'>
-            <Link to="/"><button className='button__quality btn'>Voltar para Tela Inicial</button></Link>
+              </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="birthday">
+                  <Form.Label className='text-black'>Data de Nascimento</Form.Label>
+                  <Form.Control type="text" placeholder="00/00/0000" value={values.birthday} onChange={handleBirthday} required
+                    onBlur={(() => {
+                      if (values.birthday.length == 10) {
+                        setValidate((prevState) => ({ ...prevState, birthday: false }))
+                        setValid((prevState) => ({ ...prevState, birthday: true }))
+                      } else {
+                        setValidate((prevState) => ({ ...prevState, birthday: true }))
+                        setValid((prevState) => ({ ...prevState, birthday: false }))
+                      }
+                    })}
+                    isInvalid={validate.birthday} />
+                  <Form.Control.Feedback type="invalid" className='text-danger'>
+                    Preencha com a data de nascimento.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Row>
+              <Row className="mb-3">
+                {!generate ? (
+                  <Form.Group>
+                    <button
+                      className='button__quality btn-light mt-3' onClick={handleRegistration}>Gerar Matrícula</button>
+                    {error ? (<p className='text-danger'>É obrigatório gerar a matrícula no momento do cadastro.</p>) : ""}
+                  </Form.Group>
+                ) : (
+                  <Form.Group as={Col} controlId="registration">
+                    <Form.Label>Matrícula</Form.Label>
+                    <Form.Control readOnly isValid={true} placeholder="Matrícula"
+                      value={values.registration}></Form.Control>
+                  </Form.Group>
+                )}
+              </Row>
+              <div className='text-center'>
+                <Button className='align__' type="submit">Cadastrar</Button>
+              </div>
+            </Form>
           </div>
-        </div>
-      )}  
+        ) : (
+          <div className='mt-5 '>
+            <h2 className='text-center'>{renderResponse.response}</h2>
+            <div className='mt-4 mb-5 text-center'>
+              <Link to="/"><button className='button__quality btn'>Voltar para Tela Inicial</button></Link>
+            </div>
+          </div>
+        )}
+      </div>
+
     </main>
-  );  
+  );
 }
 
 export default newStudent
