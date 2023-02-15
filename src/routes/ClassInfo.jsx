@@ -181,7 +181,7 @@ function ClassInfo() {
 
     if (deletingClassRoom) {
         return (
-            <main className='mb-5 text-center text-white'>
+            <main className='mb-5 text-center '>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
@@ -194,12 +194,12 @@ function ClassInfo() {
         return (
             <main>
                 <Loading />
-                <p className="text-white text-center">Carregando informações da Turma...</p>;
+                <p className=" text-center">Carregando informações da Turma...</p>;
             </main>
         )
     } else if (isLoading == "error") {
         return (
-            <main className='text-center text-white'>
+            <main className='text-center '>
                 <h1>Erro 404!</h1>
                 <h4>Turma não encontrada.</h4>
                 <div className='mt-4 mb-5'>
@@ -217,7 +217,7 @@ function ClassInfo() {
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Não é possível modificar a numeração da turma após sua criação.</Tooltip>}>
                                 <span className="d-inline-block">
                                     <Form.Group as={Col} md="3" controlId="classRoomCode">
-                                        <Form.Label className="text-white">Turma</Form.Label>
+                                        <Form.Label className="">Turma</Form.Label>
                                         <Form.Control className='text-center'
                                             disabled
                                             value={values.classRoom}
@@ -227,7 +227,7 @@ function ClassInfo() {
                                 </span>
                             </OverlayTrigger>
                             <Form.Group as={Col} md="3" controlId="yearCode">
-                                <Form.Label className="text-white">Série</Form.Label>
+                                <Form.Label className="">Série</Form.Label>
                                 <Form.Control
                                     value={values.year}
                                     type="number"
@@ -246,7 +246,7 @@ function ClassInfo() {
                         <div className="d-flex justify-content-center">
                             <section className="col-lg-5 row text-center">
                                 <Form.Group controlId="ControlSelect1">
-                                    <Form.Label className="text-white">Professores</Form.Label>
+                                    <Form.Label className="">Professores</Form.Label>
                                     <Form.Control as="select" value={selectedTeacher.nome} onChange={handleChangeTeacher}>
                                         <option value="" disabled>Selecionar professor</option>
                                         {teachers.map((teacher) => (
@@ -296,7 +296,7 @@ function ClassInfo() {
                         </div>
                     </div>
                 ) : (
-                    <div className='mb-5 mx-3 text-white'>
+                    <div className='mb-5 mx-3 '>
                         <div className='text-center mb-5'>
                             <div>
                                 {editedThings ? (
