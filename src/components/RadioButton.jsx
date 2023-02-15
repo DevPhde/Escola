@@ -20,7 +20,7 @@ const RadioImage = styled.label`
     display: none;
   }
 
-  img {
+  .image {
     display: block;
     width: 100%;
     height: 100%;
@@ -53,7 +53,7 @@ const RadioButton = ({ options, name, checkedValue, onChange }) => {
                         
                             className={checkedValue === option.value ? 'selected' : ''}
                         >
-                            <img src={option.imageUrl} alt={option.label} />
+                            <img className='image' src={option.imageUrl} alt={option.label} />
                             <input
                                 type="radio"
                                 id={option.value}
