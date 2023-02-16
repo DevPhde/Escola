@@ -9,7 +9,6 @@ import addStudent from "../assets/addUser.png";
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import background from "../assets/wallpaperClassInfo.jpg";
 
 function ClassInfo() {
   const navigate = useNavigate();
@@ -246,9 +245,9 @@ function ClassInfo() {
   } else {
     return (
       <main style={{ background: "#050081" }}>
-        <div>
+        <div className="pb-5">
           <Link to="/">
-            <button className="btn-light btn mb-5">⇦ Voltar</button>
+            <button className="btn-light btn mb-5 mt-3">⇦ Voltar</button>
           </Link>
         </div>
         {isEditing ? (
@@ -373,7 +372,7 @@ function ClassInfo() {
             </div>
           </div>
         ) : (
-          <div className="mb-5 bg-light class_quality mx-3 ">
+          <div className="mb-5 bg-light rounded px-3 class_quality mx-3 ">
             <div className="text-center mb-3">
               <div>
                 {editedThings ? (
@@ -385,10 +384,10 @@ function ClassInfo() {
                 )}
               </div>
             </div>
-            <section className="d-flex bg-light rounded p-0 justify-content-around">
-              <div className=" me-5 mt-2 rounded mb-0 border">
-                <h2 className="p-2 mb-0 ">Turma {values.classRoom}</h2>
-                <hr/>
+            <section className="resp__class d-flex bg-light rounded p-0 justify-content-around">
+              <div className=" me-5 mt-2 rounded mb-0 margin_controll border">
+                <h2 className="p-2 mb-0 text-center ">Turma {values.classRoom}</h2>
+                <hr />
 
                 <b className="mb-0 p-2">Professor: {values.teacher.nome}</b>
                 <p className=" p-2">Série: {values.year}º</p>
@@ -419,20 +418,18 @@ function ClassInfo() {
                 </div>
               </section>
             </section>
-            <div className="d-flex justify-content-between pb-5 mx-5 mt-5">
+            <div className="d-flex justify-content-between pb-5 mx-5 buttons_class mt-5">
               <div>
                 <button
                   className="btn btn-dark mx-2"
-                  onClick={handleEditClick}
-                >
+                  onClick={handleEditClick}>
                   Editar cadastro
                 </button>
               </div>
               <div>
                 <button
                   className="btn btn-danger mx-2"
-                  onClick={handleDeleteTeacher}
-                >
+                  onClick={handleDeleteTeacher}>
                   Deletar Cadastro
                 </button>
               </div>

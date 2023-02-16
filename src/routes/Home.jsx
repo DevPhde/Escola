@@ -56,7 +56,6 @@ function Home() {
             } catch (error) {
                 setLoadingScreen(false)
             }
-
         }
         requisitionInfo()
     }, [selectedOption])
@@ -127,9 +126,7 @@ function Home() {
 
                         <div>
                             <div className="text-center ">
-                                {/* <label><h3>Alunos</h3></label> */}
                                 <div className="d-flex flex-column">
-                                    {/* <img src={aluno} alt="aluno" className="mb-2" /> */}
                                     <h2 className="mb-4">Escolha uma opção:</h2>
                                     <div className="d-flex radios_quality">
                                     <RadioButton
