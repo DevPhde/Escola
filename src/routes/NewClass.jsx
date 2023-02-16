@@ -7,7 +7,9 @@ import addStudent from "../assets/addUser.png"
 import { Link } from "react-router-dom"
 import "../styles/NewClass.css"
 import background from "../assets/classRegister.png"
+import Loading from "../components/Loading"
 function NewClass() {
+    const [loader, setLoader] = useState(false)
 
     const [values, setValues] = useState({
         classRoom: "",
@@ -110,25 +112,36 @@ function NewClass() {
 
     if (create.status) {
         return (
-            <main className="text-center pt-5" style={{background: '#050081'}}>
-                {create.message == "200" ? (<h4 className="mt-5 text-success">Turma Criada com sucesso!</h4>) : (<div>
-                    <h4 className="mt-5">{create.message}</h4>
-                </div>
-                )}
-                <Link to="/"><button className='button__quality btn mt-5'>Voltar para Tela Inicial</button></Link>
+            <main className="text-center pt-5" style={{ background: '#050081' }}>
+                {loader ? (<div><Loading /></div>) : (
+                    <div>
+                        {create.message == "200" ? (<h4 className="mt-5 text-success">Turma Criada com sucesso!</h4>) : (<div>
+                            <h4 className="mt-5">{create.message}</h4>
+                        </div>
+
+                        )}
+                        <Link to="/"><button className='button__quality btn mt-5'>Voltar para Tela Inicial</button></Link>
+
+                    </div>)}
+
             </main>
         )
     }
 
     const CreateNewClassRoom = async (e) => {
         e.preventDefault()
+        setLoader(true)
         if (selectedStudents.length == 0) {
             setInvalidInput(prevState => ({ ...prevState, errorMessage: "É obrigatório a escolha de pelo menos um aluno." }))
         } else {
+            setCreate(prevState => ({ ...prevState, status: true }))
             const createClassRoom = await ClassRoomUseCases.CreateClassRoom(values.classRoom, values.year, selectedStudents, selectedTeacher)
             const editStudents = createClassRoom == '200' ? await ClassRoomUseCases.EditStudent(values.classRoom, selectedStudents) : setCreate(() => ({ message: createClassRoom, status: true }));
             const editTeacher = editStudents == '200' ? await ClassRoomUseCases.EditTeacher(values.classRoom, selectedTeacher) : setCreate(() => ({ message: editStudents, status: true }));
-            editTeacher == '200' ? setCreate(prevState => ({ ...prevState, status: true })) : setCreate(() => ({ message: editTeacher, status: true }));
+            if (editTeacher != '200') {
+                setCreate(() => ({ message: editTeacher, status: true }));
+            }
+            setLoader(false)
         }
     }
     return (
@@ -270,7 +283,7 @@ function NewClass() {
                 </div>
             ) : (
                 <div>
-                    <Loading/>
+                    <Loading />
                 </div>
             )}
 

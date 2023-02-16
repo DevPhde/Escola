@@ -10,6 +10,7 @@ import { Form, Row } from "react-bootstrap";
 
 function TeacherInfo() {
     const navigate = useNavigate()
+    const [data, setData] = useState('')
     const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
     const [deletingTeacher, setDeletingTeacher] = useState(false);
@@ -17,6 +18,8 @@ function TeacherInfo() {
 
     const [validated, setValidated] = useState(false);
     const [handleState, setHandleState] = useState(0);
+
+    const [loader, setLoader] = useState(false)
 
     const [valid, setValid] = useState({
         name: true,
@@ -71,6 +74,7 @@ function TeacherInfo() {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 if (connection) {
                     setValues(() => ({ id: connection.data.id, name: connection.data.nome, cpf: connection.data.cpf, register: connection.data.registro, classRoom: connection.data.turma }))
+                    setData(connection.data)
                     setIsLoading("false")
                 }
             } catch (error) {
@@ -79,7 +83,7 @@ function TeacherInfo() {
             }
         }
         requisitionInfo()
-    }, [handleState])
+    }, [handleState, editedThings])
 
 
 
@@ -98,7 +102,7 @@ function TeacherInfo() {
 
     const handleSaveClick = async (event) => {
         event.preventDefault();
-
+        setLoader(true)
         console.log(valid)
         const result = Object.values(valid).every(value => value === true);
 
@@ -109,17 +113,26 @@ function TeacherInfo() {
             setEditedThings(true)
             setIsEditing(false);
             setHandleState(handleState + 1)
+            setLoader(false)
         }
         setValidated(true);
     };
 
     if (deletingTeacher) {
         return (
-            <main className='mb-5 text-center text-white'>
+            <main className='mb-5 text-center text-white __loading' style={{ background: "#050081" }}>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
                 <button className='btn btn-light ms-5' onClick={() => setDeletingTeacher(false)}>Cancelar</button>
+            </main>
+        )
+    }
+
+    if (loader) {
+        return (
+            <main className="__loading" style={{ background: "#050081" }}>
+                <Loading />
             </main>
         )
     }
@@ -130,9 +143,11 @@ function TeacherInfo() {
     }
 
     async function handleDelete() {
+        setLoader(true)
+        setDeletingTeacher(false)
         const remove = await TeacherUseCases.DeleteTeacher(window.location.pathname)
-        alert(remove);
-        if (remove == 'Cadastro Excluído') {
+        if (remove) {
+            alert(remove);
             return navigate('/')
         }
 
@@ -141,12 +156,12 @@ function TeacherInfo() {
 
     if (isLoading == "true") {
         return (
-            <main className='' style={{ backgroundColor: '#050081' }}>
+            <main className='__loading' style={{ backgroundColor: '#050081' }}>
                 <Loading />
             </main>)
     } else if (isLoading == "error") {
         return (
-            <main className='text-center text-white'>
+            <main className='text-center text-white __loading' style={{ backgroundColor: '#050081' }}>
                 <h1>Erro 404!</h1>
                 <h4>Professor não encontrado.</h4>
                 <div className='mt-4 mb-5'>
@@ -262,10 +277,10 @@ function TeacherInfo() {
                             </div>
                             <div>
 
-                                <p>Nome Completo: {values.name}</p>
-                                <p>CPF: {values.cpf}</p>
-                                <p>Registro: {values.register}</p>
-                                <p>Turma: {!values.classRoom ? <b className="text-danger"> "Professor não cadastrado em nenhuma turma."</b> : values.classRoom} </p>
+                                <p>Nome Completo: {data.nome}</p>
+                                <p>CPF: {data.cpf}</p>
+                                <p>Registro: {data.registro}</p>
+                                <p>Turma: {!data.turma ? <b className="text-danger"> "Professor não cadastrado em nenhuma turma."</b> : data.turma} </p>
                             </div>
                             <div className='button_info_quality mt-5'>
                                 <div>

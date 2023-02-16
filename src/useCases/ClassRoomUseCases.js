@@ -71,9 +71,7 @@ export class ClassRoomUseCases {
         // 3 - update
         const newUpdate = new ClassRoom(classRoom, teacher.selectedTeacher, year, students.studentList)
         console.log(newUpdate)
-        const connection = await AxiosApi.Put(id, newUpdate)
-        if (connection.status == 200) {
-            return "true"
-        }
+        await AxiosApi.Put(id, newUpdate)
+        return true
     }
 }

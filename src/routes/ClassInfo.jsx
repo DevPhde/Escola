@@ -9,6 +9,7 @@ import addStudent from "../assets/addUser.png";
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function ClassInfo() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function ClassInfo() {
   const [handleState, setHandleState] = useState(0);
   const [reloadInfos, setReloadInfos] = useState(0);
 
+  const [loader, setLoader] = useState(false)
   // STUDENTS
   const [students, setStudents] = useState([]);
   const [availableStudents, setAvailableStudents] = useState([]);
@@ -124,6 +126,7 @@ function ClassInfo() {
       setInvalidInput((prevState) => ({ ...prevState, errorYear: true }));
       return;
     }
+    setLoader(true)
     let updateTeacher = { selectedTeacher: selectedTeacher };
     let updateStudents = { studentList: students };
 
@@ -146,13 +149,16 @@ function ClassInfo() {
         update: true,
       };
     }
-    await ClassRoomUseCases.UpdateClassRoom(
+    const update = await ClassRoomUseCases.UpdateClassRoom(
       window.location.pathname,
       values.classRoom,
       values.year,
       updateStudents,
       updateTeacher
     );
+    if (update) {
+      setLoader(false)
+    }
     setEditedThings(true);
     setIsEditing(false);
     setHandleState(handleState + 1);
@@ -177,20 +183,30 @@ function ClassInfo() {
     return { entered, exited };
   };
 
+  if (loader) {
+    return (
+      <main className="__loading" style={{ background: "#050081" }}>
+        <Loading />
+      </main>
+    )
+  }
+
   const handleDeleteTeacher = () => {
     setDeletingClassRoom(true);
     setEditedThings(false);
   };
 
   const handleDelete = async () => {
-    alert(
-      await ClassRoomUseCases.DeleteClassRoom(
-        window.location.pathname,
-        values.teacher,
-        values.students
-      )
-    );
-    return navigate("/");
+    setLoader(true)
+    const deleteRegister = await ClassRoomUseCases.DeleteClassRoom(
+      window.location.pathname,
+      values.teacher,
+      values.students)
+    if (deleteRegister) {
+      alert(deleteRegister)
+      return navigate("/");
+    }
+
   };
 
   const handleStudentSelection = (student) => {
@@ -207,7 +223,7 @@ function ClassInfo() {
 
   if (deletingClassRoom) {
     return (
-      <main className="mb-5 text-center ">
+      <main style={{ background: "#050081" }} className="mb-5 text-center text-white __loading">
         <h5>A exclusão do cadastro é irreversível.</h5>
         <p>Tem certeza que deseja deletar o cadastro?</p>
         <button className="btn btn-danger" onClick={handleDelete}>

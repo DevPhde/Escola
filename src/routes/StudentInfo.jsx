@@ -11,12 +11,15 @@ import Loading from '../components/Loading';
 
 function StudentInfo() {
     const navigate = useNavigate()
+    const [data, setData] = useState("")
     const [isLoading, setIsLoading] = useState("true");
     const [isEditing, setIsEditing] = useState(false);
     const [deletingStudent, setDeletingStudent] = useState(false)
     const [editedThings, setEditedThings] = useState(false)
 
     const [validated, setValidated] = useState(false);
+
+    const [loader, setLoader] = useState(false)
 
     const [valid, setValid] = useState({
         name: true,
@@ -92,6 +95,7 @@ function StudentInfo() {
                 const connection = await AxiosApi.Get(window.location.pathname)
                 if (connection) {
                     setValues(() => ({ id: connection.data.id, name: connection.data.nome, cpf: connection.data.cpf, birthday: connection.data.dataNascimento, registration: connection.data.matricula, classRoom: connection.data.turma }))
+                    setData(connection.data)
                     setIsLoading("false")
                 }
             } catch (error) {
@@ -114,6 +118,7 @@ function StudentInfo() {
 
     const handleSaveClick = async (event) => {
         event.preventDefault();
+        setLoader(true)
 
         const result = Object.values(valid).every(value => value === true);
         if (result) {
@@ -122,12 +127,13 @@ function StudentInfo() {
             setEditedThings(true)
             setIsEditing(false);
             setHandleState(handleState + 1)
+            setLoader(false)
         }
         setValidated(true);
     };
     if (deletingStudent) {
         return (
-            <main className='mb-5 text-center text-white'>
+            <main className='mb-5 text-center text-white __loading' style={{ background: "#050081" }}>
                 <h5>A exclusão do cadastro é irreversível.</h5>
                 <p>Tem certeza que deseja deletar o cadastro?</p>
                 <button className='btn btn-danger' onClick={handleDelete}>Deletar</button>
@@ -136,15 +142,31 @@ function StudentInfo() {
         )
     }
 
+
     const handleDeleteStudent = () => {
         setDeletingStudent(true)
         setEditedThings(false)
     }
 
     async function handleDelete() {
-        alert(await StudentUseCases.DeleteStudent(window.location.pathname))
-        return navigate('/')
+        setDeletingStudent(false)
+        setLoader(true)
+        const deleteRegister = await StudentUseCases.DeleteStudent(window.location.pathname)
+        if (deleteRegister) {
+            alert(deleteRegister)
+            return navigate('/')
+
+        }
     }
+
+    if (loader) {
+        return (
+            <main className="__loading" style={{ background: "#050081" }}>
+                <Loading />
+            </main>
+        )
+    }
+
     if (isLoading == "true") {
         return (
             <main style={{ backgroundColor: '#050081' }}>
@@ -264,11 +286,11 @@ function StudentInfo() {
                                 </div>
                             </div>
                             <div>
-                                <p>Nome Completo: {values.name}</p>
-                                <p>Data de Nascimento: {values.birthday}</p>
-                                <p>CPF: {values.cpf}</p>
-                                <p>Matrícula: {values.registration}</p>
-                                <p>Turma: {!values.classRoom ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : values.classRoom}</p>
+                                <p>Nome Completo: {data.nome}</p>
+                                <p>Data de Nascimento: {data.dataNascimento}</p>
+                                <p>CPF: {data.cpf}</p>
+                                <p>Matrícula: {data.matricula}</p>
+                                <p>Turma: {!data.turma ? <b className="text-danger"> "Aluno não matriculado em nenhuma turma."</b> : data.turma}</p>
                             </div>
 
                             <div className='button_info_quality mt-5'>

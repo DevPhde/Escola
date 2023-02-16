@@ -7,10 +7,12 @@ import { StudentUseCases } from '../useCases/StudentUseCases';
 import { Link } from 'react-router-dom';
 import "../styles/NewRegister.css"
 import background from "../assets/wallpaperregister.jpg"
+import Loading from '../components/Loading';
 
 function newStudent() {
   //CPF
   const cpfRef = useRef(null);
+  const [loader, setLoader] = useState(false)
 
   const handleChange = (event) => {
     let inputValue = event.target.value;
@@ -60,16 +62,22 @@ function newStudent() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoader(true)
     setValidated(true);
+    
     if (values.registration == "") {
       setError(true)
       return
     }
-
     const result = Object.values(valid).every(value => value === true);
+    setRenderResponse(prevState => ({ ...prevState, status: false }))
     if (result) {
       const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
-      setRenderResponse({ response: response, status: false })
+      console.log(response)
+      if (response) {
+        setLoader(false)
+      }
+      setRenderResponse(prevState => ({ ...prevState, response: response }))
     }
   };
 
@@ -198,10 +206,12 @@ function newStudent() {
           </div>
         ) : (
           <div className='mt-5 '>
-            <h2 className='text-center'>{renderResponse.response}</h2>
-            <div className='mt-4 mb-5 text-center'>
-              <Link to="/"><button className='button__quality btn'>Voltar para Tela Inicial</button></Link>
-            </div>
+            {loader ? (<div><Loading /></div>) : (<div>
+              <h2 className='text-center'>{renderResponse.response}</h2>
+              <div className='mt-4 mb-5 text-center'>
+                <Link to="/"><button className='button__quality btn'>Voltar para Tela Inicial</button></Link>
+              </div>
+            </div>)}
           </div>
         )}
       </div>

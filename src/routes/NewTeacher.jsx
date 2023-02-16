@@ -7,10 +7,13 @@ import { TeacherUseCases } from '../useCases/TeacherUseCases';
 import { Link } from 'react-router-dom';
 import "../styles/NewRegister.css"
 import background from "../assets/editBackground.jpg"
+import Loading from '../components/Loading';
 
-function newStudent() {
+function newTeacher() {
   //CPF
   const cpfRef = useRef(null);
+
+  const [loader, setLoader] = useState(false)
 
   const handleChange = (event) => {
     let inputValue = event.target.value;
@@ -43,15 +46,19 @@ function newStudent() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const result = Object.values(valid).every(value => value === true);
-    if (result) {
-      console.log("teste")
-      const response = await TeacherUseCases.CreateTeacher(values.name, values.cpf, values.register)
-      setRenderResponse({ response: response, status: false })
-    }
+    setLoader(true)
     setValidated(true);
 
+
+    const result = Object.values(valid).every(value => value === true);
+    setRenderResponse(prevState => ({ ...prevState, status: false }))
+    if (result) {
+      const response = await TeacherUseCases.CreateTeacher(values.name, values.cpf, values.register)
+      if (response) {
+        setLoader(false)
+      }
+      setRenderResponse(prevState => ({ ...prevState, response: response }))
+    }
   };
 
   const [valid, setValid] = useState({
@@ -70,6 +77,7 @@ function newStudent() {
     cpf: false,
     register: false
   })
+
   return (
     <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
       <div><Link to="/cadastro"><button className='btn-light btn mt-3 ms-2'>⇦ Voltar</button></Link></div>
@@ -150,10 +158,13 @@ function newStudent() {
           </div>
         ) : (
           <div className='mt-5'>
-            <h2 className='text-center'>{renderResponse.response}</h2>
-            <div className='mt-4 mb-5 text-center'>
-              <Link to="/"><button className='button__quality btn '>Voltar para Tela Inicial</button></Link>
-            </div>
+            {loader ? (<div><Loading /></div>) :
+              (<div>
+                <h2 className='text-center'>{renderResponse.response}</h2>
+                <div className='mt-4 mb-5 text-center'>
+                  <Link to="/"><button className='button__quality btn '>Voltar para Tela Inicial</button></Link>
+                </div>
+              </div>)}
           </div>
         )}
       </div>
@@ -162,4 +173,4 @@ function newStudent() {
   );
 }
 
-export default newStudent
+export default newTeacher

@@ -14,3 +14,7 @@ main {
 a {
     text-decoration: none;
 }
+
+.__loading {
+    padding-top: 200px;
+}
