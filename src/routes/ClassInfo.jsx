@@ -246,13 +246,11 @@ function ClassInfo() {
     return (
       <main style={{ background: "#050081" }}>
         <div className="pb-5">
-          <Link to="/">
-            <button className="btn-light btn mb-5 mt-3">⇦ Voltar</button>
-          </Link>
+
         </div>
         {isEditing ? (
           <div>
-            <Row className="mb-3 mx-5 mt-5  d-flex justify-content-between">
+            <div className="edit__class-infos">
               <OverlayTrigger
                 overlay={
                   <Tooltip id="tooltip-disabled">
@@ -262,8 +260,8 @@ function ClassInfo() {
                 }
               >
                 <span className="d-inline-block">
-                  <Form.Group as={Col} md="3" controlId="classRoomCode">
-                    <Form.Label className="">Turma</Form.Label>
+                  <Form.Group controlId="classRoomCode">
+                    <Form.Label className="text-white text-center">Turma</Form.Label>
                     <Form.Control
                       className="text-center"
                       disabled
@@ -273,8 +271,8 @@ function ClassInfo() {
                   </Form.Group>
                 </span>
               </OverlayTrigger>
-              <Form.Group as={Col} md="3" controlId="yearCode">
-                <Form.Label className="">Série</Form.Label>
+              <Form.Group className="mt-2" controlId="yearCode">
+                <Form.Label className="text-white">Série</Form.Label>
                 <Form.Control
                   value={values.year}
                   type="number"
@@ -295,11 +293,12 @@ function ClassInfo() {
                   Preencha com a série, apenas números.
                 </Form.Control.Feedback>
               </Form.Group>
-            </Row>
+            </div>
+
             <div className="d-flex justify-content-center">
               <section className="col-lg-5 row text-center">
-                <Form.Group controlId="ControlSelect1">
-                  <Form.Label className="">Professores</Form.Label>
+                <Form.Group className="mt-5" controlId="ControlSelect1">
+                  <Form.Label className="text-white">Professores</Form.Label>
                   <Form.Control
                     as="select"
                     value={selectedTeacher.nome}
@@ -317,8 +316,8 @@ function ClassInfo() {
             </div>
 
             <div className="mt-5">
-              <div className="d-flex bg-white d-flex justify-content-between p-5">
-                <section className="border rounded">
+              <div className="d-flex bg-white d-flex justify-content-between list_edit-class-info p-5">
+                <section className="border rounded mb-2">
                   <h4 className="text-center">Alunos Matrículados</h4>
                   <hr />
                   <div className=" list_students px-2">
@@ -336,7 +335,7 @@ function ClassInfo() {
                     </ul>
                   </div>
                 </section>
-                <section className="border rounded">
+                <section className="border rounded mb-2">
                   <h4 className="text-center">Alunos Disponíveis</h4>
                   <hr />
                   <div className="list_students px-2">
@@ -372,69 +371,76 @@ function ClassInfo() {
             </div>
           </div>
         ) : (
-          <div className="mb-5 bg-light rounded px-3 class_quality mx-3 ">
-            <div className="text-center mb-3">
-              <div>
-                {editedThings ? (
-                  <p className="text-success text-center mt-3">
-                    Cadastro Alterado com sucesso!
-                  </p>
-                ) : (
-                  <p></p>
-                )}
-              </div>
-            </div>
-            <section className="resp__class d-flex bg-light rounded p-0 justify-content-around">
-              <div className=" me-5 mt-2 rounded mb-0 margin_controll border">
-                <h2 className="p-2 mb-0 text-center ">Turma {values.classRoom}</h2>
-                <hr />
+          <div>
+            <Link to="/">
+              <button className="btn-light btn mb-5 mt-3">⇦ Voltar</button>
+            </Link>
+            <div className="mb-5 pt-3 bg-light rounded px-3 class_quality mx-3 ">
 
-                <b className="mb-0 p-2">Professor: {values.teacher.nome}</b>
-                <p className=" p-2">Série: {values.year}º</p>
-              </div>
-
-              <section className="border rounded students__quality">
-                <h4 className="text-center mb-4">Alunos Matriculados</h4>
-                <hr />
-
+              <div className="text-center mb-3">
                 <div>
-                  {values.students ? (
-                    <div className="students_list">
-                      {values.students.map((students) => (
-                        <div
-                          className="d-flex border m-3 p-1 rounded"
-                          key={students.id}
-                        >
-                          <b>{students.nome}</b>
-                          <p className="mx-5">
-                            Matrícula: {students.matricula}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                  {editedThings ? (
+                    <p className="text-success text-center mt-3">
+                      Cadastro Alterado com sucesso!
+                    </p>
                   ) : (
-                    <p>Carregando informações dos alunos...</p>
+                    <p></p>
                   )}
                 </div>
-              </section>
-            </section>
-            <div className="d-flex justify-content-between pb-5 mx-5 buttons_class mt-5">
-              <div>
-                <button
-                  className="btn btn-dark mx-2"
-                  onClick={handleEditClick}>
-                  Editar cadastro
-                </button>
               </div>
-              <div>
-                <button
-                  className="btn btn-danger mx-2"
-                  onClick={handleDeleteTeacher}>
-                  Deletar Cadastro
-                </button>
+              <section className="resp__class d-flex bg-light rounded p-0 justify-content-around">
+                <div className=" me-5 mt-2 rounded mb-0 margin_controll border">
+                  <h2 className="p-2 mb-0 text-center ">Turma {values.classRoom}</h2>
+                  <hr />
+
+                  <b className="mb-0 p-2">Professor: {values.teacher.nome}</b>
+                  <p className=" p-2">Série: {values.year}º</p>
+                </div>
+
+                <section className="border rounded students__quality">
+                  <h4 className="text-center mb-4">Alunos Matriculados</h4>
+                  <hr />
+
+                  <div>
+                    {values.students ? (
+                      <div className="students_list">
+                        {values.students.map((students) => (
+                          <div
+                            className="d-flex border m-3 p-1 rounded"
+                            key={students.id}
+                          >
+                            <b>{students.nome}</b>
+                            <p className="mx-5">
+                              Matrícula: {students.matricula}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>Carregando informações dos alunos...</p>
+                    )}
+                  </div>
+                </section>
+              </section>
+              <div className="d-flex justify-content-between pb-5 mx-5 buttons_class mt-5">
+                <div>
+                  <button
+                    className="btn btn-dark mx-2"
+                    onClick={handleEditClick}>
+                    Editar cadastro
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="btn btn-danger mx-2"
+                    onClick={handleDeleteTeacher}>
+                    Deletar Cadastro
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+
         )}
       </main>
     );

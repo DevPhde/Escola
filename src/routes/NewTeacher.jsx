@@ -72,7 +72,7 @@ function newStudent() {
   })
   return (
     <main style={{ backgroundImage: `url(${background})`, backgroundSize: "cover", backgroundPosition: 'center' }}>
-      <div><Link to="/"><button className='btn-light btn mt-3 ms-2'>⇦ Voltar</button></Link></div>
+      <div><Link to="/cadastro"><button className='btn-light btn mt-3 ms-2'>⇦ Voltar</button></Link></div>
       <div className='main__quality'>
 
         {renderResponse.status ? (

@@ -86,7 +86,6 @@ function Home() {
 
         }
     }
-    console.log(selectedOption)
     return (
         <main>
             <div className="color__home pb-5">

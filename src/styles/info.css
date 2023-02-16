@@ -20,6 +20,14 @@
   width: 450px !important;
 }
 
+.edit__class-infos{
+  display: grid;
+
+  place-items: center;
+}
+.list_edit-class-info {
+
+}
 
 @media only screen and (max-width: 420px) {
   .button_info_quality {
@@ -54,5 +62,9 @@
     margin-bottom: 15px !important;
     width: 430px;
     margin-left: 40px;
+  }
+  .list_edit-class-info {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
   }
 }
