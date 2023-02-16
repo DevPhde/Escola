@@ -70,7 +70,7 @@ function NewClass() {
                     setInvalidInput(prevState => ({ ...prevState, invalidClassRoom: true, errorClassRoom: false, classRoom: false }))
                 }
             } catch (error) {
-                console.log(error)
+                alert("Erro inesperado, tente novamente mais tarde.")
             }
         }
         testClassRoom()

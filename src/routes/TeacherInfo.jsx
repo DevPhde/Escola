@@ -78,7 +78,6 @@ function TeacherInfo() {
                     setIsLoading("false")
                 }
             } catch (error) {
-                console.log(error)
                 setIsLoading("error")
             }
         }
@@ -103,10 +102,8 @@ function TeacherInfo() {
     const handleSaveClick = async (event) => {
         event.preventDefault();
         setLoader(true)
-        console.log(valid)
         const result = Object.values(valid).every(value => value === true);
 
-        console.log(result)
         if (result) {
             const info = new Teacher(values.name, values.cpf, values.register, values.classRoom)
             await TeacherUseCases.EditTeacher(values.id, info)

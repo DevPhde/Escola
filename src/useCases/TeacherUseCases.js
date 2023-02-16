@@ -21,7 +21,6 @@ export class TeacherUseCases {
             const connection = await AxiosApi.Get(`/turmas/?turma=${teacher.turma}`)
             const updateClassRoom = connection.data['0']
             updateClassRoom.professor = teacher
-            console.log(updateClassRoom)
             await AxiosApi.Put(`/turmas/${updateClassRoom.id}`, updateClassRoom)
         }
         const update = await AxiosApi.Put(`/professores/${id}`, teacher)

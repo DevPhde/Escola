@@ -52,7 +52,6 @@ export class ClassRoomUseCases {
     }
     static async UpdateClassRoom(id, classRoom, year, students, teacher) {
 
-        console.log(teacher)
         // 1- modificar na rota professor
         if (teacher.update) {
             await this.EditTeacher(false, teacher.prevTeacher)
@@ -64,13 +63,11 @@ export class ClassRoomUseCases {
                 await this.EditStudent(classRoom, students.newStudent)
             }
             if (students.removedStudent.length != 0) {
-                console.log("sim")
                 await this.EditStudent(false, students.removedStudent)
             }
         }
         // 3 - update
         const newUpdate = new ClassRoom(classRoom, teacher.selectedTeacher, year, students.studentList)
-        console.log(newUpdate)
         await AxiosApi.Put(id, newUpdate)
         return true
     }

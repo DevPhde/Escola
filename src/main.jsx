@@ -9,8 +9,6 @@ import StudentInfo from './routes/StudentInfo'
 import TeacherInfo from './routes/TeacherInfo'
 import Registry from './routes/Registry'
 
-// import "./styles/main.css"
-
 import NewStudent from './routes/NewStudent'
 import NewTeacher from './routes/NewTeacher'
 import NewClass from './routes/NewClass'

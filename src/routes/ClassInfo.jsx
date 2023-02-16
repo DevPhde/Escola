@@ -9,7 +9,6 @@ import addStudent from "../assets/addUser.png";
 import { ClassRoomUseCases } from "../useCases/ClassRoomUseCases";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function ClassInfo() {
   const navigate = useNavigate();
@@ -81,7 +80,6 @@ function ClassInfo() {
     }
     dataRequisitons();
   }, [handleState]);
-  // console.log(prevUpdate)
 
   useEffect(() => {
     async function dataRequisitons() {

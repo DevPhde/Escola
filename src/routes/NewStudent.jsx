@@ -73,7 +73,6 @@ function newStudent() {
     setRenderResponse(prevState => ({ ...prevState, status: false }))
     if (result) {
       const response = await StudentUseCases.CreateStudent(values.name, values.cpf, values.birthday, values.registration)
-      console.log(response)
       if (response) {
         setLoader(false)
       }
