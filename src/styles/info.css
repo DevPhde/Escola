@@ -13,6 +13,23 @@
 
 }
 
+.div__list_students {
+  width: 500px;
+}
+
+.class_informations {
+/* display: grid;
+place-items: center; */
+text-align: end;
+}
+.class_quality {
+  display: grid;
+}
+
+.students__quality {
+  width: 450px !important;
+}
+
 @media only screen and (max-width: 420px) {
   .button_info_quality {
     display: block;  
