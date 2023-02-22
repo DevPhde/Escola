@@ -1,10 +1,10 @@
 # Projeto em grupo do Módulo 3 - AGAPT
 ### Integrantes do SQUAD
-- Diego Santos - Pessoa Gestora do Conhecimento
-- Isabela Alves - Pessoa Gestora de Gente e Engajamento
-- Gabriela Rocha - Pessoa Co-Facilitadora
-- Igor - Colaborador I
-- Igor Gonzalez - Colaborador II
+- <a href="https://github.com/DevPhde">Diego Baumbach</a> - Pessoa Gestora do Conhecimento
+- <a href="https://github.com/isabelaalvesc">Isabela Alves</a> - Pessoa Gestora de Gente e Engajamento
+- <a href="https://github.com/gabirc26">Gabriela Rocha</a> - Pessoa Co-Facilitadora
+- <a href="https://github.com/Igorzpqd">Igor de Sousa</a> - Colaborador I
+- <a href="https://github.com/igorgonzalez96">Igor Gonzalez</a> - Colaborador II
 ##
 ### Proposta
 - Criar um site utilizando o json.server. O projeto deverá ser construído usando o framework React aprendido em aula, nele iremos desenvolver um site que deverá utilizar um servidor Json construído anteriormente. Este projeto deverá seguir um tema dos utilizados pelos integrantes no projeto individual.
