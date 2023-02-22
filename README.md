@@ -76,15 +76,19 @@
 <img src="/README/home.jpeg">
 <img src="/README/home2.jpeg">
 <i>A Home conta com a barra de navegação com ancoragem para as demais rotas. Possui espaço para logo. Além disso conta com um menu de cadastro, onde é possível visualizar os alunos, professores, um painel para visualização da lista de alunos, professores ou turmas com suas respectivas informações e um botão de busca por nome.</i><br><br>
+
 ### Cadastros: 
 <img src="/README/cadastros.jpeg"><br>
+
 ### Cadastro de Aluno: 
 <img src="/README/cadastroaluno.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Aluno, uma página com um formulário é aberta. O usuário deve preencher os dados como indicado. Em caso de sucesso, poderá clicar em cadastrar e concluir a operação. Caso contrário, o sistema irá indicar os campos que precisam ser digitados e/ou corrigidos. O botão Gerar Matrícula gera um código único para este aluno.
 </i><br><br>
+
 ### Cadastro de Professor: 
 <img src="/README/cadastroprofessor.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Professor, uma página com um formulário é aberta. O usuário deve preencher os dados como indicado. Em caso de sucesso, poderá clicar em cadastrar e concluir a operação. Caso contrário, o sistema irá indicar os campos que precisam ser digitados e/ou corrigidos.</i><br><br>
+
 ### Cadastro de Turma: 
 <img src="/README/cadastroturma.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Professor, uma página com um formulário é aberta. Após preencher o número da turma e a série e clicar em prosseguir, abre um novo campo para informar o professor desta turma.</i><br><br>
