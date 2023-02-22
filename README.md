@@ -11,7 +11,7 @@
 ##
 ### Requisitos
 - ✅ Utilize endpoints do Json-server que foi criado no Projeto individual.
-- ✅ Utilizar o README do repositório para documentação do projeto;
+- ✅ Utilizar o /README do repositório para documentação do projeto;
 - ✅ Utilizar a biblioteca react-router-dom para roteamento das páginas;
 - O site deve realizar todos os métodos HTTP:
 - ✅ GET - Página para listar os cadastros ou produtos com opção de busca;
@@ -32,7 +32,7 @@
 > [/Professores](https://github.com/DevPhde/Escola/blob/DEV/src/routes/NewTeacher.jsx)
 - Cada rota conta com três entidades pré definidas e cada uma delas conta com cinco atributos (com excessão da rota aluno, que tem seis atributos).
 
-<img src="README/fluxograma.JPG">
+<img src="/README/Fluxograma.jpeg">
 
 > Aluno
 > {<br>
@@ -73,38 +73,38 @@
 ##
 # AGPT
 ### Home:
-<img src="README/home.JPG">
-<img src="README/home2.JPG">
+<img src="/README/home.jpeg">
+<img src="/README/home2.jpeg">
 <i>A Home conta com a barra de navegação com ancoragem para as demais rotas. Possui espaço para logo. Além disso conta com um menu de cadastro, onde é possível visualizar os alunos, professores, um painel para visualização da lista de alunos, professores ou turmas com suas respectivas informações e um botão de busca por nome.</i><br><br>
 ### Cadastros: 
-<img src="README/cadastros.JPG"><br>
+<img src="/README/cadastros.jpeg"><br>
 ### Cadastro de Aluno: 
-<img src="README/cadastroaluno.JPG"><br>
+<img src="/README/cadastroaluno.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Aluno, uma página com um formulário é aberta. O usuário deve preencher os dados como indicado. Em caso de sucesso, poderá clicar em cadastrar e concluir a operação. Caso contrário, o sistema irá indicar os campos que precisam ser digitados e/ou corrigidos. O botão Gerar Matrícula gera um código único para este aluno.
 </i><br><br>
 ### Cadastro de Professor: 
-<img src="README/cadastroprofessor.JPG"><br>
+<img src="/README/cadastroprofessor.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Professor, uma página com um formulário é aberta. O usuário deve preencher os dados como indicado. Em caso de sucesso, poderá clicar em cadastrar e concluir a operação. Caso contrário, o sistema irá indicar os campos que precisam ser digitados e/ou corrigidos.</i><br><br>
 ### Cadastro de Turma: 
-<img src="README/cadastroturma.JPG"><br>
+<img src="/README/cadastroturma.jpeg"><br>
 <i>Ao clicar no botão cadastrar do card Professor, uma página com um formulário é aberta. Após preencher o número da turma e a série e clicar em prosseguir, abre um novo campo para informar o professor desta turma.</i><br><br>
-<img src="README/cadastroturma2.JPG"><br>
+<img src="/README/cadastroturma2.jpeg"><br>
 <i>Ao inserir o professor desta turma e prosseguir, aparecem duas listagens: Lista de alunos, que se refere aos alunos disponíveis para cadastrar nesta turma; e Alunos selecionados, mostrando os alunos que já foram alocados à turma. Ao clicar no ícone com o símbolo +, um aluno é adicionando na turma. </i><br><br>
 
 ### Rotas:
-<img src="README/informacoesturma.JPG"><br>
+<img src="/README/informacoesturma.jpeg"><br>
 <i>As informações são exibidas em uma página. Sempre com um botão de voltar, que redireciona para a página anterior.</i><br><br>
 <i>Há uma pequena animação que é exibida enquanto as informações estão sendo requisitadas para serem exibidas para o usuário.</i><br><br>
-<img src="README/carregando.JPG"><br>
+<img src="/README/carregando.jpeg"><br>
 <i></i><br><br>
 
 ### Editar:
-<img src="README/informacoesaluno.JPG"><br>
+<img src="/README/informacoesaluno.jpeg"><br>
 <i>Na página de informações, as informações são exibidas em coluna para diferenciar do menu anterior. Abaixo ficam os botões: um para abrir o menu de edição e o outro botão de Deletar Cadastro.</i><br><br>
-<img src="README/edicaoaluno.JPG"><br>
+<img src="/README/edicaoaluno.jpeg"><br>
 <i>Ao clicar no botão editar, uma página é aberta com um formulário já preenchido com as informações atuais. O usuário deve selecionar a informação que deseja editar e ao final deve clicar no botão de confirmação. Se houver erro, o formulário informa ao usuário o que deve ser corrigido. Em caso de sucesso, o usuário é redirecionado para a página de visualização.</i><br><br>
 
 ### Deletar Cadastro
-<img src="README/informacoesprofessor.JPG"><br>
+<img src="/README/informacoesprofessor.jpeg"><br>
 <i>Ao clicar no botão Deletar Cadastro, uma página é aberta com um alerta informando que a exclusão de um cadastro é ireversível e questionado se o usuário deseja mesmo continuar a exclusão ou se deseja cancelar a operação.</i><br><br>
-<img src="README/excluir.JPG"><br>
+<img src="/README/excluir.jpeg"><br>
